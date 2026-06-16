@@ -625,7 +625,7 @@ function drawApchaGuide(){
   ctx.restore();
 }
 
-// 돌려차기용 가이드 라인 — 앞차기와 동일 스타일(파란색), 호형
+// 돌려차기용 가이드 라인 — 아래서 시작해 위로 올라가며 옆으로 휘는 궤도
 function drawDolloGuide(){
   if(smHipY==null||smHipX==null||!running) return;
   const W=canvas.width, H=canvas.height;
@@ -636,12 +636,17 @@ function drawDolloGuide(){
   const peakY=(smHipY - liftRatio*smTorso)*H;
   const startY=smHipY*H+10;
 
+  // 오른발 기준: 몸 중앙 아래쪽에서 시작 → 위로 올라가며 왼쪽으로 쭉 빠짐
+  // 미러면 반전
   const side=mirrored?-1:1;
-  const span=W*0.20;
-  const startX=bodyX + side*span*0.55;
-  const endX  =bodyX - side*span*0.55;
-  const peakX =bodyX;
-  const peakCY=peakY;
+  const startX=bodyX; // 시작은 몸 중앙
+  const endX=bodyX - side*W*0.22; // 끝은 옆으로 이동
+  const endY=peakY; // 끝은 위쪽
+  // 제어점: 시작점 아래쪽에서 끝점 방향으로 — 이렇게 하면 계속 올라가는 느낌
+  const ctrl1X=startX;
+  const ctrl1Y=startY+30; // 시작 직후 아래로 살짝 → 자연스러운 킥 모션
+  const ctrl2X=endX;
+  const ctrl2Y=endY+H*0.15; // 끝 도달 전 아직 위로 올라오는 중
 
   ctx.save();
 
@@ -650,27 +655,27 @@ function drawDolloGuide(){
   ctx.lineCap='round'; ctx.lineJoin='round'; ctx.setLineDash([]);
   ctx.beginPath();
   ctx.moveTo(startX, startY);
-  ctx.bezierCurveTo(startX, peakCY, peakX, peakCY, endX, startY-10);
+  ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
   ctx.stroke();
 
   // ② 메인 그라데이션 점선 (파란색)
-  const g=ctx.createLinearGradient(startX, startY, endX, startY-10);
+  const g=ctx.createLinearGradient(startX, startY, endX, endY);
   g.addColorStop(0,  'rgba(76,163,255,0.3)');
   g.addColorStop(0.5,'rgba(76,163,255,1)');
-  g.addColorStop(1,  'rgba(76,163,255,0.4)');
+  g.addColorStop(1,  'rgba(76,163,255,0.5)');
   ctx.strokeStyle=g; ctx.lineWidth=9; ctx.setLineDash([16,9]);
   ctx.beginPath();
   ctx.moveTo(startX, startY);
-  ctx.bezierCurveTo(startX, peakCY, peakX, peakCY, endX, startY-10);
+  ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // ③ 굵은 화살표 (끝 방향)
+  // ③ 끝점 화살표 — 끝 접선 방향 (ctrl2 → end)
   const aw=30;
-  const adx=endX-peakX, ady=(startY-10)-peakCY;
+  const adx=endX-ctrl2X, ady=endY-ctrl2Y;
   const aAngle=Math.atan2(ady,adx);
   ctx.save();
-  ctx.translate(endX, startY-10); ctx.rotate(aAngle);
+  ctx.translate(endX, endY); ctx.rotate(aAngle);
   ctx.fillStyle='rgba(76,163,255,1)';
   ctx.beginPath();
   ctx.moveTo(aw*1.3, 0);
@@ -679,21 +684,15 @@ function drawDolloGuide(){
   ctx.closePath(); ctx.fill();
   ctx.restore();
 
-  // ④ 꼭대기 흰 점
-  ctx.beginPath(); ctx.arc(peakX, peakCY, 11, 0, Math.PI*2);
-  ctx.fillStyle='rgba(76,163,255,0.8)'; ctx.fill();
-  ctx.beginPath(); ctx.arc(peakX, peakCY, 6, 0, Math.PI*2);
-  ctx.fillStyle='#fff'; ctx.fill();
-
-  // ⑤ 꼭대기 가로 점선
+  // ④ 끝점 가로 점선 (목표 높이)
   ctx.strokeStyle='rgba(76,163,255,0.6)'; ctx.lineWidth=3; ctx.setLineDash([10,6]);
-  ctx.beginPath(); ctx.moveTo(peakX-90,peakCY); ctx.lineTo(peakX+90,peakCY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(endX-90,endY); ctx.lineTo(endX+90,endY); ctx.stroke();
   ctx.setLineDash([]);
 
-  // ⑥ 라벨
-  ctx.fillStyle='rgba(9,22,40,.9)'; ctx.fillRect(peakX-84, peakCY-34, 168, 26);
+  // ⑤ 라벨
+  ctx.fillStyle='rgba(9,22,40,.9)'; ctx.fillRect(bodyX-84, startY-50, 168, 26);
   ctx.fillStyle='#4ca3ff'; ctx.font='bold 14px Gothic A1,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('↩ 이 곡선을 따라 차요', peakX, peakCY-13);
+  ctx.fillText('↩ 이 곡선을 따라 차요', bodyX, startY-28);
   ctx.textAlign='left';
   ctx.restore();
 }

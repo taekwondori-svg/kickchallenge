@@ -609,7 +609,7 @@ function drawApchaGuide(){
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
   ctx.setLineDash([]);
   // 굵은 화살표 머리
-  const aw=20;
+  const aw=30;
   ctx.fillStyle='rgba(76,163,255,1)';
   ctx.beginPath(); ctx.moveTo(bodyX,targetY-2); ctx.lineTo(bodyX-aw,targetY+aw*1.2); ctx.lineTo(bodyX+aw,targetY+aw*1.2); ctx.closePath(); ctx.fill();
   // 목표 가로선
@@ -665,7 +665,7 @@ function drawDolloGuide(){
   ctx.setLineDash([]);
 
   // ③ 굵은 화살표 (끝 방향)
-  const aw=20;
+  const aw=30;
   const adx=endX-peakX, ady=(startY-10)-peakCY;
   const aAngle=Math.atan2(ady,adx);
   ctx.save();

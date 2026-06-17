@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v1.8</title>
+<title>AI 발차기 챌린지 v2.1.2 HUD</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -183,9 +183,551 @@
     .rotate-msg small{font-size:14px;color:#9fb0c8;}
   }
   @media (orientation:landscape){.rotate-msg{display:none;}}
+
+/* ─────────────────────────────────────────────
+   v2.1 AR/HUD 테스트 UI
+   목표: 카메라 전체화면 + 상하좌우 HUD 배치
+   기존 인식/화살표 로직은 최대한 유지
+   ───────────────────────────────────────────── */
+body.hud-v21 .stage{
+  position:relative;
+  display:block;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:#000;
+}
+body.hud-v21 .cam-wrap{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  flex:none;
+  background:#000;
+}
+body.hud-v21 #video,
+body.hud-v21 #overlay{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+body.hud-v21 .cam-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0) 45%, rgba(2,8,18,.46) 100%),
+    linear-gradient(180deg, rgba(2,8,18,.60), rgba(2,8,18,0) 18%, rgba(2,8,18,0) 70%, rgba(2,8,18,.78));
+}
+
+/* 카메라 위 HUD 패널 */
+body.hud-v21 .panel{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  display:block;
+  overflow:visible;
+  padding:0;
+  background:transparent;
+  border-left:none;
+  pointer-events:none;
+}
+body.hud-v21 .panel *,
+body.hud-v21 .panel button,
+body.hud-v21 .panel select,
+body.hud-v21 .panel input{
+  pointer-events:auto;
+}
+
+/* 좌상단 로고 */
+body.hud-v21 .title{
+  position:absolute;
+  top:14px;
+  left:16px;
+  min-width:280px;
+  padding:12px 18px;
+  border-radius:20px;
+  font-size:25px;
+  line-height:1.05;
+  color:#fff;
+  background:linear-gradient(135deg,rgba(5,14,29,.88),rgba(12,38,76,.58));
+  border:1px solid rgba(76,163,255,.65);
+  box-shadow:0 0 24px rgba(76,163,255,.22), inset 0 0 24px rgba(76,163,255,.07);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 .title small{
+  margin-top:4px;
+  color:#b8c8df;
+  font-size:11px;
+}
+
+/* 상단 중앙 현재 모드 */
+body.hud-v21 #modeBadge{
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  min-width:360px;
+  padding:11px 28px;
+  font-size:25px;
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(5,14,29,.92),rgba(10,31,61,.74));
+  border:2px solid rgba(76,163,255,.95);
+  box-shadow:0 0 32px rgba(76,163,255,.42), inset 0 0 24px rgba(76,163,255,.10);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 #modeBadge small{
+  font-size:12px;
+  color:#d9eaff;
+}
+
+/* 상태창: 좌상단 아래 */
+body.hud-v21 #status{
+  top:92px;
+  left:16px;
+  bottom:auto;
+  max-width:330px;
+  padding:10px 14px;
+  font-size:14px;
+  color:#dcecff;
+  border-radius:14px;
+  background:rgba(5,14,29,.68);
+  border:1px solid rgba(76,163,255,.42);
+  box-shadow:0 0 18px rgba(76,163,255,.12);
+  backdrop-filter:blur(8px);
+}
+
+/* 우측 세로 점수판 */
+body.hud-v21 .stats-row{
+  position:absolute;
+  top:118px;
+  right:16px;
+  width:176px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+body.hud-v21 .stat-box{
+  min-height:112px;
+  padding:12px 8px;
+  border-radius:20px;
+  background:linear-gradient(180deg,rgba(6,16,32,.88),rgba(10,25,48,.70))!important;
+  border:2px solid rgba(76,163,255,.52)!important;
+  box-shadow:0 0 22px rgba(76,163,255,.16), inset 0 0 18px rgba(255,255,255,.04);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 .stat-label{
+  color:#dcecff;
+  font-size:13px;
+}
+body.hud-v21 .stat-num{
+  font-size:50px;
+  color:#fff!important;
+  text-shadow:0 0 18px rgba(76,163,255,.40);
+}
+body.hud-v21 .score-box .stat-num{
+  color:#ffe36b!important;
+  text-shadow:0 0 22px rgba(232,160,32,.60);
+}
+body.hud-v21 .avg-box .stat-num{
+  color:#54ffad!important;
+  text-shadow:0 0 22px rgba(46,204,113,.50);
+}
+body.hud-v21 #scoreGrade{
+  font-size:12px;
+  line-height:1.2;
+}
+
+/* 중앙 성공 연출 */
+body.hud-v21 #popOverlay{
+  z-index:12;
+}
+body.hud-v21 #popScore{
+  font-size:132px;
+  font-weight:900;
+  line-height:.88;
+  text-align:center;
+  color:#ffe36b;
+  text-shadow:0 0 34px rgba(232,160,32,.70), 0 5px 36px rgba(0,0,0,.78);
+}
+body.hud-v21 .popGrade{
+  margin-top:18px;
+  font-size:48px;
+  color:#4ca3ff;
+  letter-spacing:1px;
+  text-shadow:0 0 28px rgba(76,163,255,.75), 0 4px 24px rgba(0,0,0,.65);
+}
+
+/* 하단 모드 버튼 */
+body.hud-v21 .section-label{display:none;}
+body.hud-v21 .hud-kick-row{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(760px,calc(100vw - 390px));
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+body.hud-v21 .hud-kick-row1{bottom:78px;}
+body.hud-v21 .hud-kick-row2{bottom:22px;}
+
+body.hud-v21 .drill-btn,
+body.hud-v21 .game-btn{
+  min-height:46px;
+  padding:10px 16px;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:900;
+  color:#dbeaff;
+  background:linear-gradient(180deg,rgba(7,20,40,.82),rgba(5,14,29,.70));
+  border:2px solid rgba(76,163,255,.35);
+  box-shadow:0 0 18px rgba(0,0,0,.28), inset 0 0 16px rgba(255,255,255,.03);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 .drill-btn.active,
+body.hud-v21 .game-btn.active{
+  color:#061326;
+  background:linear-gradient(180deg,#93e4ff,#4ca3ff);
+  border-color:#effbff;
+  box-shadow:0 0 26px rgba(76,163,255,.55), inset 0 0 14px rgba(255,255,255,.28);
+}
+
+/* 좌하단 시작/목표 횟수 */
+body.hud-v21 #drillCountArea,
+body.hud-v21 #gameArea{
+  position:absolute;
+  left:16px;
+  bottom:18px;
+  width:300px;
+  display:flex!important;
+  gap:9px;
+  padding:12px;
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(5,14,29,.84),rgba(10,37,70,.62));
+  border:1px solid rgba(76,163,255,.48);
+  box-shadow:0 0 20px rgba(76,163,255,.14);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 #gameArea{display:none!important;}
+body.hud-v21.balloon-mode #drillCountArea{display:none!important;}
+body.hud-v21.balloon-mode #gameArea{display:flex!important;}
+
+body.hud-v21 .drill-count-row{
+  align-items:center;
+}
+body.hud-v21 .drill-count-row label{
+  font-size:12px;
+  color:#dcecff;
+}
+body.hud-v21 .drill-count-row select{
+  height:38px;
+  border-radius:12px;
+}
+body.hud-v21 .panel .primary-start{
+  min-height:48px!important;
+  padding:9px 15px!important;
+  border-radius:16px!important;
+  font-size:19px!important;
+  background:linear-gradient(180deg,#84f1a9,#2ecc71)!important;
+  color:#052217!important;
+  box-shadow:0 0 26px rgba(46,204,113,.38);
+}
+body.hud-v21 #gameResult,
+body.hud-v21 #gameResult2{display:none!important;}
+
+/* 풍선 모드는 좌중단 작은 버튼 */
+body.hud-v21 .hud-balloon-row{
+  position:absolute;
+  left:16px;
+  top:152px;
+  width:230px;
+}
+
+/* 우하단 보조 버튼 */
+body.hud-v21 .btns{
+  position:absolute;
+  right:16px;
+  bottom:18px;
+  width:410px;
+  display:flex;
+  gap:10px;
+}
+body.hud-v21 .btns button{
+  min-height:48px;
+  border-radius:16px;
+  font-size:15px;
+  color:#fff;
+  background:linear-gradient(180deg,rgba(9,25,49,.86),rgba(5,14,29,.72));
+  border:1px solid rgba(76,163,255,.38);
+  box-shadow:0 0 18px rgba(0,0,0,.22);
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 .btn-new{
+  background:linear-gradient(180deg,#ff5a6b,#D92B3A)!important;
+}
+
+/* 설정 버튼 */
+body.hud-v21 .hud-settings-btn{
+  position:absolute;
+  right:16px;
+  top:16px;
+  min-width:92px;
+  min-height:46px;
+  padding:8px 14px;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(180deg,rgba(9,25,49,.88),rgba(5,14,29,.76));
+  border:1px solid rgba(76,163,255,.52);
+  box-shadow:0 0 20px rgba(76,163,255,.16);
+  backdrop-filter:blur(8px);
+}
+
+/* 평소에는 설정 요소 숨김. 설정 버튼 누르면 우측 패널로 등장 */
+body.hud-v21 .height-box,
+body.hud-v21 .ctrl{
+  position:absolute;
+  right:16px;
+  width:380px;
+  display:none;
+  padding:14px 16px;
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(5,14,29,.90),rgba(10,37,70,.78));
+  border:1px solid rgba(76,163,255,.55);
+  box-shadow:0 0 24px rgba(76,163,255,.18);
+  backdrop-filter:blur(10px);
+}
+body.hud-v21.settings-open .height-box{display:block;top:76px;}
+body.hud-v21.settings-open .ctrl{display:block;top:164px;}
+body.hud-v21.settings-open .stats-row{
+  top:250px;
+}
+
+/* 바 스타일 */
+body.hud-v21 .height-box h3,
+body.hud-v21 .ctrl label{
+  font-size:13px;
+  color:#dcecff;
+}
+body.hud-v21 .bar-track{height:18px;}
+
+/* 결과 오버레이 */
+body.hud-v21 #drillResult{
+  z-index:13;
+  background:rgba(2,8,18,.62);
+  backdrop-filter:blur(4px);
+}
+body.hud-v21 #drillResultText{
+  text-shadow:0 0 26px rgba(76,163,255,.5);
+}
+
+/* 준비 카운트다운 */
+body.hud-v21 #readyOverlay{
+  background:rgba(2,8,18,.54);
+  backdrop-filter:blur(3px);
+}
+body.hud-v21 #readyNum{
+  color:#4ca3ff;
+  text-shadow:0 0 42px rgba(76,163,255,.78);
+}
+
+/* 태블릿 작은 가로 화면 대응 */
+@media (max-width:1200px) and (orientation:landscape){
+  body.hud-v21 .title{font-size:20px;min-width:230px;}
+  body.hud-v21 #modeBadge{font-size:21px;min-width:300px;}
+  body.hud-v21 .stats-row{width:150px;right:12px;}
+  body.hud-v21 .stat-box{min-height:96px;}
+  body.hud-v21 .stat-num{font-size:42px;}
+  body.hud-v21 .hud-kick-row{width:min(610px,calc(100vw - 330px));}
+  body.hud-v21 .drill-btn{font-size:15px;}
+  body.hud-v21 #drillCountArea{width:270px;}
+  body.hud-v21 .btns{width:350px;}
+}
+
+
+/* ── v2.1.1 HUD 간격 조정: 하단 메뉴 겹침 방지 ── */
+body.hud-v21 .title{
+  top:12px;
+  left:14px;
+  min-width:250px;
+  padding:10px 16px;
+  font-size:22px;
+}
+body.hud-v21 #modeBadge{
+  top:12px;
+  min-width:330px;
+  padding:10px 24px;
+  font-size:23px;
+}
+body.hud-v21 .hud-settings-btn{
+  top:12px;
+  right:14px;
+  min-width:86px;
+  min-height:42px;
+  font-size:16px;
+}
+
+/* 우측 점수판 조금 작게 */
+body.hud-v21 .stats-row{
+  top:112px;
+  right:14px;
+  width:158px;
+  gap:9px;
+}
+body.hud-v21 .stat-box{
+  min-height:98px;
+  padding:10px 6px;
+  border-radius:17px;
+}
+body.hud-v21 .stat-num{
+  font-size:43px;
+}
+body.hud-v21 .stat-label{
+  font-size:12px;
+}
+
+/* 하단 중앙 모드 버튼을 위로 올리고 폭 줄임 */
+body.hud-v21 .hud-kick-row{
+  width:min(620px, calc(100vw - 560px));
+  gap:9px;
+}
+body.hud-v21 .hud-kick-row1{
+  bottom:116px;
+}
+body.hud-v21 .hud-kick-row2{
+  bottom:64px;
+}
+body.hud-v21 .drill-btn,
+body.hud-v21 .game-btn{
+  min-height:43px;
+  padding:9px 12px;
+  border-radius:14px;
+  font-size:17px;
+}
+
+/* 좌하단 시작 패널은 더 작게 */
+body.hud-v21 #drillCountArea,
+body.hud-v21 #gameArea{
+  left:14px;
+  bottom:18px;
+  width:270px;
+  padding:10px;
+  gap:7px;
+  border-radius:18px;
+}
+body.hud-v21 .drill-count-row select{
+  height:36px;
+  font-size:13px;
+}
+body.hud-v21 .panel .primary-start{
+  min-height:44px!important;
+  font-size:17px!important;
+  padding:8px 12px!important;
+}
+
+/* 우하단 보조 버튼은 더 작게, 모드 버튼과 겹치지 않게 아래쪽 고정 */
+body.hud-v21 .btns{
+  right:14px;
+  bottom:18px;
+  width:340px;
+  gap:8px;
+}
+body.hud-v21 .btns button{
+  min-height:44px;
+  padding:8px 6px;
+  border-radius:14px;
+  font-size:13px;
+}
+
+/* 풍선 모드 버튼 위치: 좌측 상태창 아래, 크게 튀지 않게 */
+body.hud-v21 .hud-balloon-row{
+  left:14px;
+  top:144px;
+  width:210px;
+}
+body.hud-v21 .hud-balloon-row .game-btn{
+  min-height:44px;
+}
+
+/* 설정창 열었을 때도 우측 점수판과 덜 충돌 */
+body.hud-v21.settings-open .height-box{
+  display:block;
+  top:70px;
+  right:14px;
+  width:340px;
+}
+body.hud-v21.settings-open .ctrl{
+  display:block;
+  top:154px;
+  right:14px;
+  width:340px;
+}
+body.hud-v21.settings-open .stats-row{
+  top:236px;
+}
+
+/* 1200~1400px 폭에서 더 강한 축소 */
+@media (max-width:1400px) and (orientation:landscape){
+  body.hud-v21 .hud-kick-row{
+    width:min(560px, calc(100vw - 560px));
+  }
+  body.hud-v21 .drill-btn,
+  body.hud-v21 .game-btn{
+    font-size:15px;
+  }
+  body.hud-v21 .btns{
+    width:310px;
+  }
+  body.hud-v21 .btns button{
+    font-size:12px;
+  }
+}
+
+/* 1100px 이하에서는 하단 중앙 버튼을 2행 유지하되 더 작게 */
+@media (max-width:1100px) and (orientation:landscape){
+  body.hud-v21 .title{
+    font-size:18px;
+    min-width:210px;
+  }
+  body.hud-v21 #modeBadge{
+    min-width:260px;
+    font-size:19px;
+  }
+  body.hud-v21 .stats-row{
+    width:135px;
+  }
+  body.hud-v21 .stat-box{
+    min-height:86px;
+  }
+  body.hud-v21 .stat-num{
+    font-size:36px;
+  }
+  body.hud-v21 .hud-kick-row{
+    width:min(460px, calc(100vw - 470px));
+  }
+  body.hud-v21 #drillCountArea{
+    width:230px;
+  }
+  body.hud-v21 .btns{
+    width:270px;
+  }
+}
+
+
+/* ── v2.1.2 하단 발차기 메뉴만 조금 아래로 이동 ── */
+body.hud-v21 .hud-kick-row1{
+  bottom:94px !important;
+}
+body.hud-v21 .hud-kick-row2{
+  bottom:42px !important;
+}
+
 </style>
 </head>
-<body>
+<body class="hud-v21">
 
 <div class="rotate-msg">
   <div class="icon">🔄</div>
@@ -237,14 +779,15 @@
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v1.8 · 돌려차기 끝점 X 조정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v2.1.2 · 하단 메뉴 위치 조정</small></div>
+    <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
 
     <div class="section-label">— 연습 모드</div>
-    <div class="mode-row">
+    <div class="mode-row hud-kick-row hud-kick-row1">
       <button class="drill-btn active" id="m_apcha_r" onclick="setMode('apcha_r')">앞차기 오른발</button>
       <button class="drill-btn" id="m_apcha_l" onclick="setMode('apcha_l')">앞차기 왼발</button>
     </div>
-    <div class="mode-row">
+    <div class="mode-row hud-kick-row hud-kick-row2">
       <button class="drill-btn" id="m_dollo_r" onclick="setMode('dollo_r')">돌려차기 오른발</button>
       <button class="drill-btn" id="m_dollo_l" onclick="setMode('dollo_l')">돌려차기 왼발</button>
     </div>
@@ -263,8 +806,8 @@
     </div>
 
     <div class="section-label">— 게임 모드</div>
-    <div class="mode-row">
-      <button class="game-btn" id="m_balloon" onclick="setMode('balloon')">🎈 풍선 모드</button>
+    <div class="mode-row hud-balloon-row">
+      <button class="game-btn" id="m_balloon" onclick="setMode('balloon')">풍선 모드</button>
     </div>
     <div class="game-area" id="gameArea">
       <button id="startBtn2" class="primary-start" onclick="startGame()">▶ 시작!</button>
@@ -492,7 +1035,15 @@ function renderStats(){
 
 /* ── 팝업 ── */
 function popup(text,color){
-  popScore.textContent=text; popScore.style.color=color;
+  let grade='';
+  if(typeof lastScore==='number'){
+    if(lastScore>=98) grade='PERFECT!';
+    else if(lastScore>=90) grade='GREAT!';
+    else if(lastScore>=80) grade='GOOD!';
+    else if(lastScore>=70) grade='성공!';
+  }
+  popScore.innerHTML = text + (grade ? '<div class="popGrade">'+grade+'</div>' : '');
+  popScore.style.color=color;
   popOverlay.classList.add('show');
   if(popTimer) clearTimeout(popTimer);
   popTimer=setTimeout(()=>popOverlay.classList.remove('show'),900);
@@ -735,10 +1286,9 @@ function drawDolloGuide(){
     const ctrlVX=Math.max(W*0.06, Math.min(W*0.94, visualBodyX + side*W*0.28));
     const ctrlY=baseY - H*0.22;
 
-    // 마무리는 반대쪽 위로 가되, 얼굴을 지나 화면 반대편까지 넘어가지 않게 X 이동폭을 줄인다.
-    // 오른발: 몸 중앙 약간 왼쪽 위, 왼발: 몸 중앙 약간 오른쪽 위에서 종료.
-    const unclampedEndVX=visualBodyX - side*W*0.085;
-    const endVX=Math.max(W*0.12, Math.min(W*0.88, unclampedEndVX));
+    // 마무리는 반대쪽 위로 길게 뽑는다
+    const unclampedEndVX=visualBodyX - side*W*0.10; // v1.8: 끝점 X를 중앙에 더 가깝게
+    const endVX=Math.max(W*0.08, Math.min(W*0.92, unclampedEndVX));
     const endY=topY;
 
     return {
@@ -1093,7 +1643,11 @@ function stopGame(){
   if(drillResultTimer){ clearTimeout(drillResultTimer); drillResultTimer=null; }
 }
 
+window.toggleHudSettings=()=>{
+  document.body.classList.toggle('settings-open');
+};
 window.setMode=(mode)=>{
+  try{ document.body.classList.toggle('balloon-mode', mode==='balloon'); }catch(e){}
   ensureAudio(); stopGame(); currentMode=mode; updateModeBadge();
   const all=['apcha_r','apcha_l','dollo_r','dollo_l','balloon'];
   all.forEach(m=>{ const el=document.getElementById('m_'+m); if(el) el.classList.toggle('active',m===mode); });

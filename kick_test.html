@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v1.4</title>
+<title>AI 발차기 챌린지 v1.5</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -237,7 +237,7 @@
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v1.4 · 돌려차기 화살표 방향 수정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v1.5 · 돌려차기 화살표 재수정</small></div>
 
     <div class="section-label">— 연습 모드</div>
     <div class="mode-row">
@@ -686,156 +686,166 @@ function drawDolloGuide(){
   if(smHipY==null||smHipX==null||!running) return;
   const W=canvas.width, H=canvas.height;
   const mirrored=camWrap.classList.contains('mirrored');
-  const bodyX=(mirrored?1-smHipX:smHipX)*W;
 
-  // v1.4: 돌려차기 화살표 방향만 재수정
-  // 전면카메라 기준:
-  // - 오른발: 오른쪽으로 먼저 뻗었다가 왼쪽 위로 감
-  // - 왼발: 왼쪽으로 먼저 뻗었다가 오른쪽 위로 감
-  // 후면카메라 전환 시에는 화면 기준이 반대가 되도록 자동 반전
+  // v1.5: 돌려차기 화살표 궤도 재수정
+  // 관장님 요청 기준:
+  // - 오른발: 화면 가운데 약간 오른쪽에서 시작 → 오른쪽으로 살짝 휘며 올라가다가 → 왼쪽 위로 길게
+  // - 왼발:   화면 가운데 약간 왼쪽에서 시작 → 왼쪽으로 살짝 휘며 올라가다가 → 오른쪽 위로 길게
+  // 기존처럼 크게 회오리치지 않도록 3차 베지어 대신 2차 곡선으로 단순하고 힘 있게 그림.
+
+  // raw 좌표와 화면상 좌표를 분리한다.
+  // 전면카메라는 video/overlay가 CSS로 좌우반전되므로,
+  // 화면에 보이고 싶은 visualX를 canvas 좌표로 되돌려 그려야 한다.
+  const rawBodyX=smHipX*W;
+  const visualBodyX=mirrored ? W-rawBodyX : rawBodyX;
+  const toCanvasX=(visualX)=> mirrored ? W-visualX : visualX;
+
   const targetPct=Math.min(96, threshPct+38);
   const liftRatio=(targetPct/100)*1.6-0.8;
-  const topY=Math.max(H*0.07, (smHipY - liftRatio*smTorso)*H - H*0.10);
-  const baseY=Math.min(H*0.90, smHipY*H+H*0.14);
+  const topY=Math.max(H*0.09, (smHipY - liftRatio*smTorso)*H - H*0.06);
+  const baseY=Math.min(H*0.88, smHipY*H+H*0.15);
 
-  // side: 화면상 시작 방향. 1=오른쪽 시작, -1=왼쪽 시작
-  let side=1;
-  if(currentMode==='dollo_r') side=1;       // 오른발: 오른쪽에서 시작
-  else if(currentMode==='dollo_l') side=-1; // 왼발: 왼쪽에서 시작
-  else if(drillSide!==0) side=drillSide;
+  // 화면 기준 방향값: 오른쪽 +1, 왼쪽 -1
+  const visualSide = (currentMode==='dollo_r') ? 1 : -1;
 
-  function pathFor(sideVal){
-    // 전면카메라(mirrored)에서는 사용자가 보는 화면 기준으로 그대로,
-    // 후면카메라에서는 좌우를 뒤집어 실제 화면 표시를 맞춤.
-    const visualSide = mirrored ? sideVal : -sideVal;
-
-    // 시작점은 몸 중심 근처에서 시작. 너무 멀리 벌리지 않음.
-    const startX=bodyX + visualSide*W*0.10;
+  function makePath(side){
+    // 시작은 몸 중앙에서 살짝 해당 발 방향
+    const startVX=visualBodyX + side*W*0.095;
     const startY=baseY;
 
-    // 핵심: 처음엔 선택한 발 방향으로 휘고, 끝은 반대편 위로 길게 빠짐.
-    const outX=bodyX + visualSide*W*0.33;
-    const endX=bodyX - visualSide*W*0.20;
+    // 먼저 해당 발 방향 바깥쪽으로 휘게 만드는 제어점
+    const ctrlVX=visualBodyX + side*W*0.30;
+    const ctrlY=baseY - H*0.23;
+
+    // 마무리는 반대쪽 위로 길게 뽑는다
+    const endVX=visualBodyX - side*W*0.23;
     const endY=topY;
 
-    const ctrl1X=outX;
-    const ctrl1Y=baseY - H*0.02;
-    const ctrl2X=bodyX - visualSide*W*0.24;
-    const ctrl2Y=topY + H*0.24;
-
-    return {startX,startY,endX,endY,ctrl1X,ctrl1Y,ctrl2X,ctrl2Y,visualSide};
+    return {
+      side,
+      startVX,startY,ctrlVX,ctrlY,endVX,endY,
+      startX:toCanvasX(startVX),
+      ctrlX:toCanvasX(ctrlVX),
+      endX:toCanvasX(endVX)
+    };
   }
 
-  function bezierPoint(p,t){
-    const x=(1-t)**3*p.startX + 3*(1-t)**2*t*p.ctrl1X + 3*(1-t)*t**2*p.ctrl2X + t**3*p.endX;
-    const y=(1-t)**3*p.startY + 3*(1-t)**2*t*p.ctrl1Y + 3*(1-t)*t**2*p.ctrl2Y + t**3*p.endY;
-    return {x,y};
+  function qPoint(p,t){
+    const mt=1-t;
+    const vx=mt*mt*p.startVX + 2*mt*t*p.ctrlVX + t*t*p.endVX;
+    const y =mt*mt*p.startY  + 2*mt*t*p.ctrlY  + t*t*p.endY;
+    return {x:toCanvasX(vx), vx, y};
   }
 
-  function drawOne(sideVal){
-    const p=pathFor(sideVal);
-    const startsLeft=p.visualSide<0;
-    const color=startsLeft?'rgba(76,163,255,1)':'rgba(232,160,32,1)';
-    const glow=startsLeft?'rgba(76,163,255,0.30)':'rgba(232,160,32,0.30)';
+  function drawChevron(p,t,color){
+    const a=qPoint(p,Math.max(0,t-0.025));
+    const b=qPoint(p,Math.min(1,t+0.025));
+    const ang=Math.atan2(b.y-a.y,b.x-a.x);
+    const c=qPoint(p,t);
+    const sz=25;
     ctx.save();
-
-    // 시작 위치 표시: 왼쪽 시작=X, 오른쪽 시작=O
-    ctx.shadowColor=color; ctx.shadowBlur=20;
-    ctx.strokeStyle=color; ctx.lineWidth=9; ctx.setLineDash([]);
-    ctx.beginPath(); ctx.arc(p.startX,p.startY,32,0,Math.PI*2); ctx.stroke();
-    ctx.fillStyle='rgba(9,22,40,.88)'; ctx.beginPath(); ctx.arc(p.startX,p.startY,21,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=color; ctx.font='bold 23px Gothic A1,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(startsLeft?'X':'O',p.startX,p.startY+8);
-    ctx.shadowBlur=0;
-
-    // 큰 네온 글로우
-    ctx.lineCap='round'; ctx.lineJoin='round';
-    ctx.strokeStyle=glow; ctx.lineWidth=64;
-    ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
-    ctx.bezierCurveTo(p.ctrl1X,p.ctrl1Y,p.ctrl2X,p.ctrl2Y,p.endX,p.endY);
-    ctx.stroke();
-
-    ctx.strokeStyle=startsLeft?'rgba(76,163,255,0.38)':'rgba(255,218,88,0.38)';
-    ctx.lineWidth=38;
-    ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
-    ctx.bezierCurveTo(p.ctrl1X,p.ctrl1Y,p.ctrl2X,p.ctrl2Y,p.endX,p.endY);
-    ctx.stroke();
-
-    // 메인 화살표
-    const g=ctx.createLinearGradient(p.startX,p.startY,p.endX,p.endY);
-    g.addColorStop(0,'rgba(255,255,255,0.20)');
-    g.addColorStop(0.20,color);
-    g.addColorStop(0.72,color);
-    g.addColorStop(1,'rgba(255,255,255,1)');
-    ctx.strokeStyle=g; ctx.lineWidth=17; ctx.setLineDash([]);
-    ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
-    ctx.bezierCurveTo(p.ctrl1X,p.ctrl1Y,p.ctrl2X,p.ctrl2Y,p.endX,p.endY);
-    ctx.stroke();
-
-    // 가운데 밝은 선
-    ctx.strokeStyle='rgba(255,255,255,.88)'; ctx.lineWidth=5;
-    ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
-    ctx.bezierCurveTo(p.ctrl1X,p.ctrl1Y,p.ctrl2X,p.ctrl2Y,p.endX,p.endY);
-    ctx.stroke();
-
-    // 방향 chevron
-    for(let t=0.18;t<0.88;t+=0.14){
-      const a=bezierPoint(p,Math.max(0,t-0.035));
-      const b=bezierPoint(p,Math.min(1,t+0.035));
-      const ang=Math.atan2(b.y-a.y,b.x-a.x);
-      const c=bezierPoint(p,t);
-      const sz=25;
-      ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(ang);
-      ctx.strokeStyle='rgba(255,255,255,.94)'; ctx.lineWidth=6; ctx.lineCap='round';
-      ctx.beginPath(); ctx.moveTo(-sz*0.55,-sz*0.65); ctx.lineTo(sz*0.45,0); ctx.lineTo(-sz*0.55,sz*0.65); ctx.stroke();
-      ctx.restore();
-    }
-
-    // 끝 화살촉
-    const prev=bezierPoint(p,0.94);
-    const ang=Math.atan2(p.endY-prev.y,p.endX-prev.x);
-    const aw=54;
-    ctx.save(); ctx.translate(p.endX,p.endY); ctx.rotate(ang);
-    ctx.shadowColor=color; ctx.shadowBlur=22;
-    ctx.fillStyle=color;
+    ctx.translate(c.x,c.y); ctx.rotate(ang);
+    ctx.strokeStyle='rgba(255,255,255,.92)';
+    ctx.lineWidth=6; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.shadowColor=color; ctx.shadowBlur=12;
     ctx.beginPath();
-    ctx.moveTo(aw*1.24,0);
-    ctx.lineTo(-aw,aw*0.88);
-    ctx.lineTo(-aw*0.43,0);
-    ctx.lineTo(-aw,-aw*0.88);
-    ctx.closePath();
-    ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(255,255,255,.92)'; ctx.lineWidth=3; ctx.stroke();
-    ctx.restore();
-
-    // 목표 높이 점선
-    ctx.strokeStyle=color; ctx.lineWidth=4; ctx.setLineDash([14,8]);
-    ctx.beginPath(); ctx.moveTo(p.endX-W*0.11,p.endY); ctx.lineTo(p.endX+W*0.11,p.endY); ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle='rgba(9,22,40,.88)';
-    ctx.roundRect(p.endX-88,p.endY-50,176,32,12); ctx.fill();
-    ctx.fillStyle=color; ctx.font='bold 15px Gothic A1,sans-serif'; ctx.textAlign='center';
-    ctx.fillText('끝까지 높이!',p.endX,p.endY-29);
-
-    // 스파크
-    ctx.strokeStyle=startsLeft?'rgba(76,163,255,.65)':'rgba(255,220,100,.65)'; ctx.lineWidth=3;
-    for(let i=0;i<10;i++){
-      const t=0.12+i*0.08;
-      const c=bezierPoint(p,t);
-      const len=12+(i%3)*6;
-      const sparkSide = (i%2===0?1:-1);
-      ctx.beginPath();
-      ctx.moveTo(c.x + sparkSide*18, c.y-len);
-      ctx.lineTo(c.x + sparkSide*(18+len), c.y-len*1.8);
-      ctx.stroke();
-    }
-
+    ctx.moveTo(-sz*0.58,-sz*0.65);
+    ctx.lineTo(sz*0.45,0);
+    ctx.lineTo(-sz*0.58,sz*0.65);
+    ctx.stroke();
     ctx.restore();
   }
 
-  drawOne(side);
+  const p=makePath(visualSide);
+  const isRight=visualSide>0;
+  const color=isRight?'rgba(232,160,32,1)':'rgba(76,163,255,1)';
+  const glow=isRight?'rgba(232,160,32,.30)':'rgba(76,163,255,.30)';
+  const glow2=isRight?'rgba(255,215,90,.38)':'rgba(76,190,255,.38)';
+
+  ctx.save();
+  ctx.lineCap='round'; ctx.lineJoin='round'; ctx.setLineDash([]);
+
+  // 시작점 표시: 너무 멀지 않게 몸 중앙 근처에 둔다.
+  ctx.shadowColor=color; ctx.shadowBlur=18;
+  ctx.strokeStyle=color; ctx.lineWidth=8;
+  ctx.beginPath(); ctx.arc(p.startX,p.startY,28,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle='rgba(9,22,40,.82)'; ctx.beginPath(); ctx.arc(p.startX,p.startY,18,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=color; ctx.font='bold 20px Gothic A1,sans-serif'; ctx.textAlign='center';
+  ctx.fillText(isRight?'O':'X',p.startX,p.startY+7);
+  ctx.shadowBlur=0;
+
+  // 큰 글로우
+  ctx.strokeStyle=glow; ctx.lineWidth=58;
+  ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
+  ctx.quadraticCurveTo(p.ctrlX,p.ctrlY,p.endX,p.endY);
+  ctx.stroke();
+
+  ctx.strokeStyle=glow2; ctx.lineWidth=34;
+  ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
+  ctx.quadraticCurveTo(p.ctrlX,p.ctrlY,p.endX,p.endY);
+  ctx.stroke();
+
+  // 메인 네온 라인
+  const grad=ctx.createLinearGradient(p.startX,p.startY,p.endX,p.endY);
+  grad.addColorStop(0,'rgba(255,255,255,.20)');
+  grad.addColorStop(0.18,color);
+  grad.addColorStop(0.78,color);
+  grad.addColorStop(1,'rgba(255,255,255,1)');
+  ctx.strokeStyle=grad; ctx.lineWidth=17;
+  ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
+  ctx.quadraticCurveTo(p.ctrlX,p.ctrlY,p.endX,p.endY);
+  ctx.stroke();
+
+  // 중심 밝은 선
+  ctx.strokeStyle='rgba(255,255,255,.78)'; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.moveTo(p.startX,p.startY);
+  ctx.quadraticCurveTo(p.ctrlX,p.ctrlY,p.endX,p.endY);
+  ctx.stroke();
+
+  // 진행 방향 화살표 무늬
+  for(let t=0.22;t<0.86;t+=0.14) drawChevron(p,t,color);
+
+  // 끝 화살촉: 실제 곡선의 마지막 방향을 따라간다.
+  const prev=qPoint(p,0.94);
+  const endPt=qPoint(p,1);
+  const ang=Math.atan2(endPt.y-prev.y,endPt.x-prev.x);
+  const aw=50;
+  ctx.save();
+  ctx.translate(endPt.x,endPt.y); ctx.rotate(ang);
+  ctx.shadowColor=color; ctx.shadowBlur=22;
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  ctx.moveTo(aw*1.25,0);
+  ctx.lineTo(-aw,aw*0.86);
+  ctx.lineTo(-aw*0.42,0);
+  ctx.lineTo(-aw,-aw*0.86);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.9)'; ctx.lineWidth=3; ctx.stroke();
+  ctx.restore();
+
+  // 목표 높이 표시
+  ctx.strokeStyle=color; ctx.lineWidth=4; ctx.setLineDash([14,8]);
+  ctx.beginPath(); ctx.moveTo(endPt.x-W*0.10,endPt.y); ctx.lineTo(endPt.x+W*0.10,endPt.y); ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle='rgba(9,22,40,.88)';
+  ctx.roundRect(endPt.x-86,endPt.y-48,172,30,12); ctx.fill();
+  ctx.fillStyle=color; ctx.font='bold 15px Gothic A1,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('쭉 높이 차세요!',endPt.x,endPt.y-28);
+
+  // 스파크는 과하지 않게 곡선 바깥쪽으로만
+  ctx.strokeStyle=isRight?'rgba(255,220,100,.70)':'rgba(80,200,255,.70)'; ctx.lineWidth=3;
+  for(let i=0;i<7;i++){
+    const t=0.18+i*0.10;
+    const c=qPoint(p,t);
+    const len=10+(i%3)*5;
+    ctx.beginPath();
+    ctx.moveTo(c.x + (mirrored?-visualSide:visualSide)*22, c.y-len);
+    ctx.lineTo(c.x + (mirrored?-visualSide:visualSide)*(22+len), c.y-len*1.7);
+    ctx.stroke();
+  }
+
+  ctx.restore();
 }
 
 /* ── 발차기 연습 완료 처리 ── */

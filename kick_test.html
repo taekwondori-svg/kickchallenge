@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v2.1.2 HUD</title>
+<title>AI 발차기 챌린지 v2.1.4 HUD</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -725,6 +725,114 @@ body.hud-v21 .hud-kick-row2{
   bottom:42px !important;
 }
 
+
+/* ── v2.1.4 풍선모드 HUD 배치 조정 ──
+   2.1.2 기준. 메뉴가 화면 밖으로 나가지 않도록 태블릿용 압축은 넣지 않음.
+   풍선모드에서 랭킹/타이머/점수판 겹침만 정리. */
+
+/* 랭킹 배너: 좌측 상단 로고/풍선모드 버튼과 겹치지 않게 좌측 가운데로 이동 */
+body.hud-v21 #camRank{
+  top:250px !important;
+  left:18px !important;
+  min-width:150px !important;
+  padding:10px 13px !important;
+  border-radius:15px !important;
+  background:rgba(7,18,34,.78) !important;
+  border:2px solid rgba(232,160,32,.62) !important;
+  box-shadow:0 0 20px rgba(232,160,32,.16), inset 0 0 14px rgba(255,255,255,.03) !important;
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 #camRankTitle{
+  font-size:12px !important;
+  margin-bottom:6px !important;
+  color:#ffd76b !important;
+}
+body.hud-v21 #camRankList{
+  gap:4px !important;
+}
+body.hud-v21 .cr-item{
+  gap:8px !important;
+}
+body.hud-v21 .cr-item .crk{
+  width:34px !important;
+  font-size:15px !important;
+  color:#fff !important;
+}
+body.hud-v21 .cr-item .crv{
+  font-size:16px !important;
+}
+
+/* 풍선모드의 남은시간 배너: 설정 버튼 아래 우측 상단으로 고정 */
+body.hud-v21 #timerBadge{
+  top:74px !important;
+  right:16px !important;
+  min-width:158px !important;
+  padding:9px 12px !important;
+  border-radius:20px !important;
+  border:3px solid var(--green) !important;
+  background:rgba(7,18,34,.82) !important;
+  box-shadow:0 0 24px rgba(46,204,113,.30), inset 0 0 18px rgba(46,204,113,.07) !important;
+  backdrop-filter:blur(8px);
+}
+body.hud-v21 #timerBadgeNum{
+  font-size:72px !important;
+  color:var(--green) !important;
+}
+body.hud-v21 #timerBadgeLabel{
+  font-size:13px !important;
+  color:#dcecff !important;
+}
+
+/* 풍선모드에서는 점수판을 타이머 아래로 내려 겹침 방지 */
+body.hud-v21.balloon-mode .stats-row{
+  top:250px !important;
+  right:16px !important;
+}
+
+/* 풍선모드에서는 우측 점수판 카드가 너무 길어지지 않게 살짝 축소 */
+body.hud-v21.balloon-mode .stat-box{
+  min-height:96px !important;
+}
+body.hud-v21.balloon-mode .stat-num{
+  font-size:44px !important;
+}
+
+/* 풍선모드 버튼은 랭킹과 겹치지 않게 조금 위쪽 작은 카드로 유지 */
+body.hud-v21 .hud-balloon-row{
+  top:146px !important;
+  left:18px !important;
+  width:220px !important;
+}
+body.hud-v21 .hud-balloon-row .game-btn{
+  min-height:46px !important;
+}
+
+/* 카메라 실패/상태 안내는 랭킹과 겹치지 않게 */
+body.hud-v21 #status{
+  max-width:300px !important;
+}
+
+/* 태블릿 전체화면에서도 좌우 요소가 너무 커지지 않게만 살짝 보정 */
+@media (orientation:landscape) and (max-width:1300px){
+  body.hud-v21 #camRank{
+    top:230px !important;
+    left:14px !important;
+    min-width:135px !important;
+  }
+  body.hud-v21 #timerBadge{
+    top:70px !important;
+    right:14px !important;
+    min-width:142px !important;
+  }
+  body.hud-v21 #timerBadgeNum{
+    font-size:62px !important;
+  }
+  body.hud-v21.balloon-mode .stats-row{
+    top:220px !important;
+    right:14px !important;
+  }
+}
+
 </style>
 </head>
 <body class="hud-v21">
@@ -779,7 +887,7 @@ body.hud-v21 .hud-kick-row2{
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v2.1.2 · 하단 메뉴 위치 조정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v2.1.4 · 풍선모드 배치 조정</small></div>
     <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
 
     <div class="section-label">— 연습 모드</div>
@@ -993,7 +1101,7 @@ function renderCamRank(){
   if(list.length===0){ camRank.classList.remove('show'); return; }
   camRank.classList.add('show');
   camRankTitle.textContent='🏆 '+cfg.title;
-  const medals=['🥇','🥈','🥉','4위','5위'];
+  const medals=['1위','2위','3위','4위','5위'];
   camRankList.innerHTML=list.map((e,i)=>{
     const me=(e.ts===lastRankTs)?' me':'';
     return '<li class="cr-item'+me+'"><span class="crk">'+medals[i]+'</span><span class="crv">'+e.v+cfg.unit+'</span></li>';

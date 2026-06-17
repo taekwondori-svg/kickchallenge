@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v2.1.2 HUD</title>
+<title>AI 발차기 챌린지 v2.1.3 HUD</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -725,6 +725,217 @@ body.hud-v21 .hud-kick-row2{
   bottom:42px !important;
 }
 
+
+/* ── v2.1.3 갤럭시탭 S8+ / 태블릿 가로화면 자동맞춤 ──
+   목표: 브라우저 주소창이 있는 태블릿에서도 하단 메뉴가 화면 밖으로 내려가지 않게 함 */
+body.hud-v21{
+  overflow:hidden;
+}
+
+/* 화면 높이가 낮은 태블릿/브라우저 상태에서 전체 HUD를 압축 */
+@media (orientation:landscape) and (max-height:760px){
+  body.hud-v21 .title{
+    top:8px !important;
+    left:10px !important;
+    min-width:220px !important;
+    padding:8px 13px !important;
+    border-radius:15px !important;
+    font-size:18px !important;
+  }
+  body.hud-v21 .title small{
+    font-size:9px !important;
+    margin-top:2px !important;
+  }
+
+  body.hud-v21 #modeBadge{
+    top:8px !important;
+    min-width:280px !important;
+    padding:7px 18px !important;
+    border-radius:17px !important;
+    font-size:19px !important;
+  }
+  body.hud-v21 #modeBadge small{
+    font-size:10px !important;
+  }
+
+  body.hud-v21 .hud-settings-btn{
+    top:8px !important;
+    right:10px !important;
+    min-width:74px !important;
+    min-height:36px !important;
+    padding:6px 10px !important;
+    border-radius:13px !important;
+    font-size:14px !important;
+  }
+
+  body.hud-v21 #status{
+    top:72px !important;
+    left:10px !important;
+    max-width:280px !important;
+    padding:7px 10px !important;
+    font-size:12px !important;
+    border-radius:11px !important;
+  }
+
+  body.hud-v21 .hud-balloon-row{
+    top:122px !important;
+    left:10px !important;
+    width:190px !important;
+  }
+
+  /* 우측 점수판을 더 작게 */
+  body.hud-v21 .stats-row{
+    top:94px !important;
+    right:10px !important;
+    width:132px !important;
+    gap:7px !important;
+  }
+  body.hud-v21 .stat-box{
+    min-height:78px !important;
+    padding:7px 4px !important;
+    border-radius:14px !important;
+  }
+  body.hud-v21 .stat-label{
+    font-size:10px !important;
+    margin-bottom:1px !important;
+  }
+  body.hud-v21 .stat-num{
+    font-size:33px !important;
+  }
+  body.hud-v21 #scoreGrade{
+    font-size:10px !important;
+  }
+
+  /* 하단 모드 버튼: 화면 안쪽으로 올리고 높이 축소 */
+  body.hud-v21 .hud-kick-row{
+    width:min(520px, calc(100vw - 430px)) !important;
+    gap:7px !important;
+  }
+  body.hud-v21 .hud-kick-row1{
+    bottom:76px !important;
+  }
+  body.hud-v21 .hud-kick-row2{
+    bottom:28px !important;
+  }
+  body.hud-v21 .drill-btn,
+  body.hud-v21 .game-btn{
+    min-height:38px !important;
+    padding:7px 10px !important;
+    border-radius:12px !important;
+    font-size:14px !important;
+  }
+
+  /* 좌하단 시작 패널 축소 */
+  body.hud-v21 #drillCountArea,
+  body.hud-v21 #gameArea{
+    left:10px !important;
+    bottom:10px !important;
+    width:220px !important;
+    padding:8px !important;
+    gap:6px !important;
+    border-radius:15px !important;
+  }
+  body.hud-v21 .drill-count-row label{
+    font-size:10px !important;
+  }
+  body.hud-v21 .drill-count-row select{
+    height:32px !important;
+    font-size:12px !important;
+    padding:4px 6px !important;
+  }
+  body.hud-v21 .panel .primary-start{
+    min-height:38px !important;
+    padding:6px 10px !important;
+    border-radius:13px !important;
+    font-size:15px !important;
+  }
+
+  /* 우하단 보조 버튼 축소 */
+  body.hud-v21 .btns{
+    right:10px !important;
+    bottom:10px !important;
+    width:280px !important;
+    gap:6px !important;
+  }
+  body.hud-v21 .btns button{
+    min-height:38px !important;
+    padding:6px 4px !important;
+    border-radius:12px !important;
+    font-size:11px !important;
+  }
+
+  body.hud-v21 #popScore{
+    font-size:96px !important;
+  }
+  body.hud-v21 .popGrade{
+    font-size:36px !important;
+  }
+}
+
+/* 더 낮은 높이: 태블릿 주소창+하단바가 모두 보일 때 */
+@media (orientation:landscape) and (max-height:640px){
+  body.hud-v21 .title{
+    font-size:16px !important;
+    min-width:200px !important;
+  }
+  body.hud-v21 #modeBadge{
+    min-width:250px !important;
+    font-size:17px !important;
+  }
+  body.hud-v21 #status{
+    display:none !important;
+  }
+  body.hud-v21 .hud-balloon-row{
+    display:none !important;
+  }
+  body.hud-v21 .stats-row{
+    width:118px !important;
+    top:78px !important;
+  }
+  body.hud-v21 .stat-box{
+    min-height:66px !important;
+  }
+  body.hud-v21 .stat-num{
+    font-size:28px !important;
+  }
+  body.hud-v21 .hud-kick-row{
+    width:min(470px, calc(100vw - 390px)) !important;
+  }
+  body.hud-v21 .hud-kick-row1{
+    bottom:58px !important;
+  }
+  body.hud-v21 .hud-kick-row2{
+    bottom:16px !important;
+  }
+  body.hud-v21 .drill-btn{
+    min-height:34px !important;
+    font-size:13px !important;
+  }
+  body.hud-v21 #drillCountArea,
+  body.hud-v21 #gameArea{
+    width:200px !important;
+    bottom:8px !important;
+  }
+  body.hud-v21 .btns{
+    width:245px !important;
+    bottom:8px !important;
+  }
+  body.hud-v21 .btns button{
+    min-height:34px !important;
+    font-size:10px !important;
+  }
+}
+
+/* 태블릿에서 전체화면일 경우는 여유가 있으므로 살짝 키움 */
+@media (orientation:landscape) and (min-height:761px){
+  body.hud-v21 .hud-kick-row1{
+    bottom:98px !important;
+  }
+  body.hud-v21 .hud-kick-row2{
+    bottom:44px !important;
+  }
+}
+
 </style>
 </head>
 <body class="hud-v21">
@@ -779,7 +990,7 @@ body.hud-v21 .hud-kick-row2{
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v2.1.2 · 하단 메뉴 위치 조정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v2.1.3 · 태블릿 자동맞춤</small></div>
     <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
 
     <div class="section-label">— 연습 모드</div>

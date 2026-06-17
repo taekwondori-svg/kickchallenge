@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v1.6</title>
+<title>AI 발차기 챌린지 v1.7</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -237,16 +237,16 @@
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v1.6 · 화살표/점수 조정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v1.7 · 화살표 색상/크기 조정</small></div>
 
     <div class="section-label">— 연습 모드</div>
     <div class="mode-row">
-      <button class="drill-btn active" id="m_apcha_r" onclick="setMode('apcha_r')">🦵 앞차기 오른발</button>
-      <button class="drill-btn" id="m_apcha_l" onclick="setMode('apcha_l')">🦵 앞차기 왼발</button>
+      <button class="drill-btn active" id="m_apcha_r" onclick="setMode('apcha_r')">앞차기 오른발</button>
+      <button class="drill-btn" id="m_apcha_l" onclick="setMode('apcha_l')">앞차기 왼발</button>
     </div>
     <div class="mode-row">
-      <button class="drill-btn" id="m_dollo_r" onclick="setMode('dollo_r')">🔄 돌려차기 오른발</button>
-      <button class="drill-btn" id="m_dollo_l" onclick="setMode('dollo_l')">🔄 돌려차기 왼발</button>
+      <button class="drill-btn" id="m_dollo_r" onclick="setMode('dollo_r')">돌려차기 오른발</button>
+      <button class="drill-btn" id="m_dollo_l" onclick="setMode('dollo_l')">돌려차기 왼발</button>
     </div>
     <div class="game-area" id="drillCountArea">
       <div class="drill-count-row">
@@ -535,7 +535,7 @@ function modeTitleText(){
 function updateModeBadge(){
   const [t,sub]=modeTitleText();
   modeBadge.innerHTML=t+'<small>'+sub+'</small>';
-  modeBadge.style.borderColor=(drillKickType()==='apcha')?'rgba(76,163,255,.85)':(drillKickType()==='dollo')?'rgba(232,160,32,.85)':'rgba(232,160,32,.65)';
+  modeBadge.style.borderColor=(isDrillMode())?'rgba(76,163,255,.85)':'rgba(232,160,32,.65)';
 }
 
 /* ─────────────────────────────────────────────
@@ -647,7 +647,7 @@ function drawApchaGuide(){
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
   ctx.strokeStyle='rgba(76,163,255,0.22)'; ctx.lineWidth=58;
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
-  ctx.strokeStyle='rgba(76,190,255,0.33)'; ctx.lineWidth=36;
+  ctx.strokeStyle='rgba(76,190,255,0.36)'; ctx.lineWidth=46;
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
 
   // 메인 네온 점선
@@ -656,12 +656,12 @@ function drawApchaGuide(){
   g.addColorStop(0.28,'rgba(76,163,255,0.95)');
   g.addColorStop(0.78,'rgba(76,190,255,1)');
   g.addColorStop(1,'rgba(255,255,255,1)');
-  ctx.strokeStyle=g; ctx.lineWidth=19; ctx.setLineDash([32,14]);
+  ctx.strokeStyle=g; ctx.lineWidth=27; ctx.setLineDash([36,14]);
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
   ctx.setLineDash([]);
 
   // 중심 밝은 선
-  ctx.strokeStyle='rgba(255,255,255,.82)'; ctx.lineWidth=6;
+  ctx.strokeStyle='rgba(255,255,255,.86)'; ctx.lineWidth=8;
   ctx.beginPath(); ctx.moveTo(bodyX,startY); ctx.lineTo(bodyX,targetY); ctx.stroke();
 
   // 중간 빛 점과 작은 별빛
@@ -719,7 +719,7 @@ function drawDolloGuide(){
 
   // v1.6: 화살표 끝점은 화면 밖으로 빠지지 않게 사용자 얼굴 높이 정도에서 종료.
   // 얼굴 랜드마크를 직접 쓰지 않고, 골반-상체 길이로 얼굴 높이를 안정적으로 추정한다.
-  const faceY=Math.max(H*0.11, Math.min(H*0.42, (smHipY - smTorso*1.12)*H));
+  const faceY=Math.max(H*0.14, Math.min(H*0.46, (smHipY - smTorso*0.98)*H));
   const topY=faceY;
   const baseY=Math.min(H*0.88, smHipY*H+H*0.15);
 
@@ -777,9 +777,9 @@ function drawDolloGuide(){
 
   const p=makePath(visualSide);
   const isRight=visualSide>0;
-  const color=isRight?'rgba(232,160,32,1)':'rgba(76,163,255,1)';
-  const glow=isRight?'rgba(232,160,32,.30)':'rgba(76,163,255,.30)';
-  const glow2=isRight?'rgba(255,215,90,.38)':'rgba(76,190,255,.38)';
+  const color='rgba(76,163,255,1)';
+  const glow='rgba(76,163,255,.30)';
+  const glow2='rgba(76,190,255,.38)';
 
   ctx.save();
   ctx.lineCap='round'; ctx.lineJoin='round'; ctx.setLineDash([]);
@@ -853,7 +853,7 @@ function drawDolloGuide(){
   ctx.fillText('쭉 높이 차세요!',endPt.x,endPt.y-28);
 
   // 스파크는 과하지 않게 곡선 바깥쪽으로만
-  ctx.strokeStyle=isRight?'rgba(255,220,100,.70)':'rgba(80,200,255,.70)'; ctx.lineWidth=3;
+  ctx.strokeStyle='rgba(80,200,255,.70)'; ctx.lineWidth=3;
   for(let i=0;i<7;i++){
     const t=0.18+i*0.10;
     const c=qPoint(p,t);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v2.1.4 HUD</title>
+<title>AI 발차기 챌린지 v2.1.5 HUD</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -833,6 +833,33 @@ body.hud-v21 #status{
   }
 }
 
+
+/* ── v2.1.5 횟수/시간/문구 수정 ── */
+
+/* 상단 큰 타이머는 숨기고, 오른쪽 점수판의 남은시간만 사용 */
+body.hud-v21 #timerBadge,
+body.hud-v21 #timerBadge.show{
+  display:none !important;
+}
+
+/* 풍선모드 제한시간 선택 줄도 좌하단 패널 안에 맞게 */
+body.hud-v21 #gameArea .drill-count-row{
+  display:flex;
+  width:100%;
+}
+
+/* 풍선모드에서 좌하단 시작 패널이 시간선택+시작버튼을 담도록 살짝 넓힘 */
+body.hud-v21.balloon-mode #gameArea{
+  width:320px !important;
+}
+
+/* 태블릿 좁은 화면에서는 풍선 시간 선택 패널 축소 */
+@media (orientation:landscape) and (max-width:1300px){
+  body.hud-v21.balloon-mode #gameArea{
+    width:285px !important;
+  }
+}
+
 </style>
 </head>
 <body class="hud-v21">
@@ -887,7 +914,7 @@ body.hud-v21 #status{
   </div>
 
   <div class="panel">
-    <div class="title">AI 발차기 챌린지 <small>v2.1.4 · 풍선모드 배치 조정</small></div>
+    <div class="title">AI 발차기 챌린지 <small>v2.1.5 · 횟수/시간/문구 수정</small></div>
     <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
 
     <div class="section-label">— 연습 모드</div>
@@ -903,10 +930,9 @@ body.hud-v21 #status{
       <div class="drill-count-row">
         <label>목표 횟수</label>
         <select id="drillCountSel">
+          <option value="3">3회</option>
           <option value="5">5회</option>
           <option value="10" selected>10회</option>
-          <option value="15">15회</option>
-          <option value="20">20회</option>
         </select>
       </div>
       <button id="startBtn" class="primary-start" onclick="startGame()">▶ 시작!</button>
@@ -918,6 +944,15 @@ body.hud-v21 #status{
       <button class="game-btn" id="m_balloon" onclick="setMode('balloon')">풍선 모드</button>
     </div>
     <div class="game-area" id="gameArea">
+      <div class="drill-count-row">
+        <label>제한 시간</label>
+        <select id="balloonTimeSel">
+          <option value="10">10초</option>
+          <option value="15">15초</option>
+          <option value="20">20초</option>
+          <option value="30" selected>30초</option>
+        </select>
+      </div>
       <button id="startBtn2" class="primary-start" onclick="startGame()">▶ 시작!</button>
       <div id="gameResult2" style="text-align:center;font-size:13px;font-weight:700;color:var(--green);min-height:18px;"></div>
     </div>
@@ -990,6 +1025,7 @@ const drillResultText=document.getElementById('drillResultText');
 const drillResultSub=document.getElementById('drillResultSub');
 const drillCountArea=document.getElementById('drillCountArea');
 const drillCountSel=document.getElementById('drillCountSel');
+const balloonTimeSel=document.getElementById('balloonTimeSel');
 const gameArea=document.getElementById('gameArea');
 // 두 시작 버튼을 하나처럼
 const startBtn=document.getElementById('startBtn');
@@ -1191,6 +1227,24 @@ function modeTitleText(){
   if(currentMode==='balloon') return ['풍선 모드','발끝으로 풍선 터뜨리기'];
   return ['발차기 연습','전신이 보이게 서주세요'];
 }
+
+// mirrored canvas에서도 글자가 뒤집히지 않게 표시
+function drawReadableText(text,x,y,font,fill,align='center'){
+  const mirrored=camWrap.classList.contains('mirrored');
+  ctx.save();
+  ctx.font=font;
+  ctx.fillStyle=fill;
+  ctx.textAlign=align;
+  if(mirrored){
+    ctx.translate(x,y);
+    ctx.scale(-1,1);
+    ctx.fillText(text,0,0);
+  } else {
+    ctx.fillText(text,x,y);
+  }
+  ctx.restore();
+}
+
 function updateModeBadge(){
   const [t,sub]=modeTitleText();
   modeBadge.innerHTML=t+'<small>'+sub+'</small>';
@@ -1353,7 +1407,7 @@ function drawApchaGuide(){
   ctx.fillStyle='rgba(9,22,40,.90)';
   ctx.roundRect(bodyX-125,targetY-52,250,34,13); ctx.fill();
   ctx.fillStyle='#4ca3ff'; ctx.font='bold 17px Gothic A1,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('▲ 위로 크게 차올려요!', bodyX, targetY-29);
+  drawReadableText('▲ 위로 크게 차올려요!', bodyX, targetY-29, 'bold 17px Gothic A1,sans-serif', '#4ca3ff');
   ctx.restore();
 }
 
@@ -1509,7 +1563,7 @@ function drawDolloGuide(){
   ctx.fillStyle='rgba(9,22,40,.88)';
   ctx.roundRect(endPt.x-86,endPt.y-48,172,30,12); ctx.fill();
   ctx.fillStyle=color; ctx.font='bold 15px Gothic A1,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('쭉 높이 차세요!',endPt.x,endPt.y-28);
+  drawReadableText('쭉 높이 차세요!', endPt.x, endPt.y-28, 'bold 15px Gothic A1,sans-serif', '#4ca3ff');
 
   // 스파크는 과하지 않게 곡선 바깥쪽으로만
   ctx.strokeStyle='rgba(80,200,255,.70)'; ctx.lineWidth=3;
@@ -1713,7 +1767,7 @@ window.startGame=()=>{
   };
   runReadyCountdown(subTexts[currentMode]||'',()=>{
     running=true; statusEl.textContent='발차기 하세요!';
-    if(currentMode==='balloon'){ startBalloon(); startTimed(30,finishBalloon); }
+    if(currentMode==='balloon'){ const sec=parseInt(balloonTimeSel?.value||'30'); startBalloon(); startTimed(sec,finishBalloon); }
     else if(isDrillMode()){
       drillTarget=parseInt(drillCountSel.value);
       drillDone=0; drillScores=[];

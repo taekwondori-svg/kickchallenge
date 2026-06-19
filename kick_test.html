@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v2.7.7 Kick Tabs Fix</title>
+<title>AI 발차기 챌린지 v2.7.8 Bottom Buttons Fix</title>
 <style>
   :root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -166,7 +166,7 @@
 
 
 /* ─────────────────────────────────────────────
-   v2.7.7 CLEAN HUD CSS
+   v2.7.8 CLEAN HUD CSS
    기준: 기존 v2.6 기능 유지 + 누적 HUD 스타일 단일화
    ───────────────────────────────────────────── */
 body.hud-v21 .stage{
@@ -1615,7 +1615,7 @@ renderStats(); renderCamRank(); updateModeBadge();
 
 
 <style id="v265c-layout-fix">
-/* v2.7.7: clean final layout fix for mode buttons and kick buttons */
+/* v2.7.8: clean final layout fix for mode buttons and kick buttons */
 
 /* Left mode buttons */
 body.hud-v21 .hud-drill-row,
@@ -1777,7 +1777,7 @@ body.hud-v21.playing-ui .difficulty-panel{
 
 
 <style id="v271-bugfix-layout">
-/* v2.7.7 bugfix: status message no longer covers mode buttons */
+/* v2.7.8 bugfix: status message no longer covers mode buttons */
 body.hud-v21 #status{
   top:82px !important;
   left:14px !important;
@@ -1835,7 +1835,7 @@ body.hud-v21 .diff-btn.active{
 
 
 <style id="v272-sparring-target-upgrade">
-/* v2.7.7: 겨루기 상대 타겟만 업그레이드.
+/* v2.7.8: 겨루기 상대 타겟만 업그레이드.
    버튼/레이아웃/기능은 v2.7.1 안정본 유지 */
 
 /* 겨루기 상대 전체: 더 크고 선명한 게임 타겟 느낌 */
@@ -2132,7 +2132,7 @@ body.hud-v21 .diff-btn.active{
 
 
 <style id="v274-borderless-ui">
-/* v2.7.7: 전체 버튼/패널 테두리 최소화.
+/* v2.7.8: 전체 버튼/패널 테두리 최소화.
    시작 버튼과 HP바는 기능 강조를 위해 유지 */
 
 /* 공통 패널 테두리 제거 */
@@ -2336,7 +2336,7 @@ body.hud-v21 button:active{
 
 
 <style id="v275-right-text-hud">
-/* v2.7.7: 오른쪽 점수 패널을 카드 없이 텍스트 HUD로 통일 */
+/* v2.7.8: 오른쪽 점수 패널을 카드 없이 텍스트 HUD로 통일 */
 
 /* 오른쪽 전체 위치 고정: 모든 모드 동일 */
 body.hud-v21 .stats-row{
@@ -2482,7 +2482,7 @@ body.hud-v21 .stats-row::before{
 
 
 <style id="v276-minimal-hud-polish">
-/* v2.7.7: 미니멀 HUD 정리
+/* v2.7.8: 미니멀 HUD 정리
    - 설명글 제거
    - 상단/안내/시작영역 배경과 테두리 최소화
    - 발차기 선택 실제 1줄 정렬
@@ -2835,7 +2835,7 @@ body.hud-v21 .btn-new{
 
 
 <style id="v277-kick-tabs-align-fix">
-/* v2.7.7: 하단 발차기 선택 탭 가로 정렬 고정 */
+/* v2.7.8: 하단 발차기 선택 탭 가로 정렬 고정 */
 
 body.hud-v21 .mode-row.hud-kick-row,
 body.hud-v21 .mode-row.hud-kick-row1,
@@ -2915,6 +2915,93 @@ body.hud-v21 .mode-row.hud-kick-tabs .drill-btn br{
     height:24px !important;
     min-height:24px !important;
     font-size:15px !important;
+  }
+}
+</style>
+
+
+<style id="v278-bottom-buttons-align-fix">
+/* v2.7.8: 오른쪽 아래 보조 버튼 줄맞춤/줄바꿈 수정 */
+
+body.hud-v21 .btns{
+  right:16px !important;
+  bottom:16px !important;
+  width:auto !important;
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:18px !important;
+  z-index:80 !important;
+}
+
+body.hud-v21 .btns button{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:auto !important;
+  min-width:auto !important;
+  max-width:none !important;
+  height:28px !important;
+  min-height:28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  color:rgba(255,255,255,.56) !important;
+  font-size:14px !important;
+  font-weight:1000 !important;
+  line-height:1 !important;
+  letter-spacing:-.4px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  word-break:keep-all !important;
+  writing-mode:horizontal-tb !important;
+  overflow:visible !important;
+  text-shadow:0 2px 10px rgba(0,0,0,.78) !important;
+}
+
+body.hud-v21 .btns button:hover,
+body.hud-v21 .btns button:active{
+  color:#ffffff !important;
+  background:transparent !important;
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.78),
+    0 0 12px rgba(76,163,255,.75) !important;
+}
+
+body.hud-v21 .btns .btn-new,
+body.hud-v21 .btn-new{
+  color:rgba(255,255,255,.56) !important;
+  background:transparent !important;
+}
+
+/* 아이콘과 글자 높이 맞춤 */
+body.hud-v21 .btns button svg,
+body.hud-v21 .btns button span,
+body.hud-v21 .btns button i{
+  vertical-align:middle !important;
+  line-height:1 !important;
+}
+
+/* 줄바꿈 태그가 들어가도 무시 */
+body.hud-v21 .btns button br{
+  display:none !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21 .btns{
+    right:14px !important;
+    bottom:14px !important;
+    gap:14px !important;
+  }
+  body.hud-v21 .btns button{
+    height:26px !important;
+    min-height:26px !important;
+    font-size:13px !important;
   }
 }
 </style>

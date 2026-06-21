@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 발차기 챌린지 v3.0 KICK FIGHTER</title>
+<title>AI KICK MASTER - Taekwondo Training System</title>
 <!--
   kick_test.html maintenance note
   - CSS has been consolidated into one ordered block.
@@ -349,8 +349,8 @@ body.hud-v21 #drillResultSub{font-size:20px; color:#cdd8e8; font-weight:700;}
    CSS SECTION 02: fix4-start-stop-clean-css
    ========================================================= */
 /* Fix4: 시작/중지 버튼 배경 완전 제거, 텍스트만 표시 */
-body.hud-v21.tekken-v30 #drillCountArea,
-body.hud-v21.tekken-v30 #gameArea{
+body.hud-v21.akm-ui #drillCountArea,
+body.hud-v21.akm-ui #gameArea{
   background:transparent !important;
   border:none !important;
   box-shadow:none !important;
@@ -359,9 +359,9 @@ body.hud-v21.tekken-v30 #gameArea{
   padding:0 !important;
 }
 
-body.hud-v21.tekken-v30 .panel .primary-start,
-body.hud-v21.tekken-v30 #startBtn,
-body.hud-v21.tekken-v30 #startBtn2{
+body.hud-v21.akm-ui .panel .primary-start,
+body.hud-v21.akm-ui #startBtn,
+body.hud-v21.akm-ui #startBtn2{
   display:block !important;
   width:auto !important;
   min-width:0 !important;
@@ -391,12 +391,12 @@ body.hud-v21.tekken-v30 #startBtn2{
   text-shadow:0 3px 12px rgba(0,0,0,.86) !important;
 }
 
-body.hud-v21.tekken-v30 .panel .primary-start::before,
-body.hud-v21.tekken-v30 .panel .primary-start::after,
-body.hud-v21.tekken-v30 #startBtn::before,
-body.hud-v21.tekken-v30 #startBtn::after,
-body.hud-v21.tekken-v30 #startBtn2::before,
-body.hud-v21.tekken-v30 #startBtn2::after{
+body.hud-v21.akm-ui .panel .primary-start::before,
+body.hud-v21.akm-ui .panel .primary-start::after,
+body.hud-v21.akm-ui #startBtn::before,
+body.hud-v21.akm-ui #startBtn::after,
+body.hud-v21.akm-ui #startBtn2::before,
+body.hud-v21.akm-ui #startBtn2::after{
   content:none !important;
   display:none !important;
   background:none !important;
@@ -405,14 +405,14 @@ body.hud-v21.tekken-v30 #startBtn2::after{
 }
 
 /* 실행 중에는 JS가 텍스트를 ■ 중지로 바꾸고, 색만 빨강으로 */
-body.hud-v21.tekken-v30.playing-ui #startBtn,
-body.hud-v21.tekken-v30.playing-ui #startBtn2{
+body.hud-v21.akm-ui.playing-ui #startBtn,
+body.hud-v21.akm-ui.playing-ui #startBtn2{
   color:#ff6578 !important;
 }
 
 /* 목표횟수/제한시간 선택 줄은 기존 HUD 느낌 유지 */
-body.hud-v21.tekken-v30 #drillCountArea .drill-count-row,
-body.hud-v21.tekken-v30 #gameArea .drill-count-row{
+body.hud-v21.akm-ui #drillCountArea .drill-count-row,
+body.hud-v21.akm-ui #gameArea .drill-count-row{
   width:max-content !important;
   padding:0 !important;
   margin:0 !important;
@@ -421,8 +421,8 @@ body.hud-v21.tekken-v30 #gameArea .drill-count-row{
 /* =========================================================
    CSS SECTION 03: fix5-remove-stop-glow
    ========================================================= */
-body.hud-v21.tekken-v30.playing-ui #startBtn,
-body.hud-v21.tekken-v30.playing-ui #startBtn2{
+body.hud-v21.akm-ui.playing-ui #startBtn,
+body.hud-v21.akm-ui.playing-ui #startBtn2{
   background:transparent !important;
   background-image:none !important;
   box-shadow:none !important;
@@ -430,16 +430,16 @@ body.hud-v21.tekken-v30.playing-ui #startBtn2{
   text-shadow:none !important;
 }
 
-body.hud-v21.tekken-v30.playing-ui #startBtn::before,
-body.hud-v21.tekken-v30.playing-ui #startBtn::after,
-body.hud-v21.tekken-v30.playing-ui #startBtn2::before,
-body.hud-v21.tekken-v30.playing-ui #startBtn2::after{
+body.hud-v21.akm-ui.playing-ui #startBtn::before,
+body.hud-v21.akm-ui.playing-ui #startBtn::after,
+body.hud-v21.akm-ui.playing-ui #startBtn2::before,
+body.hud-v21.akm-ui.playing-ui #startBtn2::after{
   background:none !important;
   box-shadow:none !important;
   filter:none !important;
 }
 
-body.hud-v21.tekken-v30.playing-ui .primary-start{
+body.hud-v21.akm-ui.playing-ui .primary-start{
   box-shadow:none !important;
   filter:none !important;
 }
@@ -448,11 +448,11 @@ body.hud-v21.tekken-v30.playing-ui .primary-start{
    CSS SECTION 04: fix6-hud-clean-hp-gradient
    ========================================================= */
 /* 1) 오른쪽 점수/HUD 탭 블러 배경 제거: 숫자와 라벨만 보이게 */
-body.hud-v21.tekken-v30 .stats-row .stat-box,
-body.hud-v21.tekken-v30 .stat-box,
-body.hud-v21.tekken-v30 .score-box,
-body.hud-v21.tekken-v30 .count-box,
-body.hud-v21.tekken-v30 .avg-box{
+body.hud-v21.akm-ui .stats-row .stat-box,
+body.hud-v21.akm-ui .stat-box,
+body.hud-v21.akm-ui .score-box,
+body.hud-v21.akm-ui .count-box,
+body.hud-v21.akm-ui .avg-box{
   background:transparent !important;
   background-image:none !important;
   border:none !important;
@@ -463,26 +463,26 @@ body.hud-v21.tekken-v30 .avg-box{
 }
 
 /* 숫자 가독성은 유지 */
-body.hud-v21.tekken-v30 .stat-label{
+body.hud-v21.akm-ui .stat-label{
   text-shadow:0 2px 8px rgba(0,0,0,.85) !important;
 }
-body.hud-v21.tekken-v30 .stat-num{
+body.hud-v21.akm-ui .stat-num{
   text-shadow:0 3px 14px rgba(0,0,0,.9) !important;
 }
 
 /* 2) 왼쪽 모드 선택 파란 라인 제거 */
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn{
+body.hud-v21.akm-ui .hud-drill-row .game-btn,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn{
   border-bottom:none !important;
   box-shadow:none !important;
 }
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn::before,
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn::after,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn::before,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn::after,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn::before,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn::after{
+body.hud-v21.akm-ui .hud-drill-row .game-btn::before,
+body.hud-v21.akm-ui .hud-drill-row .game-btn::after,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn::before,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn::after,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn::before,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn::after{
   content:none !important;
   display:none !important;
   border:none !important;
@@ -490,15 +490,15 @@ body.hud-v21.tekken-v30 .hud-sparring-row .game-btn::after{
   box-shadow:none !important;
 }
 
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn.active,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn.active,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn.active{
+body.hud-v21.akm-ui .hud-drill-row .game-btn.active,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn.active,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn.active{
   border-bottom:none !important;
   box-shadow:none !important;
 }
 
 /* 3) 겨루기 체력 게이지 방향 수정: 가득 차면 초록, 0에 가까우면 빨강 */
-body.hud-v21.tekken-v30 #enemyHpFill,
+body.hud-v21.akm-ui #enemyHpFill,
 #enemyHpFill{
   background:linear-gradient(90deg,#D92B3A 0%, #E8A020 45%, #2ecc71 100%) !important;
 }
@@ -507,7 +507,7 @@ body.hud-v21.tekken-v30 #enemyHpFill,
    CSS SECTION 05: fix7-hp-dynamic-color-css
    ========================================================= */
 /* Fix7: HP 게이지는 남은 체력 비율에 따라 전체 색이 변하게 처리 */
-body.hud-v21.tekken-v30 #enemyHpFill,
+body.hud-v21.akm-ui #enemyHpFill,
 #enemyHpFill{
   background:#2ecc71 !important;
   transition:width .25s ease, background .25s ease !important;
@@ -1907,13 +1907,13 @@ body.hud-v21 .btns button br{
 }
 
 /* =========================================================
-   CSS SECTION 17: v30-kick-fighter-arcade-ui
+   CSS SECTION 17: v30-ai-kick-master-ui
    ========================================================= */
 /* ─────────────────────────────────────────────
-   v3.0 KICK FIGHTER UI
-   목적: 기능 유지 + 철권/아케이드 느낌의 대폭 UI 전환
+   v3.0 AI KICK MASTER UI
+   목적: 기능 유지 + AI KICK MASTER 전용 UI 정리
    ───────────────────────────────────────────── */
-body.hud-v21.tekken-v30{
+body.hud-v21.akm-ui{
   --arcade-red:#ff304f;
   --arcade-blue:#31b7ff;
   --arcade-gold:#ffd15a;
@@ -1921,56 +1921,56 @@ body.hud-v21.tekken-v30{
   --arcade-dark:#040912;
   background:#000 !important;
 }
-body.hud-v21.tekken-v30 .stage{background:#000 !important;}
-body.hud-v21.tekken-v30 .cam-wrap::before{
+body.hud-v21.akm-ui .stage{background:#000 !important;}
+body.hud-v21.akm-ui .cam-wrap::before{
   z-index:4 !important;
   background:
     radial-gradient(circle at 50% 42%, rgba(0,0,0,0) 34%, rgba(3,8,18,.26) 68%, rgba(0,0,0,.72) 100%),
     linear-gradient(90deg,rgba(255,48,79,.18),rgba(0,0,0,0) 23%,rgba(0,0,0,0) 72%,rgba(49,183,255,.20)),
     linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,0) 25%,rgba(0,0,0,0) 62%,rgba(0,0,0,.76));
 }
-body.hud-v21.tekken-v30 .cam-wrap::after{
+body.hud-v21.akm-ui .cam-wrap::after{
   content:"";
   position:absolute; inset:0; z-index:5; pointer-events:none;
   background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,rgba(0,0,0,0) 1px 5px);
   mix-blend-mode:screen; opacity:.20;
 }
-body.hud-v21.tekken-v30 .panel{z-index:10 !important;}
-body.hud-v21.tekken-v30 .panel *,
-body.hud-v21.tekken-v30 .panel button,
-body.hud-v21.tekken-v30 .panel select{font-family:inherit !important;}
+body.hud-v21.akm-ui .panel{z-index:10 !important;}
+body.hud-v21.akm-ui .panel *,
+body.hud-v21.akm-ui .panel button,
+body.hud-v21.akm-ui .panel select{font-family:inherit !important;}
 
 /* 좌상단 게임 로고 */
-body.hud-v21.tekken-v30 .title{
+body.hud-v21.akm-ui .title{
   top:18px !important; left:22px !important; min-width:0 !important;
   padding:0 !important; border:0 !important; background:transparent !important; box-shadow:none !important;
   color:#fff !important; font-size:22px !important; font-weight:1000 !important; letter-spacing:.5px !important;
   text-shadow:0 3px 12px rgba(0,0,0,.95),0 0 18px rgba(255,48,79,.55) !important;
 }
-body.hud-v21.tekken-v30 .title small{
+body.hud-v21.akm-ui .title small{
   margin-top:2px !important; font-size:10px !important; color:rgba(255,255,255,.58) !important; letter-spacing:1.6px !important;
 }
 
 /* 중앙 현재 미션: 카드가 아니라 경기 타이틀 */
-body.hud-v21.tekken-v30 #modeBadge{
+body.hud-v21.akm-ui #modeBadge{
   top:22px !important; left:50% !important; transform:translateX(-50%) skewX(-8deg) !important;
   min-width:360px !important; padding:0 38px 8px !important;
   border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
   color:#fff !important; font-size:36px !important; font-weight:1000 !important; letter-spacing:-1.2px !important;
   text-align:center !important; text-shadow:0 4px 18px rgba(0,0,0,.95),0 0 22px rgba(49,183,255,.55),0 0 10px rgba(255,255,255,.25) !important;
 }
-body.hud-v21.tekken-v30 #modeBadge small{display:none !important;}
-body.hud-v21.tekken-v30 #modeBadge::before,
-body.hud-v21.tekken-v30 #modeBadge::after{
+body.hud-v21.akm-ui #modeBadge small{display:none !important;}
+body.hud-v21.akm-ui #modeBadge::before,
+body.hud-v21.akm-ui #modeBadge::after{
   content:""; position:absolute; top:50%; width:96px; height:5px; transform:translateY(-50%);
   background:linear-gradient(90deg,transparent,var(--arcade-gold),transparent); opacity:.88;
   filter:drop-shadow(0 0 10px rgba(255,209,90,.8));
 }
-body.hud-v21.tekken-v30 #modeBadge::before{right:100%;}
-body.hud-v21.tekken-v30 #modeBadge::after{left:100%;}
+body.hud-v21.akm-ui #modeBadge::before{right:100%;}
+body.hud-v21.akm-ui #modeBadge::after{left:100%;}
 
 /* 상태 문구는 작게. 화면 주인공에서 제외 */
-body.hud-v21.tekken-v30 #status{
+body.hud-v21.akm-ui #status{
   top:58px !important; left:22px !important; max-width:280px !important;
   padding:0 !important; border:0 !important; background:transparent !important; box-shadow:none !important;
   color:rgba(255,255,255,.58) !important; font-size:12px !important; line-height:1.25 !important;
@@ -1978,127 +1978,127 @@ body.hud-v21.tekken-v30 #status{
 }
 
 /* 난이도: 우상단 CPU LEVEL 느낌 */
-body.hud-v21.tekken-v30 .difficulty-panel{
+body.hud-v21.akm-ui .difficulty-panel{
   top:20px !important; right:22px !important; z-index:70 !important;
   display:flex !important; gap:8px !important; padding:0 !important;
   border:0 !important; background:transparent !important; box-shadow:none !important; backdrop-filter:none !important;
 }
-body.hud-v21.tekken-v30 .difficulty-panel::before{
+body.hud-v21.akm-ui .difficulty-panel::before{
   content:"LEVEL"; align-self:center; margin-right:2px;
   color:rgba(255,255,255,.54); font-size:10px; font-weight:1000; letter-spacing:1.4px;
   text-shadow:0 2px 8px rgba(0,0,0,.95);
 }
-body.hud-v21.tekken-v30 .diff-btn{
+body.hud-v21.akm-ui .diff-btn{
   min-width:38px !important; min-height:24px !important; padding:0 2px 4px !important;
   border:0 !important; border-bottom:2px solid rgba(255,255,255,.22) !important; border-radius:0 !important;
   background:transparent !important; box-shadow:none !important; color:rgba(255,255,255,.48) !important;
   font-size:13px !important; font-weight:1000 !important; line-height:1 !important;
   text-shadow:0 2px 8px rgba(0,0,0,.9) !important;
 }
-body.hud-v21.tekken-v30 .diff-btn.active{
+body.hud-v21.akm-ui .diff-btn.active{
   color:#fff !important; border-bottom-color:var(--arcade-gold) !important;
   text-shadow:0 2px 9px rgba(0,0,0,.95),0 0 13px rgba(255,209,90,.95) !important;
 }
 
 /* 설정 버튼 */
-body.hud-v21.tekken-v30 .hud-settings-btn{
+body.hud-v21.akm-ui .hud-settings-btn{
   top:52px !important; right:22px !important; min-width:0 !important; min-height:0 !important; padding:0 !important;
   border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
   color:rgba(255,255,255,.42) !important; font-size:13px !important; font-weight:1000 !important;
   text-shadow:0 2px 8px rgba(0,0,0,.95) !important;
 }
-body.hud-v21.tekken-v30 .hud-settings-btn:hover{color:#fff !important;}
+body.hud-v21.akm-ui .hud-settings-btn:hover{color:#fff !important;}
 
 /* 점수판: 카드 3개가 아니라 전투 HUD */
-body.hud-v21.tekken-v30 .stats-row{
+body.hud-v21.akm-ui .stats-row{
   top:132px !important; right:24px !important; width:232px !important; gap:16px !important; z-index:60 !important;
 }
-body.hud-v21.tekken-v30 .stat-box{
+body.hud-v21.akm-ui .stat-box{
   position:relative; min-height:82px !important; padding:5px 0 10px !important;
   border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
   text-align:right !important;
 }
-body.hud-v21.tekken-v30 .stat-box::after{
+body.hud-v21.akm-ui .stat-box::after{
   content:""; position:absolute; right:0; bottom:0; width:176px; height:4px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),var(--arcade-blue));
   box-shadow:0 0 16px rgba(49,183,255,.60);
 }
-body.hud-v21.tekken-v30 .stat-label{
+body.hud-v21.akm-ui .stat-label{
   color:rgba(255,255,255,.62) !important; font-size:14px !important; font-weight:1000 !important; letter-spacing:.5px !important;
   text-shadow:0 2px 8px rgba(0,0,0,.95) !important;
 }
-body.hud-v21.tekken-v30 .stat-num{
+body.hud-v21.akm-ui .stat-num{
   margin-top:0 !important; font-size:58px !important; line-height:.98 !important; font-weight:1000 !important;
   color:#fff !important; text-shadow:0 4px 18px rgba(0,0,0,.96),0 0 22px rgba(49,183,255,.55) !important;
 }
-body.hud-v21.tekken-v30 .score-box .stat-num{color:var(--arcade-gold) !important; text-shadow:0 4px 16px rgba(0,0,0,.96),0 0 22px rgba(255,209,90,.85) !important;}
-body.hud-v21.tekken-v30 .avg-box .stat-num{color:var(--arcade-green) !important; text-shadow:0 4px 16px rgba(0,0,0,.96),0 0 20px rgba(81,255,157,.60) !important;}
-body.hud-v21.tekken-v30 #scoreGrade{font-size:14px !important; font-weight:1000 !important; text-shadow:0 2px 10px rgba(0,0,0,.9) !important;}
+body.hud-v21.akm-ui .score-box .stat-num{color:var(--arcade-gold) !important; text-shadow:0 4px 16px rgba(0,0,0,.96),0 0 22px rgba(255,209,90,.85) !important;}
+body.hud-v21.akm-ui .avg-box .stat-num{color:var(--arcade-green) !important; text-shadow:0 4px 16px rgba(0,0,0,.96),0 0 20px rgba(81,255,157,.60) !important;}
+body.hud-v21.akm-ui #scoreGrade{font-size:14px !important; font-weight:1000 !important; text-shadow:0 2px 10px rgba(0,0,0,.9) !important;}
 
 /* 모드 버튼: 좌측 미션 선택 */
-body.hud-v21.tekken-v30 .hud-drill-row,
-body.hud-v21.tekken-v30 .hud-balloon-row,
-body.hud-v21.tekken-v30 .hud-sparring-row{
+body.hud-v21.akm-ui .hud-drill-row,
+body.hud-v21.akm-ui .hud-balloon-row,
+body.hud-v21.akm-ui .hud-sparring-row{
   left:22px !important; width:174px !important; z-index:65 !important; display:flex !important; position:absolute !important;
 }
-body.hud-v21.tekken-v30 .hud-drill-row{top:118px !important;}
-body.hud-v21.tekken-v30 .hud-balloon-row{top:160px !important;}
-body.hud-v21.tekken-v30 .hud-sparring-row{top:202px !important;}
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn{
+body.hud-v21.akm-ui .hud-drill-row{top:118px !important;}
+body.hud-v21.akm-ui .hud-balloon-row{top:160px !important;}
+body.hud-v21.akm-ui .hud-sparring-row{top:202px !important;}
+body.hud-v21.akm-ui .hud-drill-row .game-btn,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn{
   width:100% !important; height:28px !important; min-height:28px !important; padding:0 !important;
   border:0 !important; border-left:4px solid rgba(255,255,255,.22) !important; border-radius:0 !important;
   background:linear-gradient(90deg,rgba(0,0,0,.46),rgba(0,0,0,0)) !important; box-shadow:none !important;
   color:rgba(255,255,255,.58) !important; font-size:14px !important; font-weight:1000 !important; text-align:left !important;
   padding-left:12px !important; text-shadow:0 2px 10px rgba(0,0,0,.9) !important;
 }
-body.hud-v21.tekken-v30 .hud-drill-row .game-btn.active,
-body.hud-v21.tekken-v30 .hud-balloon-row .game-btn.active,
-body.hud-v21.tekken-v30 .hud-sparring-row .game-btn.active{
+body.hud-v21.akm-ui .hud-drill-row .game-btn.active,
+body.hud-v21.akm-ui .hud-balloon-row .game-btn.active,
+body.hud-v21.akm-ui .hud-sparring-row .game-btn.active{
   color:#fff !important; border-left-color:var(--arcade-red) !important;
   text-shadow:0 2px 12px rgba(0,0,0,.95),0 0 14px rgba(255,48,79,.78) !important;
 }
 
 /* 발차기 탭: 하단 캐릭터 커맨드 바 */
-body.hud-v21.tekken-v30 .mode-row.hud-kick-row,
-body.hud-v21.tekken-v30 .mode-row.hud-kick-tabs{
+body.hud-v21.akm-ui .mode-row.hud-kick-row,
+body.hud-v21.akm-ui .mode-row.hud-kick-tabs{
   left:50% !important; bottom:24px !important; transform:translateX(-50%) !important;
   width:auto !important; max-width:none !important; gap:22px !important; z-index:80 !important;
   display:flex !important; align-items:flex-end !important; justify-content:center !important;
 }
-body.hud-v21.tekken-v30 .mode-row.hud-kick-row .drill-btn,
-body.hud-v21.tekken-v30 .mode-row.hud-kick-tabs .drill-btn{
+body.hud-v21.akm-ui .mode-row.hud-kick-row .drill-btn,
+body.hud-v21.akm-ui .mode-row.hud-kick-tabs .drill-btn{
   flex:0 0 auto !important; min-width:42px !important; width:auto !important; height:28px !important; min-height:28px !important;
   padding:0 0 6px !important; border:0 !important; border-bottom:2px solid rgba(255,255,255,.22) !important; border-radius:0 !important;
   background:transparent !important; box-shadow:none !important; color:rgba(255,255,255,.58) !important;
   font-size:16px !important; font-weight:1000 !important; line-height:1 !important; letter-spacing:-.4px !important;
   text-shadow:0 3px 12px rgba(0,0,0,.95) !important;
 }
-body.hud-v21.tekken-v30 .mode-row.hud-kick-row .drill-btn.active,
-body.hud-v21.tekken-v30 .mode-row.hud-kick-tabs .drill-btn.active{
+body.hud-v21.akm-ui .mode-row.hud-kick-row .drill-btn.active,
+body.hud-v21.akm-ui .mode-row.hud-kick-tabs .drill-btn.active{
   color:#fff !important; border-bottom-color:var(--arcade-gold) !important;
   text-shadow:0 3px 14px rgba(0,0,0,.95),0 0 18px rgba(255,209,90,.9),0 0 28px rgba(255,48,79,.35) !important;
 }
-body.hud-v21.tekken-v30.playing-ui .mode-row.hud-kick-row{opacity:.22 !important;}
+body.hud-v21.akm-ui.playing-ui .mode-row.hud-kick-row{opacity:.22 !important;}
 
 /* 시작 영역: 작은 폼이 아니라 FIGHT 버튼 */
-body.hud-v21.tekken-v30 #drillCountArea,
-body.hud-v21.tekken-v30 #gameArea{
+body.hud-v21.akm-ui #drillCountArea,
+body.hud-v21.akm-ui #gameArea{
   left:22px !important; bottom:22px !important; width:220px !important; z-index:82 !important;
   padding:0 !important; gap:8px !important; border:0 !important; border-radius:0 !important;
   background:transparent !important; box-shadow:none !important; backdrop-filter:none !important;
 }
-body.hud-v21.tekken-v30 .drill-count-row{gap:8px !important; align-items:center !important;}
-body.hud-v21.tekken-v30 .drill-count-row label{
+body.hud-v21.akm-ui .drill-count-row{gap:8px !important; align-items:center !important;}
+body.hud-v21.akm-ui .drill-count-row label{
   color:rgba(255,255,255,.58) !important; font-size:12px !important; font-weight:1000 !important; text-shadow:0 2px 8px rgba(0,0,0,.95) !important;
 }
-body.hud-v21.tekken-v30 .drill-count-row select{
+body.hud-v21.akm-ui .drill-count-row select{
   height:28px !important; border:0 !important; border-bottom:2px solid rgba(255,255,255,.28) !important; border-radius:0 !important;
   background:rgba(0,0,0,.22) !important; color:#fff !important; font-size:14px !important; font-weight:1000 !important;
   box-shadow:none !important; outline:none !important;
 }
-body.hud-v21.tekken-v30 .panel .primary-start{
+body.hud-v21.akm-ui .panel .primary-start{
   width:190px !important; height:54px !important; min-height:54px !important; padding:0 !important;
   border:0 !important; border-radius:0 !important;
   clip-path:polygon(10% 0,100% 0,90% 100%,0 100%);
@@ -2109,38 +2109,38 @@ body.hud-v21.tekken-v30 .panel .primary-start{
 
 
 /* 하단 보조 버튼은 관람 방해 최소화 */
-body.hud-v21.tekken-v30 .btns{
+body.hud-v21.akm-ui .btns{
   right:22px !important; bottom:22px !important; gap:24px !important; z-index:82 !important;
 }
-body.hud-v21.tekken-v30 .btns button{
+body.hud-v21.akm-ui .btns button{
   height:24px !important; min-height:24px !important; color:rgba(255,255,255,.42) !important;
   font-size:13px !important; font-weight:1000 !important; text-shadow:0 2px 10px rgba(0,0,0,.95) !important;
 }
-body.hud-v21.tekken-v30 .btns button:hover{color:#fff !important;}
+body.hud-v21.akm-ui .btns button:hover{color:#fff !important;}
 
 /* 겨루기 HP: 대전 게임 체력바 */
-body.hud-v21.tekken-v30 #enemyHpWrap{
+body.hud-v21.akm-ui #enemyHpWrap{
   top:82px !important; left:50% !important; transform:translateX(-50%) !important;
   width:min(620px,58vw) !important; height:38px !important; padding:0 !important; border:0 !important;
   border-radius:0 !important; background:transparent !important; box-shadow:none !important; z-index:72 !important;
 }
-body.hud-v21.tekken-v30 #enemyName{
+body.hud-v21.akm-ui #enemyName{
   position:absolute; left:0; top:-20px; font-size:12px !important; color:rgba(255,255,255,.62) !important; font-weight:1000 !important; letter-spacing:1px;
 }
-body.hud-v21.tekken-v30 #enemyHpTrack{
+body.hud-v21.akm-ui #enemyHpTrack{
   position:absolute; left:0; right:70px; top:8px; width:auto !important; height:18px !important;
   border:2px solid rgba(255,255,255,.55) !important; background:rgba(0,0,0,.58) !important; border-radius:0 !important;
   box-shadow:0 0 18px rgba(255,48,79,.25), inset 0 2px 6px rgba(0,0,0,.6) !important;
   clip-path:polygon(2% 0,100% 0,98% 100%,0 100%);
 }
-body.hud-v21.tekken-v30 #enemyHpFill{
+body.hud-v21.akm-ui #enemyHpFill{
   background:linear-gradient(90deg,#51ff9d,#ffd15a,#ff304f) !important; box-shadow:0 0 14px rgba(81,255,157,.55) !important;
 }
-body.hud-v21.tekken-v30 #enemyHpText{
+body.hud-v21.akm-ui #enemyHpText{
   position:absolute; right:0; top:3px; min-width:62px; font-size:18px !important; color:#fff !important; font-weight:1000 !important;
   text-shadow:0 2px 10px rgba(0,0,0,.95),0 0 12px rgba(255,48,79,.65) !important;
 }
-body.hud-v21.tekken-v30 #comboBadge{
+body.hud-v21.akm-ui #comboBadge{
   top:126px !important; right:22px !important; min-width:150px !important;
   padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
   color:var(--arcade-gold) !important; font-size:28px !important; font-weight:1000 !important; text-align:right !important;
@@ -2148,58 +2148,58 @@ body.hud-v21.tekken-v30 #comboBadge{
 }
 
 /* 겨루기 타겟 더 게임 오브젝트처럼 */
-body.hud-v21.tekken-v30 #enemyTarget{
+body.hud-v21.akm-ui #enemyTarget{
   width:288px !important; height:455px !important; opacity:.96 !important;
   transform:translate(-50%,-42%) perspective(560px) rotateY(-7deg) scale(1.03) !important;
   filter:drop-shadow(0 0 34px rgba(49,183,255,.50)) drop-shadow(0 0 30px rgba(255,48,79,.35)) drop-shadow(0 30px 28px rgba(0,0,0,.62)) !important;
 }
-body.hud-v21.tekken-v30 #enemyTarget .enemyHead,
-body.hud-v21.tekken-v30 #enemyTarget .enemyBody{
+body.hud-v21.akm-ui #enemyTarget .enemyHead,
+body.hud-v21.akm-ui #enemyTarget .enemyBody{
   backdrop-filter:blur(3px); font-size:13px !important; font-weight:1000 !important;
 }
-body.hud-v21.tekken-v30 #enemyTarget .enemyHead{border-width:3px !important; box-shadow:0 0 32px rgba(255,48,79,.72), inset 0 0 28px rgba(255,48,79,.20) !important;}
-body.hud-v21.tekken-v30 #enemyTarget .enemyBody{border-width:3px !important; box-shadow:0 0 32px rgba(49,183,255,.70), inset 0 0 28px rgba(49,183,255,.18) !important;}
-body.hud-v21.tekken-v30 #damagePopup{
+body.hud-v21.akm-ui #enemyTarget .enemyHead{border-width:3px !important; box-shadow:0 0 32px rgba(255,48,79,.72), inset 0 0 28px rgba(255,48,79,.20) !important;}
+body.hud-v21.akm-ui #enemyTarget .enemyBody{border-width:3px !important; box-shadow:0 0 32px rgba(49,183,255,.70), inset 0 0 28px rgba(49,183,255,.18) !important;}
+body.hud-v21.akm-ui #damagePopup{
   border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
   font-size:46px !important; font-weight:1000 !important; color:#fff !important;
   text-shadow:0 5px 16px rgba(0,0,0,.95),0 0 22px rgba(255,48,79,.85) !important;
 }
 
 /* 점수/결과 팝업: 아케이드 판정 */
-body.hud-v21.tekken-v30 #popScore{
+body.hud-v21.akm-ui #popScore{
   font-size:152px !important; font-weight:1000 !important; color:var(--arcade-gold) !important;
   text-shadow:0 8px 24px rgba(0,0,0,.96),0 0 40px rgba(255,209,90,.95),0 0 70px rgba(255,48,79,.35) !important;
 }
-body.hud-v21.tekken-v30 .popGrade{
+body.hud-v21.akm-ui .popGrade{
   font-size:54px !important; color:#fff !important; text-shadow:0 5px 18px rgba(0,0,0,.95),0 0 26px rgba(49,183,255,.88) !important;
 }
-body.hud-v21.tekken-v30 #readyOverlay{
+body.hud-v21.akm-ui #readyOverlay{
   background:rgba(0,0,0,.48) !important; backdrop-filter:blur(2px) !important;
 }
-body.hud-v21.tekken-v30 #readyNum{
+body.hud-v21.akm-ui #readyNum{
   color:#fff !important; font-size:172px !important; font-weight:1000 !important;
   text-shadow:0 8px 24px rgba(0,0,0,.95),0 0 45px rgba(255,48,79,.85) !important;
 }
-body.hud-v21.tekken-v30 #readySub{font-size:24px !important; font-weight:1000 !important; color:var(--arcade-gold) !important;}
-body.hud-v21.tekken-v30 #drillResultText{font-size:64px !important; font-weight:1000 !important;}
+body.hud-v21.akm-ui #readySub{font-size:24px !important; font-weight:1000 !important; color:var(--arcade-gold) !important;}
+body.hud-v21.akm-ui #drillResultText{font-size:64px !important; font-weight:1000 !important;}
 
 /* 설정 패널은 열었을 때만 기존 기능 확인용 */
-body.hud-v21.tekken-v30.settings-open .height-box,
-body.hud-v21.tekken-v30.settings-open .ctrl{
+body.hud-v21.akm-ui.settings-open .height-box,
+body.hud-v21.akm-ui.settings-open .ctrl{
   right:22px !important; width:320px !important; border:1px solid rgba(255,255,255,.24) !important;
   background:rgba(0,0,0,.55) !important; box-shadow:0 8px 24px rgba(0,0,0,.50) !important;
 }
 
 @media (orientation:landscape) and (max-width:1220px){
-  body.hud-v21.tekken-v30 #modeBadge{font-size:30px !important; min-width:300px !important;}
-  body.hud-v21.tekken-v30 .stats-row{width:188px !important; top:124px !important;}
-  body.hud-v21.tekken-v30 .stat-num{font-size:48px !important;}
-  body.hud-v21.tekken-v30 .mode-row.hud-kick-row,
-  body.hud-v21.tekken-v30 .mode-row.hud-kick-tabs{gap:18px !important; bottom:18px !important;}
-  body.hud-v21.tekken-v30 .mode-row.hud-kick-row .drill-btn,
-  body.hud-v21.tekken-v30 .mode-row.hud-kick-tabs .drill-btn{font-size:14px !important; min-width:36px !important;}
-  body.hud-v21.tekken-v30 #enemyHpWrap{width:min(500px,54vw) !important;}
-  body.hud-v21.tekken-v30 #enemyTarget{transform:translate(-50%,-42%) perspective(560px) rotateY(-7deg) scale(.92) !important;}
+  body.hud-v21.akm-ui #modeBadge{font-size:30px !important; min-width:300px !important;}
+  body.hud-v21.akm-ui .stats-row{width:188px !important; top:124px !important;}
+  body.hud-v21.akm-ui .stat-num{font-size:48px !important;}
+  body.hud-v21.akm-ui .mode-row.hud-kick-row,
+  body.hud-v21.akm-ui .mode-row.hud-kick-tabs{gap:18px !important; bottom:18px !important;}
+  body.hud-v21.akm-ui .mode-row.hud-kick-row .drill-btn,
+  body.hud-v21.akm-ui .mode-row.hud-kick-tabs .drill-btn{font-size:14px !important; min-width:36px !important;}
+  body.hud-v21.akm-ui #enemyHpWrap{width:min(500px,54vw) !important;}
+  body.hud-v21.akm-ui #enemyTarget{transform:translate(-50%,-42%) perspective(560px) rotateY(-7deg) scale(.92) !important;}
 }
 
 
@@ -2220,10 +2220,10 @@ body.hud-v21.tekken-v30.settings-open .ctrl{
   14%{opacity:1; transform:scale(.98);}
   100%{opacity:0; transform:scale(1.22);}
 }
-body.hud-v21.tekken-v30 #enemyTarget.hit-body{
+body.hud-v21.akm-ui #enemyTarget.hit-body{
   animation:enemyImpactBody .38s cubic-bezier(.2,1.15,.35,1) !important;
 }
-body.hud-v21.tekken-v30 #enemyTarget.hit-head{
+body.hud-v21.akm-ui #enemyTarget.hit-head{
   animation:enemyImpactHead .44s cubic-bezier(.2,1.15,.35,1) !important;
 }
 @keyframes enemyImpactBody{
@@ -2244,12 +2244,12 @@ body.hud-v21.tekken-v30 #enemyTarget.hit-head{
 
 
 /* v31 hotfix: 겨루기 HUD 겹침 복구 + 데미지 전용 팝업 복구 */
-body.hud-v21.tekken-v30.sparring-mode .stats-row{
+body.hud-v21.akm-ui.sparring-mode .stats-row{
   top:260px !important;
   right:22px !important;
   z-index:70 !important;
 }
-body.hud-v21.tekken-v30.sparring-mode #comboBadge{
+body.hud-v21.akm-ui.sparring-mode #comboBadge{
   top:154px !important;
   right:22px !important;
   z-index:78 !important;
@@ -2258,10 +2258,10 @@ body.hud-v21.tekken-v30.sparring-mode #comboBadge{
   line-height:1 !important;
   pointer-events:none !important;
 }
-body.hud-v21.tekken-v30.sparring-mode #enemyHpWrap{
+body.hud-v21.akm-ui.sparring-mode #enemyHpWrap{
   z-index:79 !important;
 }
-body.hud-v21.tekken-v30 #damagePopup{
+body.hud-v21.akm-ui #damagePopup{
   display:none;
   left:56% !important;
   top:43% !important;
@@ -2278,11 +2278,11 @@ body.hud-v21.tekken-v30 #damagePopup{
   text-shadow:0 8px 22px rgba(0,0,0,.96),0 0 32px rgba(255,48,79,.95),0 0 58px rgba(255,209,90,.48) !important;
   z-index:95 !important;
 }
-body.hud-v21.tekken-v30 #damagePopup.show{
+body.hud-v21.akm-ui #damagePopup.show{
   display:block !important;
   animation:damagePopBig 1.25s cubic-bezier(.18,.9,.25,1) forwards !important;
 }
-body.hud-v21.tekken-v30 #damagePopup.head{
+body.hud-v21.akm-ui #damagePopup.head{
   color:#ffd15a !important;
   -webkit-text-stroke:3px rgba(255,255,255,.82);
   text-shadow:0 8px 24px rgba(0,0,0,.96),0 0 36px rgba(255,209,90,.98),0 0 66px rgba(255,48,79,.55) !important;
@@ -2295,9 +2295,126 @@ body.hud-v21.tekken-v30 #damagePopup.head{
   100%{opacity:0; transform:translate(-50%,-112%) scale(.82);}
 }
 @media (orientation:landscape) and (max-width:1220px){
-  body.hud-v21.tekken-v30.sparring-mode .stats-row{top:270px !important; width:188px !important;}
-  body.hud-v21.tekken-v30.sparring-mode #comboBadge{top:168px !important; right:22px !important; font-size:28px !important;}
+  body.hud-v21.akm-ui.sparring-mode .stats-row{top:270px !important; width:188px !important;}
+  body.hud-v21.akm-ui.sparring-mode #comboBadge{top:168px !important; right:22px !important; font-size:28px !important;}
 }
+
+
+/* =========================================================
+   CSS SECTION 99: breaking-mode-emoji-target
+   - 기존 풍선 모드 로직은 유지하고 난이도별 타겟만 이모지로 표시
+   ========================================================= */
+.balloon.emoji-target{
+  width:96px;
+  height:96px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:calc(82px * var(--target-scale,1)) !important;
+  line-height:1 !important;
+  z-index:7;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.55)) drop-shadow(0 0 14px rgba(255,255,255,.20));
+  transform:translate(-50%,-50%);
+  animation:emojiTargetFloat 1.45s ease-in-out infinite;
+}
+.balloon.emoji-target.target-hard{
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.58)) drop-shadow(0 0 18px rgba(255,77,109,.50));
+  animation:emojiTargetFloat 1.05s ease-in-out infinite, bombBlink .42s ease-in-out infinite alternate;
+}
+.balloon.emoji-target.pop{animation:emojiTargetPop .25s ease forwards !important;}
+.balloon.emoji-target.miss{animation:emojiTargetMiss .22s ease forwards !important;}
+@keyframes emojiTargetFloat{
+  0%,100%{transform:translate(-50%,-50%) translateY(0) rotate(-2deg);}
+  50%{transform:translate(-50%,-50%) translateY(-5px) rotate(2deg);}
+}
+@keyframes bombBlink{
+  from{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  to{opacity:.72; transform:translate(-50%,-50%) scale(1.08);}
+}
+@keyframes emojiTargetPop{
+  0%{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0; transform:translate(-50%,-64%) scale(1.55) rotate(10deg);}
+}
+@keyframes emojiTargetMiss{
+  0%{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(.35);}
+}
+.burst.emoji-burst{font-size:56px !important;animation:emojiBurstFade .46s ease forwards !important;filter:drop-shadow(0 0 18px rgba(255,209,90,.75));}
+@keyframes emojiBurstFade{0%{opacity:1;transform:translate(-50%,-50%) scale(.55);}100%{opacity:0;transform:translate(-50%,-74%) scale(1.65);}}
+
+
+
+
+/* =========================================================
+   CSS SECTION 100: final-mode-specific-kick-tabs-visibility
+   - 발차기 선택 버튼은 발차기 연습 모드에서만 표시
+   - 격파/겨루기 모드에서는 가운데 하단 버튼 숨김
+   ========================================================= */
+body.hud-v21.balloon-mode .mode-row.hud-kick-row,
+body.hud-v21.balloon-mode .mode-row.hud-kick-row1,
+body.hud-v21.balloon-mode .mode-row.hud-kick-row2,
+body.hud-v21.balloon-mode .mode-row.hud-kick-tabs,
+body.hud-v21.sparring-mode .mode-row.hud-kick-row,
+body.hud-v21.sparring-mode .mode-row.hud-kick-row1,
+body.hud-v21.sparring-mode .mode-row.hud-kick-row2,
+body.hud-v21.sparring-mode .mode-row.hud-kick-tabs{
+  display:none !important;
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+body.hud-v21:not(.balloon-mode):not(.sparring-mode) .mode-row.hud-kick-row,
+body.hud-v21:not(.balloon-mode):not(.sparring-mode) .mode-row.hud-kick-row1,
+body.hud-v21:not(.balloon-mode):not(.sparring-mode) .mode-row.hud-kick-tabs{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+body.hud-v21:not(.balloon-mode):not(.sparring-mode) .mode-row.hud-kick-row2{
+  display:none !important;
+}
+
+
+/* =========================================================
+   CSS SECTION 100: sparring-time-right-hud
+   - 초록 테두리 타이머 박스는 숨김
+   - 겨루기 시작 중에만 오른쪽 HUD 안에 TIME 표시
+   ========================================================= */
+body.hud-v21 #timerBadge,
+body.hud-v21 #timerBadge.show,
+body.hud-v21.sparring-mode #timerBadge,
+body.hud-v21.sparring-mode #timerBadge.show{
+  display:none !important;
+}
+
+#sparringTimeBox{
+  display:none;
+}
+
+body.hud-v21.akm-ui.sparring-mode.playing-ui #sparringTimeBox{
+  display:block !important;
+}
+
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  gap:12px !important;
+}
+
+body.hud-v21.akm-ui .time-box .stat-label{
+  color:rgba(255,255,255,.62) !important;
+}
+
+body.hud-v21.akm-ui .time-box .stat-num{
+  color:var(--arcade-gold) !important;
+  text-shadow:0 4px 16px rgba(0,0,0,.96),0 0 22px rgba(255,209,90,.85) !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    gap:10px !important;
+  }
+}
+
 </style>
 
 
@@ -2364,7 +2481,7 @@ body.hud-v21.tekken-v30 #damagePopup.head{
 </script>
 
 </head>
-<body class="hud-v21 tekken-v30">
+<body class="hud-v21 akm-ui">
 
 <div class="rotate-msg">
   <div class="icon">🔄</div>
@@ -2422,7 +2539,7 @@ body.hud-v21.tekken-v30 #damagePopup.head{
   </div>
 
   <div class="panel">
-    <div class="title"><span class="title-text">KICK FIGHTER<small>AI TAEKWONDO v3.0</small></span></div>
+    <div class="title"><span class="title-text">AI KICK MASTER<small>Taekwondo Training System</small></span></div>
     <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
 
     <div id="difficultyPanel" class="difficulty-panel" aria-label="난이도 선택">
@@ -2456,7 +2573,7 @@ body.hud-v21.tekken-v30 #damagePopup.head{
       <button class="game-btn active" id="m_drillhome" onclick="setMode('apcha_r')">발차기 모드</button>
     </div>
     <div class="mode-row hud-balloon-row">
-      <button class="game-btn" id="m_balloon" onclick="setMode('balloon')">풍선 모드</button>
+      <button class="game-btn" id="m_balloon" onclick="setMode('balloon')">격파 모드</button>
     </div>
     <div class="mode-row hud-sparring-row">
       <button class="game-btn" id="m_sparring" onclick="setMode('sparring')">겨루기 모드</button>
@@ -2497,6 +2614,10 @@ body.hud-v21.tekken-v30 #damagePopup.head{
         <div class="stat-label" id="lblC">평균</div>
         <div class="stat-num" id="valC">—</div>
       </div>
+      <div class="stat-box time-box" id="sparringTimeBox">
+        <div class="stat-label" id="lblTime">TIME</div>
+        <div class="stat-num" id="valTime">—</div>
+      </div>
     </div>
 
     <div class="height-box">
@@ -2531,6 +2652,7 @@ const ctx=canvas.getContext('2d');
 const statusEl=document.getElementById('status');
 const modeBadge=document.getElementById('modeBadge');
 const lblA=document.getElementById('lblA'), valA=document.getElementById('valA');
+const sparringTimeBox=document.getElementById('sparringTimeBox'), valTime=document.getElementById('valTime');
 const lblB=document.getElementById('lblB'), valB=document.getElementById('valB');
 const lblC=document.getElementById('lblC'), valC=document.getElementById('valC');
 const scoreGrade=document.getElementById('scoreGrade');
@@ -2563,7 +2685,7 @@ const damagePopup=document.getElementById('damagePopup');
 
 /* ── 모드 설정 ── */
 const MODE_CFG={
-  balloon:  {rank:true,  isDrill:false, unit:'개',   title:'풍선 터뜨리기'},
+  balloon:  {rank:true,  isDrill:false, unit:'개',   title:'격파 모드'},
   sparring: {rank:false, isDrill:false, unit:'점',   title:'겨루기 모드'},
   apcha_r:  {rank:false, isDrill:true,  label:'앞차기 오른발', kick:'apcha', foot:'right'},
   apcha_l:  {rank:false, isDrill:true,  label:'앞차기 왼발',   kick:'apcha', foot:'left'},
@@ -2587,9 +2709,10 @@ let running=false, gameTimer=null, gameRemain=0, popTimer=null;
 let readyTimer=null, readyToken=0;
 
 const DIFFICULTY_CFG={
-  easy:{label:'쉬움', balloonRadius:1.22, balloonSize:1.14, balloonScore:1.10, damage:1.15, hitZone:1.18, successScore:70},
-  normal:{label:'보통', balloonRadius:1.00, balloonSize:1.00, balloonScore:1.00, damage:1.00, hitZone:1.00, successScore:80},
-  hard:{label:'어려움', balloonRadius:0.82, balloonSize:0.90, balloonScore:0.85, damage:0.85, hitZone:0.82, successScore:90}
+  // 격파 모드: 쉬움은 기존 보통 난이도 기준, 보통은 30% 작게, 어려움은 보통보다 10% 작게 + 자동 소멸
+  easy:{label:'쉬움', balloonRadius:1.00, balloonSize:1.00, targetEmoji:'🎈', targetLifeMs:0, damage:1.15, hitZone:1.18, successScore:70},
+  normal:{label:'보통', balloonRadius:0.70, balloonSize:0.70, targetEmoji:'🧱', targetLifeMs:0, damage:1.00, hitZone:1.00, successScore:80},
+  hard:{label:'어려움', balloonRadius:0.63, balloonSize:0.63, targetEmoji:'💣', targetLifeMs:2000, damage:0.85, hitZone:0.82, successScore:90}
 };
 let difficulty='normal';
 function diffCfg(){ return DIFFICULTY_CFG[difficulty] || DIFFICULTY_CFG.normal; }
@@ -2708,14 +2831,19 @@ barThresh.style.left=threshPct+'%';
 function avgOf(arr){ return arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):null; }
 function renderStats(){
   scoreGrade.style.display='none';
+  if(sparringTimeBox) sparringTimeBox.style.display='none';
   if(currentMode==='balloon'){
-    lblA.textContent='터뜨림'; valA.textContent=balloonCount;
+    lblA.textContent='격파'; valA.textContent=balloonCount;
     lblB.textContent='남은 시간'; valB.textContent=(running?gameRemain+'초':'—'); valB.style.color='var(--gold)';
-    const best=loadRank('balloon')[0]; lblC.textContent='오늘 1등'; valC.textContent=(best?best.v+'개':'—');
+    const best=loadRank('balloon')[0]; lblC.textContent='오늘 1등'; valC.textContent=(best?best.v+'장':'—');
   } else if(currentMode==='sparring'){
     lblA.textContent='총 데미지'; valA.textContent=sparringDamage;
     lblB.textContent='남은 HP'; valB.textContent=(sparringHp<=0?'K.O.':Math.max(0,Math.round(sparringHp))); valB.style.color='var(--gold)';
     lblC.textContent='콤보'; valC.textContent=sparringCombo;
+    if(sparringTimeBox){
+      sparringTimeBox.style.display=running?'block':'none';
+      valTime.textContent=running?Math.max(0,gameRemain):'—';
+    }
   } else if(isDrillMode()){
     lblA.textContent='횟수'; valA.textContent=drillDone+'/'+drillTarget;
     lblB.textContent='이번 점수'; valB.textContent=(lastScore==null?'—':lastScore); valB.style.color=lastColor;
@@ -2753,7 +2881,7 @@ function modeTitleText(){
   if(currentMode==='apcha_l') return ['앞차기 왼발','왼발로 중앙선 위로 곧게 차기'];
   if(currentMode==='dollo_r') return ['돌려차기 오른발','오른발: 바깥쪽으로 휘었다가 위로 차기'];
   if(currentMode==='dollo_l') return ['돌려차기 왼발','왼발: 바깥쪽으로 휘었다가 위로 차기'];
-  if(currentMode==='balloon') return ['풍선 모드','발끝으로 풍선 터뜨리기'];
+  if(currentMode==='balloon') return ['격파 모드',''];
   if(currentMode==='sparring') return ['겨루기 모드','상대 몸통과 머리를 발차기로 공격하세요'];
   return ['발차기 연습','전신이 보이게 서주세요'];
 }
@@ -3247,38 +3375,64 @@ function finishSparring(){
   setTimeout(()=>drillResult.classList.remove('show'),2800);
 }
 
-/* ── 풍선 ── */
+/* ── 격파 모드: 기존 풍선 로직 유지, 난이도별 이모지 타겟 표시 ── */
+function balloonTargetEmoji(){
+  return diffCfg().targetEmoji || '🎈';
+}
+function removeBalloonAt(index, opts={}){
+  const b=balloons[index];
+  if(!b) return;
+  balloons.splice(index,1);
+  if(b._lifeTimer){ clearTimeout(b._lifeTimer); b._lifeTimer=null; }
+  if(opts.miss) b.classList.add('miss');
+  else b.classList.add('pop');
+  setTimeout(()=>b.remove(), opts.miss?220:250);
+  if(opts.burst){
+    const burst=document.createElement('div'); burst.className='burst emoji-burst'; burst.textContent=opts.burstText || '💥';
+    burst.style.left=b.dataset.left+'%'; burst.style.top=b.dataset.top+'%';
+    camWrap.appendChild(burst); setTimeout(()=>burst.remove(),460);
+  }
+}
 function spawnBalloon(){
-  const b=document.createElement('div'); b.className='balloon';
+  const b=document.createElement('div'); b.className='balloon emoji-target';
+  const cfg=diffCfg();
+  if(difficulty==='hard') b.classList.add('target-hard');
   const left=15+Math.random()*70, top=42+Math.random()*40;
   b.style.left=left+'%'; b.style.top=top+'%';
   b.dataset.left=left; b.dataset.top=top;
-  b.style.fontSize=(64*diffCfg().balloonSize)+'px';
-  b.textContent=['🎈','🎈','🎈','🎉','🎊'][Math.floor(Math.random()*5)];
+  b.style.setProperty('--target-scale', cfg.balloonSize);
+  b.textContent=balloonTargetEmoji();
+  b.setAttribute('aria-label',cfg.label+' 격파 타겟');
   camWrap.appendChild(b); balloons.push(b);
+  const lifeMs=cfg.targetLifeMs || 0;
+  if(lifeMs>0){
+    b._lifeTimer=setTimeout(()=>{
+      const idx=balloons.indexOf(b);
+      if(idx<0 || !running || currentMode!=='balloon') return;
+      removeBalloonAt(idx,{miss:true,burst:true,burstText:'💥'});
+      if(running && currentMode==='balloon') spawnBalloon();
+    }, lifeMs);
+  }
 }
 function popBalloon(b,i){
-  balloons.splice(i,1); b.classList.add('pop'); setTimeout(()=>b.remove(),250);
-  const burst=document.createElement('div'); burst.className='burst'; burst.textContent='💥';
-  burst.style.left=b.dataset.left+'%'; burst.style.top=b.dataset.top+'%';
-  camWrap.appendChild(burst); setTimeout(()=>burst.remove(),450);
+  removeBalloonAt(i,{burst:true,burstText:'💥'});
   sndPop(); balloonCount++; renderStats(); spawnBalloon();
 }
 function checkBalloons(fx,fy){
   const W=camWrap.clientWidth, H=camWrap.clientHeight;
-  const fpx=fx/100*W, fpy=fy/100*H, R=0.10*W;
+  const fpx=fx/100*W, fpy=fy/100*H, R=0.10*W*diffCfg().balloonRadius;
   for(let i=balloons.length-1;i>=0;i--){
     const b=balloons[i];
     const bx=parseFloat(b.dataset.left)/100*W, by=parseFloat(b.dataset.top)/100*H;
     if(Math.hypot(fpx-bx,fpy-by)<R) popBalloon(b,i);
   }
 }
-function clearBalloons(){ balloons.forEach(b=>b.remove()); balloons=[]; }
+function clearBalloons(){ balloons.forEach(b=>{ if(b._lifeTimer) clearTimeout(b._lifeTimer); b.remove(); }); balloons=[]; }
 function startBalloon(){ balloonCount=0; clearBalloons(); spawnBalloon(); spawnBalloon(); }
 function finishBalloon(){
   running=false; setPlayingUi(false); timerBadge.classList.remove('show'); clearBalloons();
   const r=addRank('balloon',balloonCount); lastRankTs=r.newTs; renderCamRank();
-  setGrResult('결과: 풍선 '+balloonCount+'개');
+  setGrResult('결과: 격파 '+balloonCount+'개');
   setStartBtn(false,'🔁 다시!'); celebrate(r.rank, balloonCount+'개');
 }
 
@@ -3340,7 +3494,7 @@ window.startGame=()=>{
   const startMode=currentMode;
   setStartBtn(true,'준비 중…');
   const subTexts={
-    balloon:'풍선을 발로 터뜨려요!',
+    balloon:'',
     sparring:'상대를 발차기로 공격하세요!',
     apcha_r:'앞차기 오른발 — 위로 쭉 차올려요!', apcha_l:'앞차기 왼발 — 위로 쭉 차올려요!',
     dollo_r:'돌려차기 오른발 — 화살표 방향으로 차요!', dollo_l:'돌려차기 왼발 — 화살표 방향으로 차요!'
@@ -3387,9 +3541,19 @@ function stopGame(){
 window.toggleHudSettings=()=>{
   document.body.classList.toggle('settings-open');
 };
+function updateKickButtonVisibility(){
+  const show=isDrillMode();
+  document.querySelectorAll('.mode-row.hud-kick-row, .mode-row.hud-kick-row1, .mode-row.hud-kick-row2, .mode-row.hud-kick-tabs').forEach(row=>{
+    const isSecond=row.classList.contains('hud-kick-row2');
+    row.style.setProperty('display', show && !isSecond ? 'flex' : 'none', 'important');
+    row.style.setProperty('visibility', show && !isSecond ? 'visible' : 'hidden', 'important');
+    row.style.setProperty('opacity', show && !isSecond ? '1' : '0', 'important');
+    row.style.setProperty('pointer-events', show && !isSecond ? 'auto' : 'none', 'important');
+  });
+}
 window.setMode=(mode)=>{
   try{ document.body.classList.toggle('balloon-mode', mode==='balloon'); document.body.classList.toggle('sparring-mode', mode==='sparring'); }catch(e){}
-  ensureAudio(); stopGame(); currentMode=mode; updateModeBadge();
+  ensureAudio(); stopGame(); currentMode=mode; updateModeBadge(); updateKickButtonVisibility();
   const all=['apcha_r','apcha_l','dollo_r','dollo_l','balloon','sparring'];
   all.forEach(m=>{ const el=document.getElementById('m_'+m); if(el) el.classList.toggle('active',m===mode); });
   const isDrill=MODE_CFG[mode].isDrill;
@@ -3498,7 +3662,7 @@ function computeMetrics(lm){
     if(chosen) return chosen;
   }
   if(!L) return R; if(!R) return L;
-  // 풍선 모드는 더 높고, 조금 더 빠르게 움직이는 발을 킥 발로 선택
+  // 격파 모드는 더 높고, 조금 더 빠르게 움직이는 발을 킥 발로 선택
   return (L.pct + L.speed*900 > R.pct + R.speed*900) ? L : R;
 }
 
@@ -3585,6 +3749,7 @@ drillCountArea.style.display='flex';
 gameArea.style.display='none';
 initDifficulty();
 updateModeBadge();
+updateKickButtonVisibility();
 renderStats(); renderCamRank(); updateModeBadge();
 (async()=>{ await initModel(); await startCamera(); loop(); })();
 </script>

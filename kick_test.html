@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>AI KICK MASTER - Taekwondo Training System</title>
 <!--
   kick_test.html maintenance note
@@ -743,7 +743,7 @@ body.hud-v21 .diff-btn.active{
 #enemyTarget{
   width:270px !important;
   height:440px !important;
-  opacity:.94 !important;
+  opacity:.47 !important;
   transform:translate(-50%,-43%) perspective(500px) rotateY(-5deg) scale(1.08) !important;
   filter:
     drop-shadow(0 0 28px rgba(255,36,77,.45))
@@ -2415,6 +2415,141 @@ body.hud-v21.akm-ui .time-box .stat-num{
   }
 }
 
+
+
+/* === v2.7.9 user fixes === */
+/* 겨루기 우측 HUD를 위로 올려 TIME/버튼 겹침 방지 */
+body.hud-v21.sparring-mode .stats-row{
+  top:190px !important;
+}
+
+/* 발차기 안내문은 연습모드에서만 표시 */
+body.hud-v21.balloon-mode #scoreGrade,
+body.hud-v21.sparring-mode #scoreGrade{
+  display:none !important;
+}
+
+
+
+/* =========================================================
+   CSS SECTION 19: v280-tablet-fullscreen-fit
+   목적: Galaxy Tab S8+ 16:10 화면에서 전체화면이어도 세로 스크롤이 생기지 않게 고정
+   ========================================================= */
+html,
+body{
+  width:100% !important;
+  height:100% !important;
+  min-height:100% !important;
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+  touch-action:manipulation !important;
+}
+
+body.hud-v21,
+body.hud-v21.akm-ui{
+  position:fixed !important;
+  inset:0 !important;
+  width:100dvw !important;
+  height:var(--akm-app-height, 100dvh) !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+
+body.hud-v21 .stage{
+  position:fixed !important;
+  inset:0 !important;
+  width:100dvw !important;
+  height:var(--akm-app-height, 100dvh) !important;
+  min-height:0 !important;
+  max-height:var(--akm-app-height, 100dvh) !important;
+  overflow:hidden !important;
+}
+
+body.hud-v21 .cam-wrap,
+body.hud-v21 .panel{
+  height:var(--akm-app-height, 100dvh) !important;
+  max-height:var(--akm-app-height, 100dvh) !important;
+  overflow:hidden !important;
+}
+
+body.hud-v21 .panel{
+  inset:0 !important;
+}
+
+/* 태블릿 16:10 가로 화면: 하단 메뉴와 우측 정보판이 겹치지 않도록 전체 HUD 압축 */
+@media (orientation:landscape) and (max-aspect-ratio: 1.66){
+  body.hud-v21 .title{top:10px !important; left:12px !important; transform:scale(.88) !important; transform-origin:top left !important;}
+  body.hud-v21 #modeBadge{top:9px !important; transform:translateX(-50%) scale(.88) !important; transform-origin:top center !important;}
+  body.hud-v21 .difficulty-panel{top:10px !important; right:92px !important; transform:scale(.88) !important; transform-origin:top right !important;}
+  body.hud-v21 .hud-settings-btn{top:10px !important; right:10px !important; transform:scale(.9) !important; transform-origin:top right !important;}
+  body.hud-v21 #status{top:66px !important; left:12px !important; font-size:11px !important; max-width:260px !important; padding:6px 9px !important;}
+
+  body.hud-v21 .hud-drill-row{top:126px !important; left:12px !important;}
+  body.hud-v21 .hud-balloon-row{top:162px !important; left:12px !important;}
+  body.hud-v21 .hud-sparring-row{top:198px !important; left:12px !important;}
+  body.hud-v21 .hud-drill-row .game-btn,
+  body.hud-v21 .hud-balloon-row .game-btn,
+  body.hud-v21 .hud-sparring-row .game-btn{font-size:12px !important; min-height:26px !important;}
+
+  body.hud-v21 .stats-row,
+  body.hud-v21.balloon-mode .stats-row,
+  body.hud-v21.sparring-mode .stats-row{
+    top:118px !important;
+    right:10px !important;
+    width:116px !important;
+    gap:4px !important;
+  }
+  body.hud-v21 .stat-box{min-height:58px !important; padding:2px 2px !important;}
+  body.hud-v21 .stat-label{font-size:10px !important; line-height:1.05 !important;}
+  body.hud-v21 .stat-num{font-size:29px !important; line-height:.98 !important;}
+  body.hud-v21 #scoreGrade{font-size:10px !important; min-height:10px !important;}
+
+  body.hud-v21 #comboBadge{top:98px !important; right:10px !important; min-width:116px !important; padding:4px 5px !important; font-size:17px !important;}
+  body.hud-v21.sparring-mode #comboBadge{top:98px !important; right:10px !important;}
+  body.hud-v21 #enemyHpWrap{top:68px !important; width:min(430px,46vw) !important; padding:5px 10px !important;}
+  #enemyName{font-size:12px !important;}
+  #enemyHpTrack{height:14px !important;}
+  #enemyHpText{font-size:12px !important;}
+
+  body.hud-v21 .btns{
+    right:10px !important;
+    bottom:max(8px, env(safe-area-inset-bottom)) !important;
+    width:260px !important;
+    gap:6px !important;
+  }
+  body.hud-v21 .btns button{min-height:30px !important; font-size:10px !important; padding:3px !important;}
+
+  body.hud-v21 #drillCountArea,
+  body.hud-v21 #gameArea{
+    left:12px !important;
+    bottom:max(8px, env(safe-area-inset-bottom)) !important;
+  }
+  body.hud-v21.akm-ui .panel .primary-start,
+  body.hud-v21.akm-ui #startBtn,
+  body.hud-v21.akm-ui #startBtn2{font-size:27px !important; padding-top:6px !important;}
+
+  body.hud-v21 .mode-row.hud-kick-row1{bottom:14px !important;}
+  body.hud-v21 .mode-row.hud-kick-row .drill-btn{font-size:15px !important; padding:2px 1px !important;}
+  .mode-row.hud-kick-row{gap:14px !important;}
+
+  #enemyTarget{transform:translate(-50%,-45%) perspective(500px) rotateY(-5deg) scale(.92) !important;}
+}
+
+/* 키가 낮은 화면에서는 추가 압축 */
+@media (orientation:landscape) and (max-height: 760px){
+  body.hud-v21 .stats-row,
+  body.hud-v21.balloon-mode .stats-row,
+  body.hud-v21.sparring-mode .stats-row{top:106px !important; gap:2px !important; width:108px !important;}
+  body.hud-v21 .stat-box{min-height:52px !important;}
+  body.hud-v21 .stat-num{font-size:26px !important;}
+  body.hud-v21 #comboBadge{top:86px !important; font-size:16px !important; min-width:108px !important;}
+  body.hud-v21.sparring-mode #comboBadge{top:86px !important;}
+  body.hud-v21 #enemyHpWrap{top:60px !important;}
+  body.hud-v21 .btns{bottom:6px !important;}
+  body.hud-v21 #drillCountArea,
+  body.hud-v21 #gameArea{bottom:6px !important;}
+  body.hud-v21 .mode-row.hud-kick-row1{bottom:8px !important;}
+}
 </style>
 
 
@@ -3808,6 +3943,22 @@ renderStats(); renderCamRank(); updateModeBadge();
     obs.observe(document.body, {attributes:true, attributeFilter:['class']});
     document.addEventListener('click', function(){ setTimeout(setStartStopText, 0); setTimeout(setStartStopText, 80); }, true);
   });
+})();
+</script>
+
+
+<script id="akm-v280-viewport-fit-js">
+(function(){
+  function setAkmViewportHeight(){
+    var h = Math.max(320, Math.floor(window.innerHeight || document.documentElement.clientHeight || screen.height));
+    document.documentElement.style.setProperty('--akm-app-height', h + 'px');
+  }
+  setAkmViewportHeight();
+  window.addEventListener('resize', setAkmViewportHeight, {passive:true});
+  window.addEventListener('orientationchange', function(){ setTimeout(setAkmViewportHeight, 250); }, {passive:true});
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setAkmViewportHeight, {passive:true});
+  }
 })();
 </script>
 

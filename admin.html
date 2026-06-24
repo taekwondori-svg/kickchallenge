@@ -295,7 +295,7 @@ async function loadDojangs() {
         <td><span class="badge ${badgeClass}">${status}</span></td>
         <td>
           <div class="action-btns">
-            <button class="btn-sm btn-edit" onclick="openEditModal(${JSON.stringify(JSON.stringify(d))})">수정</button>
+            <button class="btn-sm btn-edit" onclick="openEditModal('${encodeURIComponent(JSON.stringify(d))}')">수정</button>
             <button class="btn-sm btn-toggle" onclick="toggleActive('${d.id}', ${d.is_active})">${d.is_active ? '중지' : '활성'}</button>
             <button class="btn-sm btn-del" onclick="deleteDojang('${d.id}', '${d.dojang_name}')">삭제</button>
           </div>
@@ -316,8 +316,8 @@ function openAddModal() {
   document.getElementById('modalBg').classList.add('show');
 }
 
-function openEditModal(jsonStr) {
-  const d = JSON.parse(jsonStr);
+function openEditModal(encoded) {
+  const d = JSON.parse(decodeURIComponent(encoded));
   document.getElementById('modalTitle').innerHTML = '도장 <span>수정</span>';
   document.getElementById('editId').value = d.id;
   document.getElementById('mDojang').value = d.dojang_name;

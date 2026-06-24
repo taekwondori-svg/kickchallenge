@@ -4078,7 +4078,10 @@ initDifficulty();
 updateModeBadge();
 updateKickButtonVisibility();
 renderStats(); renderCamRank(); updateModeBadge();
-(async()=>{ await initModel(); await startCamera(); loop(); })();
+// 로그인 후 카메라 시작
+window.__startApp = async function() {
+  await initModel(); await startCamera(); loop();
+};
 </script>
 
 
@@ -4222,6 +4225,7 @@ async function doLogin() {
     // 로그인 성공
     sessionStorage.setItem('akm_auth', JSON.stringify({ dojang_name, expires_at, username }));
     document.getElementById('loginScreen').classList.add('hidden');
+    if (window.__startApp) window.__startApp();
 
   } catch(e) {
     errorEl.textContent = '네트워크 오류가 발생했습니다. 다시 시도해주세요.';
@@ -4245,6 +4249,7 @@ document.addEventListener('keydown', function(e) {
       const today = new Date().toISOString().slice(0,10);
       if (expires_at >= today) {
         document.getElementById('loginScreen').classList.add('hidden');
+        if (window.__startApp) window.__startApp();
       }
     } catch(e) {}
   }

@@ -2550,6 +2550,112 @@ body.hud-v21 .panel{
   body.hud-v21 #gameArea{bottom:6px !important;}
   body.hud-v21 .mode-row.hud-kick-row1{bottom:8px !important;}
 }
+
+
+/* =========================================================
+   CSS SECTION 101: v281-sparring-combo-popup-and-difficulty
+   - 겨루기 고정 콤보 배지 제거, 타격 순간 팝업만 사용
+   - 겨루기 오른쪽 HUD 높이 연습/격파 모드와 통일
+   - 겨루기 타겟 투명도 추가 감소
+   ========================================================= */
+body.hud-v21 #comboBadge,
+body.hud-v21.sparring-mode #comboBadge,
+body.hud-v21.akm-ui #comboBadge,
+body.hud-v21.akm-ui.sparring-mode #comboBadge{
+  display:none !important;
+  position:absolute !important;
+  left:50% !important;
+  right:auto !important;
+  top:44% !important;
+  transform:translate(-50%,-50%) !important;
+  min-width:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  pointer-events:none !important;
+  z-index:96 !important;
+  font-size:64px !important;
+  line-height:.9 !important;
+  font-weight:1000 !important;
+  letter-spacing:-2px !important;
+  color:#ffd15a !important;
+  -webkit-text-stroke:2px rgba(255,255,255,.82) !important;
+  text-shadow:0 8px 24px rgba(0,0,0,.96),0 0 36px rgba(255,209,90,.90),0 0 58px rgba(76,163,255,.45) !important;
+}
+body.hud-v21 #comboBadge.show,
+body.hud-v21.sparring-mode #comboBadge.show,
+body.hud-v21.akm-ui #comboBadge.show,
+body.hud-v21.akm-ui.sparring-mode #comboBadge.show{
+  display:block !important;
+  animation:comboPopFloat .85s cubic-bezier(.18,.9,.25,1) forwards !important;
+}
+body.hud-v21 #comboBadge.hot,
+body.hud-v21.akm-ui #comboBadge.hot{
+  color:#ffef8a !important;
+  text-shadow:0 8px 24px rgba(0,0,0,.96),0 0 42px rgba(255,209,90,1),0 0 70px rgba(255,77,109,.62) !important;
+}
+@keyframes comboPopFloat{
+  0%{opacity:0; transform:translate(-50%,-50%) scale(.35) rotate(-3deg);}
+  15%{opacity:1; transform:translate(-50%,-50%) scale(1.18) rotate(1deg);}
+  35%{opacity:1; transform:translate(-50%,-56%) scale(1);}
+  78%{opacity:.95; transform:translate(-50%,-76%) scale(.94);}
+  100%{opacity:0; transform:translate(-50%,-104%) scale(.82);}
+}
+
+body.hud-v21.sparring-mode .stats-row,
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  top:112px !important;
+}
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  gap:8px !important;
+}
+body.hud-v21.settings-open.sparring-mode .stats-row,
+body.hud-v21.akm-ui.settings-open.sparring-mode .stats-row{
+  top:236px !important;
+}
+#enemyTarget,
+body.hud-v21.akm-ui #enemyTarget{
+  opacity:.28 !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:112px !important;
+  }
+}
+@media (orientation:landscape) and (max-aspect-ratio: 1.66){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:118px !important;
+  }
+  body.hud-v21 #comboBadge,
+  body.hud-v21.akm-ui #comboBadge{
+    left:50% !important;
+    right:auto !important;
+    top:43% !important;
+    font-size:52px !important;
+    min-width:0 !important;
+  }
+}
+@media (orientation:landscape) and (max-height: 760px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:106px !important;
+  }
+  body.hud-v21 #comboBadge,
+  body.hud-v21.akm-ui #comboBadge{
+    left:50% !important;
+    right:auto !important;
+    top:42% !important;
+    font-size:46px !important;
+    min-width:0 !important;
+  }
+}
+
 </style>
 
 
@@ -2846,8 +2952,8 @@ let readyTimer=null, readyToken=0;
 const DIFFICULTY_CFG={
   // 격파 모드: 쉬움은 기존 보통 난이도 기준, 보통은 30% 작게, 어려움은 보통보다 10% 작게 + 자동 소멸
   easy:{label:'쉬움', balloonRadius:1.00, balloonSize:1.00, targetEmoji:'🎈', targetLifeMs:0, damage:1.15, hitZone:1.18, successScore:70},
-  normal:{label:'보통', balloonRadius:0.70, balloonSize:0.70, targetEmoji:'🧱', targetLifeMs:0, damage:1.00, hitZone:1.00, successScore:80},
-  hard:{label:'어려움', balloonRadius:0.63, balloonSize:0.63, targetEmoji:'💣', targetLifeMs:2000, damage:0.85, hitZone:0.82, successScore:90}
+  normal:{label:'보통', balloonRadius:0.70, balloonSize:0.70, targetEmoji:'🧱', targetLifeMs:2300, damage:1.00, hitZone:1.00, successScore:80},
+  hard:{label:'어려움', balloonRadius:0.63, balloonSize:0.63, targetEmoji:'💣', targetLifeMs:1500, damage:0.85, hitZone:0.82, successScore:90}
 };
 let difficulty='normal';
 function diffCfg(){ return DIFFICULTY_CFG[difficulty] || DIFFICULTY_CFG.normal; }
@@ -3401,10 +3507,14 @@ function finishDrill(){
 function updateSparringHud(){
   if(enemyHpFill) enemyHpFill.style.width=Math.max(0,(sparringHp/250)*100)+'%';
   if(enemyHpText) enemyHpText.textContent=(sparringHp<=0?'K.O.':'HP '+Math.max(0,Math.round(sparringHp)));
-  if(comboBadge){
-    comboBadge.textContent=sparringCombo>0 ? sparringCombo+' COMBO' : '0 COMBO';
-    comboBadge.classList.toggle('hot', sparringCombo>=3);
-  }
+  // 콤보 숫자는 오른쪽 HUD(stat C)에서만 상시 표시한다.
+}
+function showComboPopup(combo){
+  if(!comboBadge || combo < 2) return;
+  comboBadge.textContent=combo+' COMBO';
+  comboBadge.className='show'+(combo>=5?' hot':'');
+  void comboBadge.offsetWidth;
+  setTimeout(()=>{ if(comboBadge) comboBadge.className=''; },850);
 }
 function showDamage(text,kind='body'){
   if(!damagePopup) return;
@@ -3478,6 +3588,7 @@ function handleSparringKick(peak){
   sparringHp=Math.max(0,sparringHp-dmg);
   sparringDamage+=dmg;
   updateSparringHud(); renderStats();
+  showComboPopup(sparringCombo);
   const label=zone==='head'?'머리 공격':'몸통 공격';
   const tech=(motion.type==='round'?' · 회전보너스 +'+motion.bonus:(motion.type==='front'?' · 앞차기':' · 판정애매'));
   showDamage('-'+dmg, zone);
@@ -3581,12 +3692,14 @@ function runReadyCountdown(subText,cb){
   const token=++readyToken;
   if(readyTimer){ clearTimeout(readyTimer); readyTimer=null; }
   const steps=['3','2','1','시작!']; let i=0;
+  setReadyUi(true);
   readyOverlay.classList.add('show'); readySub.textContent=subText;
   (function next(){
     if(token!==readyToken) return;
     if(i>=steps.length){
       readyOverlay.classList.remove('show');
       readyTimer=null;
+      setReadyUi(false);
       cb();
       return;
     }
@@ -3613,6 +3726,9 @@ function setStartBtn(disabled,text){
 function setPlayingUi(on){
   try{ document.body.classList.toggle('playing-ui', !!on); }catch(e){}
 }
+function setReadyUi(on){
+  try{ document.body.classList.toggle('ready-ui', !!on); }catch(e){}
+}
 function setGrResult(text){ gameResult.textContent=text; gameResult2.textContent=text; }
 
 window.startGame=()=>{
@@ -3627,7 +3743,8 @@ window.startGame=()=>{
   ensureAudio();
   resetCounters(); setGrResult('');
   const startMode=currentMode;
-  setStartBtn(true,'준비 중…');
+  setReadyUi(true);
+  setStartBtn(true,'⏳ 준비중...');
   const subTexts={
     balloon:'',
     sparring:'상대를 발차기로 공격하세요!',
@@ -3664,6 +3781,7 @@ function stopGame(){
   readyToken++;
   if(readyTimer){ clearTimeout(readyTimer); readyTimer=null; }
   setPlayingUi(false);
+  setReadyUi(false);
   running=false;
   if(gameTimer){ clearInterval(gameTimer); gameTimer=null; }
   timerBadge.classList.remove('show'); readyOverlay.classList.remove('show');
@@ -3927,13 +4045,36 @@ renderStats(); renderCamRank(); updateModeBadge();
 
 
 
+
+
+<style id="akm-v281-ready-target-fix">
+/* v2.8.1: 겨루기 타겟 투명도 재조정 */
+body.hud-v21.akm-ui #enemyTarget{
+  opacity:.38 !important;
+}
+
+/* v2.8.1: 카운트다운 준비중 버튼 표시 */
+body.hud-v21.akm-ui.ready-ui #startBtn,
+body.hud-v21.akm-ui.ready-ui #startBtn2,
+body.hud-v21.akm-ui.ready-ui .panel .primary-start{
+  color:#ffd86b !important;
+  font-size:30px !important;
+  background:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  filter:none !important;
+  text-shadow:0 3px 14px rgba(0,0,0,.95),0 0 18px rgba(255,216,107,.85) !important;
+}
+</style>
 <script id="fix4-start-stop-text-helper">
 (function(){
   function setStartStopText(){
+    const ready = document.body.classList.contains('ready-ui');
     const playing = document.body.classList.contains('playing-ui');
     ['startBtn','startBtn2'].forEach(function(id){
       const btn=document.getElementById(id);
       if(!btn) return;
+      if(ready){ btn.textContent = '⏳ 준비중...'; return; }
       btn.textContent = playing ? '■ 중지' : '▶ 시작!';
     });
   }

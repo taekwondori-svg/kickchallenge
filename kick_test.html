@@ -2818,11 +2818,11 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
 <style>
 /* =========================================================
-   LOGIN SCREEN
+   LICENSE SCREEN
    ========================================================= */
 #loginScreen {
   position: fixed; inset: 0; z-index: 9999;
-  background: var(--navy);
+  background: radial-gradient(circle at top, #142a4a 0, var(--navy) 44%, #050b14 100%);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Gothic A1','Noto Sans KR',system-ui,sans-serif;
 }
@@ -2833,7 +2833,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   border: 1.5px solid rgba(76,163,255,0.25);
   border-radius: 24px;
   padding: 48px 44px 40px;
-  width: 380px;
+  width: 400px;
   max-width: 92vw;
   box-shadow: 0 8px 48px rgba(0,0,0,0.5);
   text-align: center;
@@ -2844,7 +2844,14 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 }
 .login-logo span { color: var(--gold); }
 .login-sub {
-  font-size: 12px; color: #7a90aa; margin-bottom: 36px; font-weight: 600;
+  font-size: 12px; color: #7a90aa; margin-bottom: 10px; font-weight: 600;
+}
+.login-key-label {
+  font-size: 12px; color: #9aadc5; font-weight: 800;
+  text-align: left; display: block; margin-bottom: 8px; margin-top: 20px;
+}
+.login-key-help {
+  font-size: 11px; color: #4a5a6a; margin-bottom: 20px; line-height: 1.5;
 }
 .login-field {
   width: 100%; margin-bottom: 14px;
@@ -2855,9 +2862,10 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   color: #fff; font-size: 15px; font-weight: 600;
   outline: none; box-sizing: border-box;
   transition: border-color 0.2s;
+  letter-spacing: 1px; text-align: center;
 }
 .login-field:focus { border-color: var(--blue); }
-.login-field::placeholder { color: #4a5a6a; }
+.login-field::placeholder { color: #4a5a6a; letter-spacing: 0; }
 .login-btn {
   width: 100%; padding: 15px;
   background: linear-gradient(135deg, var(--blue), #2255cc);
@@ -2873,47 +2881,36 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   margin-top: 14px; min-height: 20px;
 }
 .login-footer {
-  font-size: 11px; color: #3a4a5a; margin-top: 28px;
+  font-size: 11px; color: #3a4a5a; margin-top: 24px; line-height: 1.6;
 }
-.login-changepw {
-  font-size: 12px; color: #4ca3ff; margin-top: 16px;
-  cursor: pointer; text-decoration: underline; font-weight: 700;
-}
-.login-changepw:hover { color: #7ec3ff; }
 
-/* 비밀번호 변경 모달 */
-#pwChangeModal {
-  display: none; position: fixed; inset: 0; z-index: 99999;
-  background: rgba(0,0,0,0.75);
-  align-items: center; justify-content: center;
+/* 정품 인증 배지 - 좌상단 표시 */
+#licenseBadge {
+  display: none;
+  position: absolute;
+  top: 14px; left: 14px;
+  z-index: 100;
+  background: rgba(10,22,40,0.82);
+  border: 1px solid rgba(76,163,255,0.28);
+  border-radius: 10px;
+  padding: 8px 13px;
+  backdrop-filter: blur(6px);
+  line-height: 1.45;
+  pointer-events: none;
 }
-#pwChangeModal.show { display: flex; }
-.pwchange-box {
-  background: #0f1e35;
-  border: 1.5px solid rgba(76,163,255,0.3);
-  border-radius: 20px; padding: 36px 32px;
-  width: 360px; max-width: 92vw;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+#licenseBadge.show { display: block; }
+#licenseBadge .lb-title {
+  font-size: 11px; font-weight: 900; color: var(--gold); letter-spacing: 0.3px;
 }
-.pwchange-box h3 { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-.pwchange-box h3 span { color: var(--gold); }
-.pwchange-sub { font-size: 12px; color: #6a7a8a; margin-bottom: 22px; }
-.pwchange-label { font-size: 12px; color: #9aadc5; font-weight: 800; display: block; margin-bottom: 6px; }
-.pwchange-input {
-  width: 100%; margin-bottom: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1.5px solid rgba(76,163,255,0.2);
-  border-radius: 11px; padding: 13px 16px;
-  color: #fff; font-size: 15px; outline: none;
+#licenseBadge .lb-auth {
+  font-size: 10px; color: #2ecc71; font-weight: 800; margin: 1px 0;
 }
-.pwchange-input:focus { border-color: var(--blue); }
-.pwchange-err { color: var(--red); font-size: 13px; min-height: 18px; margin-bottom: 10px; }
-.pwchange-btns { display: flex; gap: 10px; }
-.pwchange-btns button { flex: 1; padding: 13px; border-radius: 10px; border: none; font-size: 14px; font-weight: 900; cursor: pointer; }
-.pwchange-cancel { background: rgba(255,255,255,0.08); color: #aaa; }
-.pwchange-save { background: var(--blue); color: #fff; }
-
-/* 로그인 후 설정 버튼 - 설정 모달로 통합됨 */
+#licenseBadge .lb-dojang {
+  font-size: 12px; font-weight: 900; color: #fff;
+}
+#licenseBadge .lb-version {
+  font-size: 10px; color: #5a7a9a; margin-top: 1px;
+}
 
 /* =========================================================
    CSS SECTION 103: final-sparring-hud-height-sync
@@ -2958,42 +2955,27 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 </head>
 <body class="hud-v21 akm-ui">
 
-<!-- ===== 로그인 화면 ===== -->
+<!-- ===== 라이선스 키 입력 화면 ===== -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">AI <span>KICK</span> MASTER</div>
     <div class="login-sub">태권도 AI 발차기 훈련 시스템</div>
-    <input id="loginUser" class="login-field" type="text" placeholder="아이디" autocomplete="off" />
-    <input id="loginPass" class="login-field" type="password" placeholder="비밀번호" />
-    <button class="login-btn" onclick="doLogin()">로그인</button>
+    <label class="login-key-label">🔑 라이선스 키</label>
+    <div class="login-key-help">구매 후 전달받은 라이선스 키를 입력하세요.<br>최초 1회 입력 후 자동으로 인증됩니다.</div>
+    <input id="licenseKeyInput" class="login-field" type="text" placeholder="AKM-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" />
+    <button class="login-btn" onclick="doLicenseActivate()">인증하기</button>
     <div class="login-error" id="loginError"></div>
-    <div class="login-changepw" onclick="openPwChangeModal()">🔑 비밀번호 변경</div>
-    <div class="login-footer">© AI KICK MASTER · 라이선스 문의: aikickmaster.kr</div>
+    <div class="login-footer">© AI KICK MASTER · 라이선스 문의: aikickmaster.kr<br>구매 및 문의는 카카오톡으로 연락해주세요.</div>
   </div>
 </div>
 
-<!-- ===== 비밀번호 변경 모달 ===== -->
-<div id="pwChangeModal">
-  <div class="pwchange-box">
-    <h3>🔑 비밀번호 <span>변경</span></h3>
-    <div class="pwchange-sub">아이디와 현재 비밀번호를 먼저 확인합니다.</div>
-    <label class="pwchange-label">아이디</label>
-    <input id="pcUser" class="pwchange-input" type="text" placeholder="아이디" autocomplete="off" />
-    <label class="pwchange-label">현재 비밀번호</label>
-    <input id="pcCurrent" class="pwchange-input" type="password" placeholder="현재 비밀번호" />
-    <label class="pwchange-label">새 비밀번호</label>
-    <input id="pcNew" class="pwchange-input" type="password" placeholder="새 비밀번호 (6자 이상)" />
-    <label class="pwchange-label">새 비밀번호 확인</label>
-    <input id="pcConfirm" class="pwchange-input" type="password" placeholder="새 비밀번호 재입력" />
-    <div class="pwchange-err" id="pcErr"></div>
-    <div class="pwchange-btns">
-      <button class="pwchange-cancel" onclick="closePwChangeModal()">취소</button>
-      <button class="pwchange-save" onclick="doChangePw()">변경</button>
-    </div>
-  </div>
+<!-- ===== 정품 인증 배지 (좌상단) ===== -->
+<div id="licenseBadge">
+  <div class="lb-title">AI KICK MASTER</div>
+  <div class="lb-auth">✓ 정품 인증</div>
+  <div class="lb-dojang" id="lbDojangName"></div>
+  <div class="lb-version" id="lbVersion"></div>
 </div>
-
-<!-- ===== 로그인 후 설정 버튼 ===== -->
 
 
 <div class="rotate-msg">
@@ -3004,6 +2986,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
 <div class="stage">
   <div class="cam-wrap mirrored" id="camWrap">
+  <!-- 정품 인증 배지는 loginScreen 바깥 고정 위치에 있음 -->
     <div id="status">AI 모델 로딩 중…</div>
     <div id="modeBadge">앞차기 오른발<small>오른발로 중앙선 위로 차기</small></div>
     <div id="sparringHud">
@@ -4434,147 +4417,174 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 })();
 </script>
 
-<!-- ===== 로그인 로직 ===== -->
+<!-- ===== 라이선스 인증 로직 ===== -->
 <script>
 const SUPABASE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_378Ep28vw4J9Sia2OsN6-Q_gqnu5OQJ';
+const AKM_VERSION  = '1.0.0';
+const CACHE_DAYS   = 30; // 오프라인 사용 가능 기간
+const LS_KEY       = 'akm_license_v1';
 
-async function doLogin() {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value.trim();
+// 로그인 실패 횟수 제한
+let _failCount = 0;
+let _failLockUntil = 0;
+
+function _getLicenseCache() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e) { return null; }
+}
+function _setLicenseCache(data) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+}
+function _clearLicenseCache() {
+  try { localStorage.removeItem(LS_KEY); } catch(e) {}
+}
+
+function showLicenseBadge(dojang_name, version) {
+  const badge = document.getElementById('licenseBadge');
+  document.getElementById('lbDojangName').textContent = dojang_name;
+  document.getElementById('lbVersion').textContent = 'v' + (version || AKM_VERSION);
+  badge.classList.add('show');
+}
+
+function activateApp(dojang_name, license_type, version) {
+  document.getElementById('loginScreen').classList.add('hidden');
+  showLicenseBadge(dojang_name, version);
+  if (window.__startApp) window.__startApp();
+}
+
+async function doLicenseActivate() {
+  const key = document.getElementById('licenseKeyInput').value.trim().toUpperCase();
   const errorEl = document.getElementById('loginError');
   const btn = document.querySelector('.login-btn');
 
-  if (!username || !password) {
-    errorEl.textContent = '아이디와 비밀번호를 입력해주세요.';
+  // 잠금 체크
+  if (Date.now() < _failLockUntil) {
+    const sec = Math.ceil((_failLockUntil - Date.now()) / 1000);
+    errorEl.textContent = `잠시 후 다시 시도해주세요. (${sec}초)`;
     return;
   }
 
-  btn.textContent = '확인 중...';
+  if (!key) {
+    errorEl.textContent = '라이선스 키를 입력해주세요.';
+    return;
+  }
+  if (!/^AKM-/.test(key)) {
+    errorEl.textContent = '올바른 형식의 키를 입력해주세요. (AKM-으로 시작)';
+    return;
+  }
+
+  btn.textContent = '인증 중...';
   btn.disabled = true;
   errorEl.textContent = '';
 
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/dojangs?username=eq.${encodeURIComponent(username)}&password=eq.${encodeURIComponent(password)}&is_active=eq.true&select=dojang_name,expires_at`,
+      `${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(key)}&is_active=eq.true&select=dojang_name,license_type,version`,
       { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
     );
     const data = await res.json();
 
     if (!data || data.length === 0) {
-      errorEl.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
-      btn.textContent = '로그인'; btn.disabled = false;
+      _failCount++;
+      if (_failCount >= 5) {
+        _failLockUntil = Date.now() + 30000; // 30초 잠금
+        _failCount = 0;
+        errorEl.textContent = '입력 오류가 많습니다. 30초 후 다시 시도해주세요.';
+      } else {
+        errorEl.textContent = '유효하지 않은 라이선스 키입니다. 키를 다시 확인해주세요.';
+      }
+      btn.textContent = '인증하기'; btn.disabled = false;
       return;
     }
 
-    const { dojang_name, expires_at } = data[0];
-    const today = new Date().toISOString().slice(0,10);
+    // 인증 성공
+    _failCount = 0;
+    const { dojang_name, license_type, version } = data[0];
 
-    if (expires_at < today) {
-      errorEl.textContent = `이용 기간이 만료되었습니다. (만료일: ${expires_at})`;
-      btn.textContent = '로그인'; btn.disabled = false;
-      return;
-    }
+    // last_verified_at 업데이트
+    fetch(`${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(key)}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ last_verified_at: new Date().toISOString() })
+    }).catch(() => {});
 
-    // 로그인 성공
-    sessionStorage.setItem('akm_auth', JSON.stringify({ dojang_name, expires_at, username }));
-    document.getElementById('loginScreen').classList.add('hidden');
-    
-    if (window.__startApp) window.__startApp();
+    // 30일 캐시 저장
+    _setLicenseCache({
+      license_key: key,
+      dojang_name,
+      license_type,
+      version: version || AKM_VERSION,
+      cached_at: Date.now()
+    });
+
+    activateApp(dojang_name, license_type, version || AKM_VERSION);
 
   } catch(e) {
-    errorEl.textContent = '네트워크 오류가 발생했습니다. 다시 시도해주세요.';
-    btn.textContent = '로그인'; btn.disabled = false;
+    // 네트워크 오류 시 캐시 확인
+    const cache = _getLicenseCache();
+    if (cache && cache.license_key === key) {
+      const daysPassed = (Date.now() - cache.cached_at) / (1000 * 60 * 60 * 24);
+      if (daysPassed < CACHE_DAYS) {
+        activateApp(cache.dojang_name, cache.license_type, cache.version);
+        return;
+      }
+    }
+    errorEl.textContent = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.';
+    btn.textContent = '인증하기'; btn.disabled = false;
   }
 }
 
-// 엔터키 로그인
+// 엔터키 인증
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
-    doLogin();
+    doLicenseActivate();
   }
 });
 
-// 이미 로그인된 세션 확인
-(function() {
-  const auth = sessionStorage.getItem('akm_auth');
-  if (auth) {
-    try {
-      const { expires_at } = JSON.parse(auth);
-      const today = new Date().toISOString().slice(0,10);
-      if (expires_at >= today) {
-        document.getElementById('loginScreen').classList.add('hidden');
-        
-        if (window.__startApp) window.__startApp();
-      }
-    } catch(e) {}
-  }
-})();
+// 앱 시작 시 캐시 자동 확인 (30일 오프라인 사용)
+(async function() {
+  const cache = _getLicenseCache();
+  if (!cache) return;
 
-// ===== 비밀번호 변경 =====
-function openPwChangeModal() {
-  ['pcUser','pcCurrent','pcNew','pcConfirm'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('pcErr').textContent = '';
-  document.getElementById('pwChangeModal').classList.add('show');
-}
-function closePwChangeModal() {
-  document.getElementById('pwChangeModal').classList.remove('show');
-}
-async function doChangePw() {
-  const username = document.getElementById('pcUser').value.trim();
-  const current  = document.getElementById('pcCurrent').value.trim();
-  const newPw    = document.getElementById('pcNew').value.trim();
-  const confirm  = document.getElementById('pcConfirm').value.trim();
-  const errEl    = document.getElementById('pcErr');
-
-  if (!username || !current || !newPw || !confirm) {
-    errEl.textContent = '모든 항목을 입력해주세요.'; return;
-  }
-  if (newPw.length < 6) {
-    errEl.textContent = '새 비밀번호는 6자 이상으로 입력해주세요.'; return;
-  }
-  if (newPw !== confirm) {
-    errEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return;
+  const daysPassed = (Date.now() - cache.cached_at) / (1000 * 60 * 60 * 24);
+  if (daysPassed >= CACHE_DAYS) {
+    _clearLicenseCache();
+    return;
   }
 
-  errEl.textContent = '확인 중...';
+  // 캐시 유효 → 바로 앱 실행
+  activateApp(cache.dojang_name, cache.license_type, cache.version);
 
+  // 백그라운드에서 서버 재인증 (조용히)
   try {
-    // 현재 아이디/비번 확인
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/dojangs?username=eq.${encodeURIComponent(username)}&password=eq.${encodeURIComponent(current)}&is_active=eq.true&select=id`,
+      `${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(cache.license_key)}&is_active=eq.true&select=dojang_name,license_type,version`,
       { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
     );
     const data = await res.json();
-
     if (!data || data.length === 0) {
-      errEl.textContent = '아이디 또는 현재 비밀번호가 올바르지 않습니다.'; return;
+      // 서버에서 비활성화된 경우 캐시 삭제 후 로그인 화면으로
+      _clearLicenseCache();
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('licenseBadge').classList.remove('show');
+      document.getElementById('loginError').textContent = '라이선스가 비활성화되었습니다. 관리자에게 문의해주세요.';
+    } else {
+      // 캐시 갱신
+      const { dojang_name, license_type, version } = data[0];
+      _setLicenseCache({
+        license_key: cache.license_key,
+        dojang_name, license_type,
+        version: version || AKM_VERSION,
+        cached_at: Date.now()
+      });
     }
-
-    const id = data[0].id;
-
-    // 비밀번호 업데이트
-    await fetch(
-      `${SUPABASE_URL}/rest/v1/dojangs?id=eq.${id}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ password: newPw })
-      }
-    );
-
-    closePwChangeModal();
-    alert('✅ 비밀번호가 변경되었습니다.\n다음 로그인부터 새 비밀번호를 사용하세요.');
-
-  } catch(e) {
-    errEl.textContent = '네트워크 오류가 발생했습니다. 다시 시도해주세요.';
-  }
-}
+  } catch(e) { /* 네트워크 오류 시 캐시로 계속 사용 */ }
+})();
 </script>
 
 </body>

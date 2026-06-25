@@ -208,11 +208,15 @@ body.hud-v21 #comboBadge{
   box-shadow:0 10px 28px rgba(0,0,0,.22), 0 0 18px rgba(76,163,255,.10), inset 0 1px 0 rgba(255,255,255,.10) !important;
   backdrop-filter:blur(10px) saturate(1.12);
 }
-body.hud-v21 .title{position:absolute; top:14px; left:14px; min-width:230px; padding:10px 15px; border-radius:16px; font-size:21px; line-height:1.05; color:#fff; font-weight:900;}
-body.hud-v21 .title small{display:block; margin-top:4px; font-size:10px; color:#aebbd1; font-weight:600;}
+body.hud-v21 .title{position:relative; top:auto; left:auto; min-width:0; padding:10px 12px 8px; border-radius:14px; font-size:13px; line-height:1.2; color:#fff; font-weight:900; display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:2px;}
+body.hud-v21 .title small{display:block; margin-top:2px; font-size:10px; color:#7a90aa; font-weight:600;}
+body.hud-v21 .title-left{flex:1; min-width:0;}
+body.hud-v21 .title-dojang{font-size:13px; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+body.hud-v21 .title-auth{font-size:10px; color:#2ecc71; font-weight:800; margin-top:1px;}
+body.hud-v21 .title-version{font-size:10px; color:#5a7a9a; margin-top:1px;}
 body.hud-v21 #modeBadge{top:14px; left:50%; transform:translateX(-50%); min-width:320px; padding:10px 22px; border-radius:16px; font-size:22px; font-weight:900; color:#fff; text-align:center; z-index:8;}
 body.hud-v21 #modeBadge small{display:block; margin-top:2px; font-size:11px; color:#dbeaff;}
-body.hud-v21 .hud-settings-btn{position:absolute; top:14px; right:14px; min-width:76px; min-height:38px; padding:6px 12px; border-radius:13px; color:#fff; font-size:14px; font-weight:900;}
+body.hud-v21 .hud-settings-btn{position:relative; top:auto; right:auto; min-width:44px; min-height:34px; padding:5px 10px; border-radius:10px; color:#9fb0c8; font-size:13px; font-weight:900; flex-shrink:0;}
 body.hud-v21 #status{top:82px; left:14px; bottom:auto; max-width:250px; padding:8px 11px; border-radius:12px; font-size:12px; color:#dcecff; z-index:8;}
 
 /* 모드 버튼 */
@@ -2504,7 +2508,7 @@ body.hud-v21 .panel{
   body.hud-v21 .title{top:10px !important; left:12px !important; transform:scale(.88) !important; transform-origin:top left !important;}
   body.hud-v21 #modeBadge{top:9px !important; transform:translateX(-50%) scale(.88) !important; transform-origin:top center !important;}
   body.hud-v21 .difficulty-panel{top:10px !important; right:92px !important; transform:scale(.88) !important; transform-origin:top right !important;}
-  body.hud-v21 .hud-settings-btn{top:10px !important; right:10px !important; transform:scale(.9) !important; transform-origin:top right !important;}
+  /* hud-settings-btn: 패널 내 인라인 배치로 변경됨 */
   body.hud-v21 #status{top:66px !important; left:12px !important; font-size:11px !important; max-width:260px !important; padding:6px 9px !important;}
 
   body.hud-v21 .hud-drill-row{top:126px !important; left:12px !important;}
@@ -2885,32 +2889,9 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 }
 
 /* 정품 인증 배지 - 좌상단 표시 */
-#licenseBadge {
-  display: none;
-  position: absolute;
-  top: 14px; left: 14px;
-  z-index: 100;
-  background: rgba(10,22,40,0.82);
-  border: 1px solid rgba(76,163,255,0.28);
-  border-radius: 10px;
-  padding: 8px 13px;
-  backdrop-filter: blur(6px);
-  line-height: 1.45;
-  pointer-events: none;
-}
+/* 라이선스 배지 - 패널 타이틀 영역에 통합 */
+#licenseBadge { display: none; }
 #licenseBadge.show { display: block; }
-#licenseBadge .lb-title {
-  font-size: 11px; font-weight: 900; color: var(--gold); letter-spacing: 0.3px;
-}
-#licenseBadge .lb-auth {
-  font-size: 10px; color: #2ecc71; font-weight: 800; margin: 1px 0;
-}
-#licenseBadge .lb-dojang {
-  font-size: 12px; font-weight: 900; color: #fff;
-}
-#licenseBadge .lb-version {
-  font-size: 10px; color: #5a7a9a; margin-top: 1px;
-}
 
 /* =========================================================
    CSS SECTION 103: final-sparring-hud-height-sync
@@ -2970,7 +2951,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 </div>
 
 <!-- ===== 정품 인증 배지 (좌상단) ===== -->
-<div id="licenseBadge">
+<!-- licenseBadge 숨김 - 패널 타이틀에 통합됨 -->
+<div id="licenseBadge" style="display:none">
   <div class="lb-title">AI KICK MASTER</div>
   <div class="lb-auth">✓ 정품 인증</div>
   <div class="lb-dojang" id="lbDojangName"></div>
@@ -3035,8 +3017,14 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   </div>
 
   <div class="panel">
-    <div class="title"><span class="title-text">AI KICK MASTER<small>Taekwondo Training System</small></span></div>
-    <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
+    <div class="title">
+      <div class="title-left">
+        <div class="title-dojang" id="panelDojangName">AI KICK MASTER</div>
+        <div class="title-auth" id="panelAuth"></div>
+        <div class="title-version" id="panelVersion"></div>
+      </div>
+      <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙</button>
+    </div>
 
     <div id="difficultyPanel" class="difficulty-panel" aria-label="난이도 선택">
       <button type="button" class="diff-btn" data-diff="easy" onclick="setDifficulty('easy')">쉬움</button>
@@ -4440,10 +4428,16 @@ function _clearLicenseCache() {
 }
 
 function showLicenseBadge(dojang_name, version) {
-  const badge = document.getElementById('licenseBadge');
+  // 패널 타이틀에 도장명/인증/버전 표시
+  const nameEl = document.getElementById('panelDojangName');
+  const authEl = document.getElementById('panelAuth');
+  const verEl  = document.getElementById('panelVersion');
+  if (nameEl) nameEl.textContent = dojang_name;
+  if (authEl) authEl.textContent = '✓ 정품 인증';
+  if (verEl)  verEl.textContent  = 'v' + (version || AKM_VERSION);
+  // 숨겨진 배지 데이터도 동기화
   document.getElementById('lbDojangName').textContent = dojang_name;
   document.getElementById('lbVersion').textContent = 'v' + (version || AKM_VERSION);
-  badge.classList.add('show');
 }
 
 function activateApp(dojang_name, license_type, version) {
@@ -4571,7 +4565,10 @@ document.addEventListener('keydown', function(e) {
       // 서버에서 비활성화된 경우 캐시 삭제 후 로그인 화면으로
       _clearLicenseCache();
       document.getElementById('loginScreen').classList.remove('hidden');
-      document.getElementById('licenseBadge').classList.remove('show');
+      // 패널 타이틀 초기화
+      const n=document.getElementById('panelDojangName'); if(n) n.textContent='AI KICK MASTER';
+      const a=document.getElementById('panelAuth'); if(a) a.textContent='';
+      const v=document.getElementById('panelVersion'); if(v) v.textContent='';
       document.getElementById('loginError').textContent = '라이선스가 비활성화되었습니다. 관리자에게 문의해주세요.';
     } else {
       // 캐시 갱신

@@ -223,7 +223,14 @@ body.hud-v21 .title-version{font-size:10px; color:#5a7a9a; margin-top:1px;}
 body.hud-v21 #modeBadge{top:14px; left:50%; transform:translateX(-50%); min-width:320px; padding:10px 22px; border-radius:16px; font-size:22px; font-weight:900; color:#fff; text-align:center; z-index:8;}
 body.hud-v21 #modeBadge small{display:block; margin-top:2px; font-size:11px; color:#dbeaff;}
 body.hud-v21 .hud-settings-btn{position:relative; top:auto; right:auto; min-width:44px; min-height:34px; padding:5px 10px; border-radius:10px; color:#9fb0c8; font-size:13px; font-weight:900; flex-shrink:0;}
-body.hud-v21 #status{top:82px; left:14px; bottom:auto; max-width:250px; padding:8px 11px; border-radius:12px; font-size:12px; color:#dcecff; z-index:8;}
+body.hud-v21 #status{
+  top:70px; left:50%; transform:translateX(-50%); bottom:auto;
+  max-width:360px; padding:6px 18px; border-radius:20px;
+  font-size:13px; font-weight:700; color:#dcecff;
+  text-align:center; white-space:nowrap;
+  z-index:8; transition:opacity .3s;
+}
+body.hud-v21 #status:empty{ opacity:0; pointer-events:none; }
 
 /* 모드 버튼 */
 body.hud-v21 .drill-btn, body.hud-v21 .game-btn{
@@ -2039,11 +2046,14 @@ body.hud-v21.akm-ui .diff-btn.active{
 }
 
 /* 설정 버튼 */
+/* 설정버튼: 패널 타이틀 안에 인라인 배치 */
 body.hud-v21.akm-ui .hud-settings-btn{
-  top:52px !important; right:22px !important; min-width:0 !important; min-height:0 !important; padding:0 !important;
-  border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important;
-  color:rgba(255,255,255,.42) !important; font-size:13px !important; font-weight:1000 !important;
-  text-shadow:0 2px 8px rgba(0,0,0,.95) !important;
+  position:relative !important; top:auto !important; right:auto !important;
+  min-width:34px !important; min-height:30px !important; padding:4px 8px !important;
+  border:none !important; border-radius:8px !important;
+  background:transparent !important; box-shadow:none !important;
+  color:rgba(255,255,255,.5) !important; font-size:14px !important; font-weight:900 !important;
+  text-shadow:none !important; flex-shrink:0 !important;
 }
 body.hud-v21.akm-ui .hud-settings-btn:hover{color:#fff !important;}
 
@@ -2697,7 +2707,7 @@ body.hud-v21.akm-ui #enemyTarget{
    - 버튼 포커스/터치 하이라이트 제거
    ========================================================= */
 body.hud-v21.akm-ui .difficulty-panel{
-  right:70px !important;
+  right:22px !important;
 }
 body.hud-v21.akm-ui .diff-btn,
 body.hud-v21.akm-ui .hud-settings-btn,
@@ -3944,6 +3954,7 @@ function finishBalloon(){
 
 /* ── 공통 ── */
 function celebrate(rank,label){
+  statusEl.style.opacity='1';
   if(rank===0){ confetti(true); sndRecord(); statusEl.textContent='🏆 오늘 1등! '+label; }
   else if(rank>0&&rank<5){ statusEl.textContent='👏 오늘 '+(rank+1)+'위! '+label; }
   else { statusEl.textContent='완료! '+label; }
@@ -3996,7 +4007,7 @@ window.startGame=()=>{
     stopGame();
     setStartBtn(false,'▶ 시작!');
     setGrResult('중단됨');
-    statusEl.textContent='중단했습니다. 다시 시작하려면 시작 버튼을 누르세요.';
+    statusEl.style.opacity='1'; statusEl.textContent='중단했습니다. 다시 시작하려면 시작 버튼을 누르세요.';
     renderStats(); renderCamRank();
     return;
   }
@@ -4013,7 +4024,7 @@ window.startGame=()=>{
   };
   runReadyCountdown(subTexts[startMode]||'',()=>{
     if(currentMode!==startMode) return;
-    running=true; setPlayingUi(true); statusEl.textContent='발차기 하세요!';
+    running=true; setPlayingUi(true); statusEl.textContent=''; statusEl.style.opacity='0';
     if(currentMode==='balloon'){ const sec=parseInt(balloonTimeSel?.value||'30'); startBalloon(); startTimed(sec,finishBalloon); }
     else if(currentMode==='sparring'){ startSparring(); }
     else if(isDrillMode()){
@@ -4081,6 +4092,7 @@ window.setMode=(mode)=>{
   gameArea.style.display=(!isDrill)?'flex':'none';
   setStartBtn(false,'▶ 시작!'); setGrResult('');
   resetCounters(); renderStats(); renderCamRank();
+  statusEl.style.opacity='1';
   if(isDrill) statusEl.textContent='시작 버튼을 눌러 '+MODE_CFG[mode].label+' 연습을 시작하세요';
   else statusEl.textContent='시작 버튼을 누르세요';
 };
@@ -4249,12 +4261,12 @@ function loop(){
         }
       } else {
         barFill.style.width='0%';
-        if(!running) statusEl.textContent='🔍 전신이 보이게 뒤로 물러서세요';
+        if(!running){ statusEl.style.opacity='1'; statusEl.textContent='🔍 전신이 보이게 뒤로 물러서세요'; };
         kicking=false; aboveFrames=0; belowFrames=0;
       }
     } else {
       barFill.style.width='0%';
-      if(!running) statusEl.textContent='🔍 사람을 찾는 중…';
+      if(!running){ statusEl.style.opacity='1'; statusEl.textContent='🔍 사람을 찾는 중…'; };
       kicking=false; aboveFrames=0; belowFrames=0; smHipY=null; smTorso=null; smHipX=null;
     }
   }

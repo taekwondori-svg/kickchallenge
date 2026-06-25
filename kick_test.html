@@ -2679,6 +2679,77 @@ body.hud-v21.akm-ui #enemyTarget{
   }
 }
 
+
+
+/* =========================================================
+   CSS SECTION 102: final tablet privacy-dot spacing + focus cleanup
+   - 초록 점이 난이도 버튼 옆 표시처럼 보이지 않도록 난이도 위치를 왼쪽으로 이동
+   - 버튼 포커스/터치 하이라이트 제거
+   ========================================================= */
+body.hud-v21.akm-ui .difficulty-panel{
+  right:70px !important;
+}
+body.hud-v21.akm-ui .diff-btn,
+body.hud-v21.akm-ui .hud-settings-btn,
+body.hud-v21.akm-ui button{
+  outline:none !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+body.hud-v21.akm-ui .diff-btn:focus,
+body.hud-v21.akm-ui .diff-btn:focus-visible,
+body.hud-v21.akm-ui .hud-settings-btn:focus,
+body.hud-v21.akm-ui .hud-settings-btn:focus-visible,
+body.hud-v21.akm-ui button:focus,
+body.hud-v21.akm-ui button:focus-visible{
+  outline:none !important;
+  box-shadow:none !important;
+}
+@media (orientation:landscape) and (max-width:1200px){
+  body.hud-v21.akm-ui .difficulty-panel{
+    right:72px !important;
+  }
+}
+
+
+/* =========================================================
+   CSS SECTION 103: final-sparring-hud-height-sync
+   - 겨루기모드 우측 HUD 높이를 발차기/격파모드와 완전히 동일하게 고정
+   ========================================================= */
+body.hud-v21.sparring-mode .stats-row,
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  top:132px !important;
+  right:24px !important;
+  width:232px !important;
+  gap:16px !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:124px !important;
+    width:188px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-aspect-ratio: 1.66){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:118px !important;
+    right:10px !important;
+    width:116px !important;
+    gap:4px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-height: 760px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:106px !important;
+    width:108px !important;
+    gap:2px !important;
+  }
+}
+
 </style>
 
 
@@ -2843,6 +2914,46 @@ body.hud-v21.akm-ui #enemyTarget{
 .pwchange-save { background: var(--blue); color: #fff; }
 
 /* 로그인 후 설정 버튼 - 설정 모달로 통합됨 */
+
+/* =========================================================
+   CSS SECTION 103: final-sparring-hud-height-sync
+   - 겨루기모드 우측 HUD 높이를 발차기/격파모드와 완전히 동일하게 고정
+   ========================================================= */
+body.hud-v21.sparring-mode .stats-row,
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  top:132px !important;
+  right:24px !important;
+  width:232px !important;
+  gap:16px !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:124px !important;
+    width:188px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-aspect-ratio: 1.66){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:118px !important;
+    right:10px !important;
+    width:116px !important;
+    gap:4px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-height: 760px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:106px !important;
+    width:108px !important;
+    gap:2px !important;
+  }
+}
+
 </style>
 </head>
 <body class="hud-v21 akm-ui">
@@ -3252,7 +3363,7 @@ function renderStats(){
   } else if(currentMode==='sparring'){
     lblA.textContent='총 데미지'; valA.textContent=sparringDamage;
     lblB.textContent='남은 HP'; valB.textContent=(sparringHp<=0?'K.O.':Math.max(0,Math.round(sparringHp))); valB.style.color='var(--gold)';
-    lblC.textContent='콤보'; valC.textContent=sparringCombo;
+    lblC.textContent='최고콤보'; valC.textContent=sparringMaxCombo;
     if(sparringTimeBox){
       sparringTimeBox.style.display=running?'block':'none';
       valTime.textContent=running?Math.max(0,gameRemain):'—';
@@ -3679,7 +3790,7 @@ function finishDrill(){
 function updateSparringHud(){
   if(enemyHpFill) enemyHpFill.style.width=Math.max(0,(sparringHp/250)*100)+'%';
   if(enemyHpText) enemyHpText.textContent=(sparringHp<=0?'K.O.':'HP '+Math.max(0,Math.round(sparringHp)));
-  // 콤보 숫자는 오른쪽 HUD(stat C)에서만 상시 표시한다.
+  // 최고콤보 숫자는 오른쪽 HUD(stat C)에서만 상시 표시한다.
 }
 function showComboPopup(combo){
   if(!comboBadge || combo < 2) return;
@@ -4245,6 +4356,46 @@ body.hud-v21.akm-ui.ready-ui .panel .primary-start{
   filter:none !important;
   text-shadow:0 3px 14px rgba(0,0,0,.95),0 0 18px rgba(255,216,107,.85) !important;
 }
+
+/* =========================================================
+   CSS SECTION 103: final-sparring-hud-height-sync
+   - 겨루기모드 우측 HUD 높이를 발차기/격파모드와 완전히 동일하게 고정
+   ========================================================= */
+body.hud-v21.sparring-mode .stats-row,
+body.hud-v21.akm-ui.sparring-mode .stats-row{
+  top:132px !important;
+  right:24px !important;
+  width:232px !important;
+  gap:16px !important;
+}
+
+@media (orientation:landscape) and (max-width:1220px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:124px !important;
+    width:188px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-aspect-ratio: 1.66){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:118px !important;
+    right:10px !important;
+    width:116px !important;
+    gap:4px !important;
+  }
+}
+
+@media (orientation:landscape) and (max-height: 760px){
+  body.hud-v21.sparring-mode .stats-row,
+  body.hud-v21.akm-ui.sparring-mode .stats-row{
+    top:106px !important;
+    width:108px !important;
+    gap:2px !important;
+  }
+}
+
 </style>
 <script id="fix4-start-stop-text-helper">
 (function(){

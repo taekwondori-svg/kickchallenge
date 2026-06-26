@@ -4436,15 +4436,14 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 })();
 </script>
 
-<!-- ===== 라이선스 인증 로직 ===== -->
+<!-- ===== 라이선스 인증 로직 (Edge Function 방식) ===== -->
 <script>
-const SUPABASE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_378Ep28vw4J9Sia2OsN6-Q_gqnu5OQJ';
+// Supabase 키 완전 제거 - Edge Function으로만 통신
+const EDGE_URL     = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/verify-license';
 const AKM_VERSION  = '1.0.0';
-const CACHE_DAYS   = 30; // 오프라인 사용 가능 기간
+const CACHE_DAYS   = 30;
 const LS_KEY       = 'akm_license_v1';
 
-// 로그인 실패 횟수 제한
 let _failCount = 0;
 let _failLockUntil = 0;
 
@@ -4459,14 +4458,12 @@ function _clearLicenseCache() {
 }
 
 function showLicenseBadge(dojang_name, version) {
-  // 패널 타이틀에 도장명/인증/버전 표시
   const nameEl = document.getElementById('panelDojangName');
   const authEl = document.getElementById('panelAuth');
   const verEl  = document.getElementById('panelVersion');
   if (nameEl) nameEl.textContent = dojang_name;
   if (authEl) authEl.textContent = '✓ 정품 인증';
   if (verEl)  verEl.textContent  = 'v' + (version || AKM_VERSION);
-  // 숨겨진 배지 데이터도 동기화
   document.getElementById('lbDojangName').textContent = dojang_name;
   document.getElementById('lbVersion').textContent = 'v' + (version || AKM_VERSION);
 }
@@ -4477,68 +4474,59 @@ function activateApp(dojang_name, license_type, version) {
   if (window.__startApp) window.__startApp();
 }
 
+function _resetPanel() {
+  const n=document.getElementById('panelDojangName'); if(n) n.textContent='AI KICK MASTER';
+  const a=document.getElementById('panelAuth'); if(a) a.textContent='';
+  const v=document.getElementById('panelVersion'); if(v) v.textContent='';
+}
+
+// Edge Function 호출 (Supabase 키 노출 없음)
+async function _verifyWithServer(license_key) {
+  const res = await fetch(EDGE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ license_key })
+  });
+  return await res.json();
+}
+
 async function doLicenseActivate() {
   const key = document.getElementById('licenseKeyInput').value.trim().toUpperCase();
   const errorEl = document.getElementById('loginError');
   const btn = document.querySelector('.login-btn');
 
-  // 잠금 체크
   if (Date.now() < _failLockUntil) {
     const sec = Math.ceil((_failLockUntil - Date.now()) / 1000);
     errorEl.textContent = `잠시 후 다시 시도해주세요. (${sec}초)`;
     return;
   }
 
-  if (!key) {
-    errorEl.textContent = '라이선스 키를 입력해주세요.';
-    return;
-  }
-  if (!/^AKM-/.test(key)) {
-    errorEl.textContent = '올바른 형식의 키를 입력해주세요. (AKM-으로 시작)';
-    return;
-  }
+  if (!key) { errorEl.textContent = '라이선스 키를 입력해주세요.'; return; }
+  if (!/^AKM-/.test(key)) { errorEl.textContent = '올바른 형식의 키를 입력해주세요. (AKM-으로 시작)'; return; }
 
   btn.textContent = '인증 중...';
   btn.disabled = true;
   errorEl.textContent = '';
 
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(key)}&is_active=eq.true&select=dojang_name,license_type,version`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    const data = await res.json();
+    const result = await _verifyWithServer(key);
 
-    if (!data || data.length === 0) {
+    if (!result.valid) {
       _failCount++;
       if (_failCount >= 5) {
-        _failLockUntil = Date.now() + 30000; // 30초 잠금
+        _failLockUntil = Date.now() + 30000;
         _failCount = 0;
         errorEl.textContent = '입력 오류가 많습니다. 30초 후 다시 시도해주세요.';
       } else {
-        errorEl.textContent = '유효하지 않은 라이선스 키입니다. 키를 다시 확인해주세요.';
+        errorEl.textContent = result.error || '유효하지 않은 라이선스 키입니다.';
       }
       btn.textContent = '인증하기'; btn.disabled = false;
       return;
     }
 
-    // 인증 성공
     _failCount = 0;
-    const { dojang_name, license_type, version } = data[0];
+    const { dojang_name, license_type, version } = result;
 
-    // last_verified_at 업데이트
-    fetch(`${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(key)}`, {
-      method: 'PATCH',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ last_verified_at: new Date().toISOString() })
-    }).catch(() => {});
-
-    // 30일 캐시 저장
     _setLicenseCache({
       license_key: key,
       dojang_name,
@@ -4564,7 +4552,6 @@ async function doLicenseActivate() {
   }
 }
 
-// 엔터키 인증
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
     doLicenseActivate();
@@ -4572,7 +4559,6 @@ document.addEventListener('keydown', function(e) {
 });
 
 // 앱 시작 시 캐시 자동 확인 (30일 오프라인 사용)
-// __startApp 정의 후 실행되도록 지연
 window.addEventListener('load', async function() {
   const cache = _getLicenseCache();
   if (!cache) return;
@@ -4586,29 +4572,20 @@ window.addEventListener('load', async function() {
   // 캐시 유효 → 바로 앱 실행
   activateApp(cache.dojang_name, cache.license_type, cache.version);
 
-  // 백그라운드에서 서버 재인증 (조용히)
+  // 백그라운드 재인증 (조용히)
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/licenses?license_key=eq.${encodeURIComponent(cache.license_key)}&is_active=eq.true&select=dojang_name,license_type,version`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    const data = await res.json();
-    if (!data || data.length === 0) {
-      // 서버에서 비활성화된 경우 캐시 삭제 후 로그인 화면으로
+    const result = await _verifyWithServer(cache.license_key);
+    if (!result.valid) {
       _clearLicenseCache();
       document.getElementById('loginScreen').classList.remove('hidden');
-      // 패널 타이틀 초기화
-      const n=document.getElementById('panelDojangName'); if(n) n.textContent='AI KICK MASTER';
-      const a=document.getElementById('panelAuth'); if(a) a.textContent='';
-      const v=document.getElementById('panelVersion'); if(v) v.textContent='';
-      document.getElementById('loginError').textContent = '라이선스가 비활성화되었습니다. 관리자에게 문의해주세요.';
+      _resetPanel();
+      document.getElementById('loginError').textContent = result.error || '라이선스가 비활성화되었습니다.';
     } else {
-      // 캐시 갱신
-      const { dojang_name, license_type, version } = data[0];
       _setLicenseCache({
         license_key: cache.license_key,
-        dojang_name, license_type,
-        version: version || AKM_VERSION,
+        dojang_name: result.dojang_name,
+        license_type: result.license_type,
+        version: result.version || AKM_VERSION,
         cached_at: Date.now()
       });
     }

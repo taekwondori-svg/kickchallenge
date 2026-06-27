@@ -570,7 +570,8 @@ tr.row-expired td { background: rgba(217,43,58,0.04); }
    ============================== */
 const SUPABASE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_378Ep28vw4J9Sia2OsN6-Q_gqnu5OQJ'; // anon키 (조회용)
-const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/admin-action';
+// Edge Function URL (clever-worker = admin-action 기능)
+const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker';
 // ▼ 아래 값을 Edge Function 환경변수 AKM_ADMIN_SECRET 과 동일하게 설정하세요
 const ADMIN_SECRET = 'AKM-ADMIN-2026-SECRET'; // ← 본인이 원하는 값으로 변경
 const LOGIN_URL = 'https://aikickmaster.kr/kick_test.html';

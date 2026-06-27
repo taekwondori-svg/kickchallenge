@@ -568,18 +568,14 @@ tr.row-expired td { background: rgba(217,43,58,0.04); }
 /* ==============================
    공통
    ============================== */
-const SUPABASE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_378Ep28vw4J9Sia2OsN6-Q_gqnu5OQJ'; // anon키 (조회용)
-// Edge Function URL (clever-worker = admin-action 기능)
-const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker';
-// ▼ 아래 값을 Edge Function 환경변수 AKM_ADMIN_SECRET 과 동일하게 설정하세요
-const ADMIN_SECRET = 'AKM-ADMIN-2026-SECRET'; // ← 본인이 원하는 값으로 변경
-const LOGIN_URL = 'https://aikickmaster.kr';
+const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/admin-action';
+const LOGIN_URL = 'https://aikickmaster.kr/kick_test.html';
 const AKM_VERSION = '1.0.0';
-const ADMIN_PW_KEY = 'akm_admin_pw';
 const HOME_DATA_KEY = 'akm_home_data';
+// ※ ADMIN_SECRET 완전 제거 — 서버(Edge Function 환경변수)에만 존재
+// ※ 관리자 비밀번호도 클라이언트에 저장하지 않음 — 토큰 방식으로 전환
 
-let ADMIN_PASSWORD = '';
+let ADMIN_TOKEN = ''; // 로그인 성공 시 서버에서 발급받은 임시 토큰 (1시간 유효)
 let LICENSES = [];
 
 function escapeHtml(v) {
@@ -613,34 +609,38 @@ function switchTab(tab) {
 }
 
 /* ==============================
-   로그인
+   로그인 (토큰 방식)
+   비밀번호 검증은 서버에서만 — 클라이언트에 비밀번호/시크릿 없음
    ============================== */
-async function loadAdminPassword() {
-  const saved = localStorage.getItem(ADMIN_PW_KEY);
-  if (saved) { ADMIN_PASSWORD = saved; return; }
-  try {
-    const data = await edgeCall('GET_ADMIN_PW', {});
-    if (data && data.value) ADMIN_PASSWORD = data.value;
-  } catch(e) { console.error('비밀번호 로드 실패', e); }
-}
-
 async function adminLogin() {
   const pw = document.getElementById('adminPw').value;
   const errEl = document.getElementById('adminErr');
+  if (!pw) { errEl.textContent = '비밀번호를 입력해주세요.'; return; }
   errEl.textContent = '확인 중...';
-  if (!ADMIN_PASSWORD) await loadAdminPassword();
-  if (pw === ADMIN_PASSWORD) {
-    sessionStorage.setItem('akm_admin_logged_in', '1');
+  try {
+    // LOGIN action은 토큰 없이 호출 가능 (비밀번호만으로 토큰 발급)
+    const res = await fetch(ADMIN_EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'LOGIN', payload: { password: pw } })
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data?.error || '로그인 실패'; return; }
+
+    ADMIN_TOKEN = data.token; // 서버 발급 토큰 (1시간 유효, 메모리에만 보관)
+    sessionStorage.setItem('akm_admin_token', ADMIN_TOKEN);
     document.getElementById('loginWrap').classList.add('hidden');
     document.getElementById('dashboard').classList.add('show');
     loadLicenses();
     loadHomeFields();
-  } else {
-    errEl.textContent = '비밀번호가 올바르지 않습니다.';
+  } catch(e) {
+    errEl.textContent = '서버 연결 실패: ' + e.message;
   }
 }
+
 function logoutAdmin() {
-  sessionStorage.removeItem('akm_admin_logged_in');
+  ADMIN_TOKEN = '';
+  sessionStorage.removeItem('akm_admin_token');
   document.getElementById('dashboard').classList.remove('show');
   document.getElementById('loginWrap').classList.remove('hidden');
   document.getElementById('adminPw').value = '';
@@ -659,13 +659,19 @@ async function changePassword() {
   const newPw = document.getElementById('pwNew').value;
   const confirm = document.getElementById('pwConfirm').value;
   const errEl = document.getElementById('pwErr');
-  if (current !== ADMIN_PASSWORD) { errEl.textContent = '현재 비밀번호가 올바르지 않습니다.'; return; }
+  if (!current) { errEl.textContent = '현재 비밀번호를 입력해주세요.'; return; }
   if (newPw.length < 6) { errEl.textContent = '새 비밀번호는 6자 이상으로 입력해주세요.'; return; }
   if (newPw !== confirm) { errEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return; }
+  // 현재 비밀번호 확인: 서버에 LOGIN 요청으로 검증
   try {
+    errEl.textContent = '확인 중...';
+    const verifyRes = await fetch(ADMIN_EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'LOGIN', payload: { password: current } })
+    });
+    if (!verifyRes.ok) { errEl.textContent = '현재 비밀번호가 올바르지 않습니다.'; return; }
     await edgeCall('UPDATE_ADMIN_PW', { value: newPw });
-    ADMIN_PASSWORD = newPw;
-    localStorage.setItem(ADMIN_PW_KEY, newPw);
     closePwModal();
     showToast('✅ 비밀번호가 변경되었습니다!');
   } catch(e) { errEl.textContent = '저장 실패: ' + e.message; }
@@ -674,26 +680,28 @@ async function changePassword() {
 /* ==============================
    라이선스 관리
    ============================== */
-// Edge Function 호출 함수 (service_role 권한, 외부 노출 없음)
+// Edge Function 호출 — ADMIN_SECRET 완전 제거, 토큰으로만 인증
 async function edgeCall(action, payload) {
+  if (!ADMIN_TOKEN) { alert('로그인이 필요합니다.'); logoutAdmin(); throw new Error('미로그인'); }
   const res = await fetch(ADMIN_EDGE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-admin-secret': ADMIN_SECRET
+      'x-admin-token': ADMIN_TOKEN   // 서버 발급 임시 토큰 (1시간)
     },
     body: JSON.stringify({ action, payload })
   });
   const text = await res.text();
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+  if (res.status === 401) {
+    // 토큰 만료 시 자동 로그아웃
+    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+    logoutAdmin();
+    throw new Error('세션 만료');
+  }
   if (!res.ok) throw new Error(data?.error || text || `요청 실패 (${res.status})`);
   return data;
-}
-
-// 기존 api 함수는 호환성 유지 (사용 안 함)
-async function api(method, path, body) {
-  return edgeCall('_LEGACY_', { method, path, body });
 }
 
 async function loadLicenses() {
@@ -980,13 +988,14 @@ document.getElementById('pwModalBg').addEventListener('click', e => { if(e.targe
 document.getElementById('modalBg').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
 document.addEventListener('keydown', e => { if(e.key==='Escape') { closeModal(); closePwModal(); } });
 
-if (sessionStorage.getItem('akm_admin_logged_in') === '1') {
-  loadAdminPassword().then(() => {
-    document.getElementById('loginWrap').classList.add('hidden');
-    document.getElementById('dashboard').classList.add('show');
-    loadLicenses();
-    loadHomeFields();
-  });
+// 새로고침 시 sessionStorage 토큰으로 자동 복원 (탭 닫으면 초기화)
+const savedToken = sessionStorage.getItem('akm_admin_token');
+if (savedToken) {
+  ADMIN_TOKEN = savedToken;
+  document.getElementById('loginWrap').classList.add('hidden');
+  document.getElementById('dashboard').classList.add('show');
+  loadLicenses();
+  loadHomeFields();
 }
 </script>
 </body>

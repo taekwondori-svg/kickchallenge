@@ -308,185 +308,61 @@ tr.row-expired td { background: rgba(217,43,58,0.04); }
 
   <!-- ===== 홈페이지 편집 탭 ===== -->
   <div class="tab-content" id="tab-home">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px">
+      <button class="btn-add btn-ghost" onclick="loadHomeFields()">↻ 불러오기</button>
+      <button class="btn-add btn-ghost" onclick="window.open('index.html','_blank')">👁 홈페이지 미리보기</button>
       <button class="btn-add btn-gold" onclick="saveHomeData()">💾 홈페이지 저장</button>
     </div>
 
-    <!-- 기본 정보 -->
     <div class="edit-section">
-      <h3>기본 정보</h3>
+      <h3>핵심 링크</h3>
       <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">카카오톡 오픈채팅 링크</div>
-          <input id="f_kakao" class="f-input" type="url" placeholder="https://open.kakao.com/o/..." />
-        </div>
-        <div class="field-group">
-          <div class="field-label">운영 시간</div>
-          <input id="f_hours" class="f-input" type="text" placeholder="평일 10:00 – 19:00 응답" />
-        </div>
+        <div class="field-group"><div class="field-label">발차기 프로그램 링크</div><input id="f_program_url" class="f-input" type="text" placeholder="kick_test.html" /></div>
+        <div class="field-group"><div class="field-label">숨김 관리자 링크</div><input id="f_admin_url" class="f-input" type="text" placeholder="admin.html" /><div class="field-hint">푸터 오른쪽의 작은 '관리' 링크로 연결됩니다.</div></div>
       </div>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">저작권 표시</div>
-          <input id="f_copyright" class="f-input" type="text" placeholder="© 2026 AI KICK MASTER. All rights reserved." />
-        </div>
+      <div class="field-row">
+        <div class="field-group"><div class="field-label">카카오톡 문의 링크</div><input id="f_kakao_url" class="f-input" type="url" placeholder="https://open.kakao.com/o/..." /></div>
+        <div class="field-group"><div class="field-label">전화 링크</div><input id="f_tel_url" class="f-input" type="text" placeholder="tel:01000000000" /></div>
       </div>
     </div>
 
-    <!-- 히어로 -->
     <div class="edit-section">
-      <h3>히어로 섹션</h3>
+      <h3>첫 화면 Hero</h3>
       <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">메인 타이틀 첫째 줄</div>
-          <input id="f_hero_title1" class="f-input" type="text" placeholder="발차기를 데이터로," />
-        </div>
-        <div class="field-group">
-          <div class="field-label">메인 타이틀 둘째 줄</div>
-          <input id="f_hero_title2" class="f-input" type="text" placeholder="훈련을 게임으로." />
-        </div>
+        <div class="field-group"><div class="field-label">상단 작은 문구</div><input id="f_hero_eyebrow" class="f-input" type="text" /></div>
+        <div class="field-group"><div class="field-label">메인 이미지 URL</div><input id="f_hero_img" class="f-input" type="text" placeholder="images/hero-kick.png" /></div>
       </div>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">부제목</div>
-          <textarea id="f_hero_sub" class="f-textarea" placeholder="AI가 당신의 발차기를 실시간으로 감지하고 분석합니다."></textarea>
-        </div>
-      </div>
+      <div class="field-row single"><div class="field-group"><div class="field-label">메인 타이틀 HTML</div><textarea id="f_hero_title" class="f-textarea" placeholder="발차기를 <strong>데이터</strong>로.<br>훈련을 <strong>게임</strong>으로."></textarea><div class="field-hint">강조할 단어는 &lt;strong&gt;단어&lt;/strong&gt;, 줄바꿈은 &lt;br&gt; 사용</div></div></div>
+      <div class="field-row single"><div class="field-group"><div class="field-label">메인 설명</div><textarea id="f_hero_desc" class="f-textarea"></textarea></div></div>
       <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">통계 1 숫자</div>
-          <input id="f_stat1_num" class="f-input" type="text" placeholder="4종" />
-        </div>
-        <div class="field-group">
-          <div class="field-label">통계 1 설명</div>
-          <input id="f_stat1_lbl" class="f-input" type="text" placeholder="발차기 인식" />
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">통계 2 숫자</div>
-          <input id="f_stat2_num" class="f-input" type="text" placeholder="실시간" />
-        </div>
-        <div class="field-group">
-          <div class="field-label">통계 2 설명</div>
-          <input id="f_stat2_lbl" class="f-input" type="text" placeholder="AI 분석" />
-        </div>
+        <div class="field-group"><div class="field-label">빨간 버튼 문구</div><input id="f_hero_btn1" class="f-input" type="text" /></div>
+        <div class="field-group"><div class="field-label">검정 버튼 문구</div><input id="f_hero_btn2" class="f-input" type="text" /></div>
       </div>
     </div>
 
-    <!-- 데모 영상 -->
     <div class="edit-section">
-      <h3>데모 영상</h3>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">유튜브 영상 URL</div>
-          <input id="f_demo_url" class="f-input" type="url" placeholder="https://www.youtube.com/embed/영상ID" />
-          <div class="field-hint">유튜브 → 공유 → 퍼가기 → src 안의 URL 복사</div>
-        </div>
-      </div>
+      <h3>섹션 문구</h3>
+      <div class="field-row single"><div class="field-group"><div class="field-label">WHY 섹션 제목</div><input id="f_why_title" class="f-input" type="text" /></div></div>
+      <div class="field-row"><div class="field-group"><div class="field-label">모드 섹션 제목 HTML</div><textarea id="f_modes_title" class="f-textarea"></textarea></div><div class="field-group"><div class="field-label">모드 섹션 설명</div><textarea id="f_modes_desc" class="f-textarea"></textarea></div></div>
     </div>
 
-    <!-- 스크린샷 -->
     <div class="edit-section">
-      <h3>실제 화면 스크린샷 (3장)</h3>
+      <h3>문의 / 푸터</h3>
+      <div class="field-row single"><div class="field-group"><div class="field-label">문의 제목 HTML</div><textarea id="f_contact_title" class="f-textarea"></textarea></div></div>
+      <div class="field-row single"><div class="field-group"><div class="field-label">문의 설명</div><textarea id="f_contact_desc" class="f-textarea"></textarea></div></div>
       <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">스크린샷 1 제목</div>
-          <input id="f_ss1_title" class="f-input" type="text" placeholder="발차기 모드 화면" />
-          <div class="img-upload-area">
-            <input type="file" id="ss1_file" accept="image/*" onchange="previewImg(this,'ss1')" />
-            <div class="upload-icon">🖼️</div>
-            <p>클릭해서 이미지 선택</p>
-            <small>JPG, PNG, WebP</small>
-          </div>
-          <div class="img-preview" id="ss1_preview"><img id="ss1_img" /></div>
-        </div>
-        <div class="field-group">
-          <div class="field-label">스크린샷 2 제목</div>
-          <input id="f_ss2_title" class="f-input" type="text" placeholder="게임 모드 화면" />
-          <div class="img-upload-area">
-            <input type="file" id="ss2_file" accept="image/*" onchange="previewImg(this,'ss2')" />
-            <div class="upload-icon">🖼️</div>
-            <p>클릭해서 이미지 선택</p>
-            <small>JPG, PNG, WebP</small>
-          </div>
-          <div class="img-preview" id="ss2_preview"><img id="ss2_img" /></div>
-        </div>
-      </div>
-      <div class="field-row" style="grid-template-columns:1fr 1fr">
-        <div class="field-group">
-          <div class="field-label">스크린샷 3 제목</div>
-          <input id="f_ss3_title" class="f-input" type="text" placeholder="겨루기 모드 화면" />
-          <div class="img-upload-area">
-            <input type="file" id="ss3_file" accept="image/*" onchange="previewImg(this,'ss3')" />
-            <div class="upload-icon">🖼️</div>
-            <p>클릭해서 이미지 선택</p>
-            <small>JPG, PNG, WebP</small>
-          </div>
-          <div class="img-preview" id="ss3_preview"><img id="ss3_img" /></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 가격 -->
-    <div class="edit-section">
-      <h3>가격 안내</h3>
-      <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">패키지 가격</div>
-          <input id="f_price1" class="f-input" type="text" placeholder="문의 또는 ₩150,000" />
-        </div>
-        <div class="field-group">
-          <div class="field-label">영구 라이선스 가격</div>
-          <input id="f_price2" class="f-input" type="text" placeholder="문의 또는 ₩300,000" />
-        </div>
+        <div class="field-group"><div class="field-label">카카오톡 버튼 문구</div><input id="f_kakao_label" class="f-input" type="text" /></div>
+        <div class="field-group"><div class="field-label">전화번호 표시</div><input id="f_phone" class="f-input" type="text" /></div>
       </div>
       <div class="field-row">
-        <div class="field-group">
-          <div class="field-label">패키지 설명</div>
-          <input id="f_price1_note" class="f-input" type="text" placeholder="기간제 사용, 갱신 가능" />
-        </div>
-        <div class="field-group">
-          <div class="field-label">영구 라이선스 설명</div>
-          <input id="f_price2_note" class="f-input" type="text" placeholder="한 번 구매로 평생 사용" />
-        </div>
-      </div>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">가격 하단 안내 문구</div>
-          <input id="f_price_note" class="f-input" type="text" placeholder="💬 정확한 가격은 카카오톡으로 문의해 주세요." />
-        </div>
+        <div class="field-group"><div class="field-label">운영시간</div><input id="f_hours" class="f-input" type="text" /></div>
+        <div class="field-group"><div class="field-label">저작권 문구</div><input id="f_copyright" class="f-input" type="text" /></div>
       </div>
     </div>
 
-    <!-- 문의 -->
     <div class="edit-section">
-      <h3>문의 섹션</h3>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">문의 섹션 제목</div>
-          <input id="f_contact_title" class="f-input" type="text" placeholder="도입 문의 / 구매" />
-        </div>
-      </div>
-      <div class="field-row single">
-        <div class="field-group">
-          <div class="field-label">문의 섹션 설명</div>
-          <textarea id="f_contact_desc" class="f-textarea" placeholder="도장, 개인 트레이닝 어디든."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- FAQ -->
-    <div class="edit-section">
-      <h3>FAQ</h3>
-      <div class="faq-edit-list" id="faqEditList"></div>
-      <button class="btn-add-faq" onclick="addFaq()" style="margin-top:12px">+ FAQ 항목 추가</button>
-    </div>
-
-    <!-- 기능 카드 -->
-    <div class="edit-section">
-      <h3>기능 소개 카드</h3>
-      <div class="feat-edit-list" id="featEditList"></div>
+      <h3>연결 상태</h3>
+      <div class="field-hint" id="homeSaveStatus">현재는 Edge Function의 GET_HOME_DATA / UPDATE_HOME_DATA가 연결되면 전 방문자에게 적용됩니다. 실패 시 임시로 이 브라우저 localStorage에 저장됩니다.</div>
     </div>
   </div>
 
@@ -874,113 +750,62 @@ async function copyLicenseMsg(encoded) {
    홈페이지 편집
    ============================== */
 const HOME_DEFAULT = {
-  kakao: 'https://open.kakao.com/o/placeholder',
-  hours: '평일 10:00 – 19:00 응답',
+  program_url: 'kick_test.html',
+  admin_url: 'admin.html',
+  kakao_url: '#',
+  tel_url: 'tel:01000000000',
+  phone: '010-0000-0000',
+  hours: '평일 10:00 - 19:00',
   copyright: '© 2026 AI KICK MASTER. All rights reserved.',
-  hero_title1: '발차기를 데이터로,', hero_title2: '훈련을 게임으로.',
-  hero_sub: 'AI가 당신의 발차기를 실시간으로 감지하고 분석합니다.\n카메라 하나로 시작하는 차세대 태권도 트레이닝.',
-  stat1_num: '4종', stat1_lbl: '발차기 인식',
-  stat2_num: '실시간', stat2_lbl: 'AI 분석',
-  demo_url: '',
-  ss1_title: '발차기 모드 화면', ss1_img: '',
-  ss2_title: '게임 모드 화면', ss2_img: '',
-  ss3_title: '겨루기 모드 화면', ss3_img: '',
-  price1: '문의', price1_note: '기간제 사용, 갱신 가능',
-  price2: '문의', price2_note: '한 번 구매로 평생 사용',
-  price_note: '💬 정확한 가격은 카카오톡으로 문의해 주세요.',
-  contact_title: '도입 문의 / 구매',
-  contact_desc: '도장, 개인 트레이닝 어디든.\n라이선스와 설치 방법을 카카오톡으로 빠르게 안내해 드립니다.',
-  faqs: [
-    { q: '어떤 기기에서 사용할 수 있나요?', a: '노트북, 데스크탑, 태블릿(갤럭시 탭 등) 모두 사용 가능합니다. 카메라와 Chrome 브라우저만 있으면 됩니다.' },
-    { q: '인터넷 연결이 필요한가요?', a: 'AI 동작 인식에 인터넷 연결이 필요합니다. 라이선스 인증은 최초 1회 후 30일간 자동 유지됩니다.' },
-    { q: '몇 대의 기기에서 사용할 수 있나요?', a: '라이선스 키 1개로 기기 수 제한 없이 사용 가능합니다.' },
-    { q: '어떤 발차기를 인식할 수 있나요?', a: '현재 앞차기(오른발·왼발), 돌려차기(오른발·왼발) 4가지를 인식합니다.' },
-    { q: '카메라 영상이 저장되나요?', a: '아니요. 영상은 브라우저 내에서만 처리되며 저장되거나 외부로 전송되지 않습니다.' },
-  ],
-  feats: [
-    { icon: '🦵', title: 'AI 발차기 감지', desc: '카메라가 관절과 동작을 실시간 추적해 앞차기·돌려차기를 자동으로 인식하고 카운트합니다.' },
-    { icon: '🎮', title: '게임 모드', desc: '목표 차기 수, 타이머택, 풍선 격파, 콤보 챌린지까지. 훈련을 미션으로 바꿉니다.' },
-    { icon: '📊', title: '실시간 분석', desc: '속도·정확도·반응속도를 즉시 시각화하고 누적 기록으로 성장을 확인합니다.' },
-    { icon: '⚔️', title: '겨루기 모드', desc: '타이머와 점수판으로 실전 겨루기 환경을 구현합니다.' },
-    { icon: '📱', title: '태블릿 최적화', desc: '갤럭시 탭 등 태블릿에서도 완벽하게 작동합니다.' },
-    { icon: '🔑', title: '라이선스 방식', desc: '앱 설치 없이 라이선스 키 하나로 시작합니다. 30일 자동 캐시.' },
-  ]
+  hero_eyebrow: 'AI 기술로 완성된 태권도 훈련의 새로운 기준',
+  hero_title: '발차기를 <strong>데이터</strong>로.<br>훈련을 <strong>게임</strong>으로.',
+  hero_desc: 'AI가 실시간으로 발차기를 분석하고 피드백하여 아이들의 실력을 빠르고 재미있게 성장시킵니다.',
+  hero_btn1: '프로그램 실행',
+  hero_btn2: '도입 문의',
+  hero_img: 'images/hero-kick.png',
+  why_title: '아이들의 성장을 더 빠르고, 더 재미있게',
+  modes_title: '다양한 모드로<br>즐겁게 성장하세요',
+  modes_desc: '겨루기, 품새, 기본동작, 미션게임까지 아이들의 수준과 목적에 맞는 모드를 제공합니다.',
+  contact_title: '지금 바로 도장 수업에<br>AI 훈련을 더하세요.',
+  contact_desc: 'AI KICK MASTER 도입 문의 및 무료 체험 상담을 신청하시면 도장 환경에 맞춰 안내해드립니다.',
+  kakao_label: '바로 상담하기 →'
 };
-
+const HOME_FIELDS = Object.keys(HOME_DEFAULT);
 let HOME_DATA = {};
 
-function loadHomeFields() {
-  try { HOME_DATA = JSON.parse(localStorage.getItem(HOME_DATA_KEY)) || {}; } catch(e) { HOME_DATA = {}; }
+function setHomeStatus(msg, ok=true){
+  const el = document.getElementById('homeSaveStatus');
+  if(!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? '#64f3a4' : '#ff8795';
+}
+
+async function loadHomeFields() {
+  HOME_DATA = {};
+  try {
+    const data = await edgeCall('GET_HOME_DATA', {});
+    HOME_DATA = data?.data || data || {};
+    setHomeStatus('✅ Supabase에서 홈페이지 데이터를 불러왔습니다.');
+  } catch(e) {
+    try { HOME_DATA = JSON.parse(localStorage.getItem(HOME_DATA_KEY)) || {}; } catch(_) { HOME_DATA = {}; }
+    setHomeStatus('⚠ Supabase 불러오기 실패. 임시 localStorage 데이터를 표시합니다: ' + e.message, false);
+  }
   HOME_DATA = { ...HOME_DEFAULT, ...HOME_DATA };
-  const fields = ['kakao','hours','copyright','hero_title1','hero_title2','hero_sub',
-    'stat1_num','stat1_lbl','stat2_num','stat2_lbl','demo_url',
-    'ss1_title','ss2_title','ss3_title',
-    'price1','price1_note','price2','price2_note','price_note',
-    'contact_title','contact_desc'];
-  fields.forEach(k => { const el = document.getElementById('f_'+k); if (el) el.value = HOME_DATA[k] || ''; });
-  ['ss1','ss2','ss3'].forEach(k => {
-    if (HOME_DATA[k+'_img']) {
-      document.getElementById(k+'_img').src = HOME_DATA[k+'_img'];
-      document.getElementById(k+'_preview').classList.add('show');
-    }
-  });
-  renderFaqs(); renderFeats();
+  HOME_FIELDS.forEach(k => { const el = document.getElementById('f_'+k); if (el) el.value = HOME_DATA[k] || ''; });
 }
 
-function previewImg(input, key) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    HOME_DATA[key+'_img'] = e.target.result;
-    document.getElementById(key+'_img').src = e.target.result;
-    document.getElementById(key+'_preview').classList.add('show');
-  };
-  reader.readAsDataURL(file);
-}
-
-function renderFaqs() {
-  const list = document.getElementById('faqEditList');
-  list.innerHTML = HOME_DATA.faqs.map((f, i) => `
-    <div class="faq-edit-item">
-      <div class="faq-edit-item-top">
-        <input class="f-input" style="margin:0" placeholder="질문" value="${escapeHtml(f.q)}" oninput="HOME_DATA.faqs[${i}].q=this.value" />
-        <button class="btn-del-faq" onclick="delFaq(${i})">삭제</button>
-      </div>
-      <textarea class="f-textarea" style="margin:0;min-height:60px" placeholder="답변" oninput="HOME_DATA.faqs[${i}].a=this.value">${escapeHtml(f.a)}</textarea>
-    </div>`).join('');
-}
-function addFaq() { HOME_DATA.faqs.push({ q: '', a: '' }); renderFaqs(); }
-function delFaq(i) { if (!confirm('이 FAQ를 삭제하시겠습니까?')) return; HOME_DATA.faqs.splice(i,1); renderFaqs(); }
-
-function renderFeats() {
-  const list = document.getElementById('featEditList');
-  list.innerHTML = HOME_DATA.feats.map((f, i) => `
-    <div class="feat-edit-item">
-      <div style="display:grid;grid-template-columns:60px 1fr;gap:10px;margin-bottom:10px">
-        <div class="field-group">
-          <div class="field-label">아이콘</div>
-          <input class="f-input" style="margin:0;text-align:center;font-size:20px" value="${f.icon}" oninput="HOME_DATA.feats[${i}].icon=this.value" maxlength="2" />
-        </div>
-        <div class="field-group">
-          <div class="field-label">제목</div>
-          <input class="f-input" style="margin:0" value="${escapeHtml(f.title)}" oninput="HOME_DATA.feats[${i}].title=this.value" />
-        </div>
-      </div>
-      <div class="field-label" style="margin-bottom:6px">설명</div>
-      <textarea class="f-textarea" style="margin:0;min-height:60px" oninput="HOME_DATA.feats[${i}].desc=this.value">${escapeHtml(f.desc)}</textarea>
-    </div>`).join('');
-}
-
-function saveHomeData() {
-  const fields = ['kakao','hours','copyright','hero_title1','hero_title2','hero_sub',
-    'stat1_num','stat1_lbl','stat2_num','stat2_lbl','demo_url',
-    'ss1_title','ss2_title','ss3_title',
-    'price1','price1_note','price2','price2_note','price_note',
-    'contact_title','contact_desc'];
-  fields.forEach(k => { const el = document.getElementById('f_'+k); if (el) HOME_DATA[k] = el.value; });
-  localStorage.setItem(HOME_DATA_KEY, JSON.stringify(HOME_DATA));
-  showToast('✅ 홈페이지 내용이 저장되었습니다!');
+async function saveHomeData() {
+  HOME_FIELDS.forEach(k => { const el = document.getElementById('f_'+k); if (el) HOME_DATA[k] = el.value; });
+  try {
+    await edgeCall('UPDATE_HOME_DATA', { data: HOME_DATA });
+    localStorage.setItem(HOME_DATA_KEY, JSON.stringify(HOME_DATA));
+    showToast('✅ 홈페이지 내용이 Supabase에 저장되었습니다!');
+    setHomeStatus('✅ 저장 완료. 방문자 홈페이지에도 반영됩니다.');
+  } catch(e) {
+    localStorage.setItem(HOME_DATA_KEY, JSON.stringify(HOME_DATA));
+    showToast('⚠ Supabase 저장 실패 · 임시 저장됨');
+    setHomeStatus('⚠ Supabase 저장 실패. 이 브라우저에만 임시 저장했습니다: ' + e.message, false);
+  }
 }
 
 /* ── 이벤트 ── */

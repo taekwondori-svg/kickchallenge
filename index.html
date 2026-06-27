@@ -1,760 +1,375 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI KICK MASTER — 태권도 AI 발차기 트레이닝</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI KICK MASTER — 발차기를 데이터로, 훈련을 게임으로</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;800;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #0A1628;
-  --navy2: #0f1f3d;
-  --blue: #4ca3ff;
-  --gold: #E8A020;
-  --red: #D92B3A;
-  --green: #2ecc71;
-  --muted: #7a90aa;
-  --border: rgba(76,163,255,0.18);
-  --card: rgba(255,255,255,0.04);
+:root{
+  --black:#050505;
+  --black2:#0b0b0d;
+  --red:#e52626;
+  --red2:#c91515;
+  --white:#ffffff;
+  --gray50:#fafafa;
+  --gray100:#f4f5f7;
+  --gray200:#e7e9ee;
+  --gray400:#8b9099;
+  --gray600:#555b66;
+  --gray900:#111318;
+  --radius:24px;
+  --shadow:0 24px 80px rgba(0,0,0,.12);
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--navy);
-  color: #fff;
-  font-family: 'Noto Sans KR', 'Gothic A1', system-ui, sans-serif;
-  line-height: 1.6;
-  overflow-x: hidden;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;
+  color:var(--gray900);
+  background:#fff;
+  overflow-x:hidden;
 }
-a { color: inherit; text-decoration: none; }
-img { max-width: 100%; }
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+.container{width:min(1180px,calc(100% - 56px));margin:0 auto}
 
-/* ── 네비게이션 ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 40px; height: 64px;
-  background: rgba(10,22,40,0.88);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  transition: background .3s;
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:76px;background:rgba(5,5,5,.78);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
-.nav-logo {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 18px; font-weight: 900; letter-spacing: -.3px;
-}
-.nav-logo .logo-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--gold), var(--red));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-}
-.nav-logo span { color: var(--gold); }
-.nav-links { display: flex; align-items: center; gap: 8px; }
-.nav-links a {
-  padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 700;
-  color: #9fb0c8; transition: color .2s, background .2s;
-}
-.nav-links a:hover { color: #fff; background: rgba(255,255,255,.07); }
-.nav-links .btn-admin {
-  background: rgba(255,255,255,.08); color: #cdd8e8;
-  border: 1px solid var(--border);
-}
-.nav-links .btn-start {
-  background: linear-gradient(135deg, var(--gold), #d4890a);
-  color: #0A1628; font-weight: 900;
-  border: none;
-}
-.nav-links .btn-start:hover { opacity: .9; color: #0A1628; }
+.nav .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px;color:#fff;font-size:21px;font-weight:900;letter-spacing:-.5px}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),#ff5a5a);position:relative;transform:skew(-12deg)}
+.logo-mark:after{content:"";position:absolute;inset:8px 11px;background:#050505;border-radius:4px}
+.nav-links{display:flex;align-items:center;gap:38px;color:#fff;font-size:14px;font-weight:700}
+.nav-cta{padding:13px 21px;border-radius:11px;background:var(--red);color:#fff;font-weight:900;box-shadow:0 10px 24px rgba(229,38,38,.32)}
 
-/* ── 히어로 ── */
-#hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 100px 24px 80px;
+/* HERO */
+.hero{
+  min-height:760px;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(76,163,255,.13) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(232,160,32,.08) 0%, transparent 60%),
-    radial-gradient(circle at top, #142a4a 0%, var(--navy) 44%, #050b14 100%);
-  position: relative; overflow: hidden;
+    radial-gradient(circle at 74% 35%, rgba(229,38,38,.26), transparent 26%),
+    radial-gradient(circle at 70% 20%, rgba(255,255,255,.12), transparent 18%),
+    linear-gradient(135deg,#060606 0%,#101014 50%,#020202 100%);
+  color:#fff;
+  position:relative;
+  padding:128px 0 54px;
+  overflow:hidden;
 }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 16px; border-radius: 999px; margin-bottom: 28px;
-  background: rgba(76,163,255,.1); border: 1px solid rgba(76,163,255,.3);
-  font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .5px;
+.hero:before{
+  content:"";position:absolute;right:-160px;top:70px;width:720px;height:720px;
+  border:1px solid rgba(229,38,38,.42);border-radius:50%;
 }
-.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
-.hero-title {
-  font-size: clamp(52px, 8vw, 96px);
-  font-weight: 900; line-height: 1.05; letter-spacing: -2px;
-  margin-bottom: 24px;
+.hero:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.45) 48%,rgba(0,0,0,.1) 100%);
 }
-.hero-title .gold { color: var(--gold); }
-.hero-title .red { color: var(--red); }
-.hero-sub {
-  font-size: clamp(16px, 2vw, 20px); color: #9fb0c8; font-weight: 500;
-  max-width: 540px; margin: 0 auto 48px; line-height: 1.7;
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.eyebrow{font-size:15px;font-weight:700;color:#d8d8d8;margin-bottom:26px}
+.hero h1{font-size:68px;line-height:1.04;letter-spacing:-3.8px;font-weight:950;margin-bottom:28px}
+.hero h1 strong{color:var(--red)}
+.hero p{font-size:19px;line-height:1.75;color:#c9c9cc;margin-bottom:34px;max-width:540px}
+.hero-actions{display:flex;gap:16px;margin-bottom:52px}
+.btn{
+  height:58px;padding:0 30px;border-radius:15px;border:1px solid transparent;
+  display:inline-flex;align-items:center;gap:14px;font-size:16px;font-weight:900;cursor:pointer;
 }
-.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.btn-hero-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 36px; border-radius: 14px; font-size: 17px; font-weight: 900;
-  background: linear-gradient(135deg, var(--gold), #c87d0a);
-  color: #0A1628; border: none; cursor: pointer;
-  box-shadow: 0 8px 32px rgba(232,160,32,.35);
-  transition: transform .15s, box-shadow .15s;
+.btn-red{background:var(--red);color:#fff;box-shadow:0 18px 36px rgba(229,38,38,.28)}
+.btn-dark{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.28);color:#fff}
+.hero-icons{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:640px}
+.hero-icon{color:#fff}
+.hero-icon .ico{font-size:25px;margin-bottom:10px;color:var(--red)}
+.hero-icon b{display:block;font-size:14px;margin-bottom:4px}
+.hero-icon span{display:block;font-size:12px;color:#a8a8ad}
+.hero-visual{position:relative;height:560px}
+.kicker-placeholder{
+  position:absolute;right:-20px;top:0;width:560px;height:440px;border-radius:38px;
+  background-image: var(--hero-img, none),
+    radial-gradient(circle at 70% 38%,rgba(255,255,255,.28),transparent 16%),
+    linear-gradient(135deg,#24242a,#08080a 65%);
+  background-size:cover;background-position:center;
+  box-shadow:var(--shadow);overflow:hidden;
 }
-.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,160,32,.45); }
-.btn-hero-secondary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 32px; border-radius: 14px; font-size: 17px; font-weight: 800;
-  background: rgba(255,255,255,.07); color: #cdd8e8;
-  border: 1.5px solid var(--border); cursor: pointer;
-  transition: background .2s, border-color .2s;
+.kicker-placeholder:before{
+  content:"발차기 메인 이미지\A/images/hero-kick.png";
+  white-space:pre;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.55);font-size:28px;font-weight:900;text-align:center;line-height:1.45;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(229,38,38,.16));
 }
-.btn-hero-secondary:hover { background: rgba(255,255,255,.12); border-color: rgba(76,163,255,.4); }
-.hero-stats {
-  display: flex; gap: 48px; margin-top: 72px; justify-content: center; flex-wrap: wrap;
+.kicker-placeholder:after{
+  content:"";position:absolute;left:-120px;bottom:-130px;width:520px;height:220px;
+  background:#fff;border-radius:50%;transform:rotate(-16deg);opacity:.92;
 }
-.hero-stat { text-align: center; }
-.hero-stat .num { font-size: 36px; font-weight: 900; color: var(--gold); line-height: 1; }
-.hero-stat .lbl { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+.tablet{
+  position:absolute;right:40px;bottom:12px;width:430px;height:250px;border-radius:28px;
+  background:#101014;border:9px solid #2a2b30;box-shadow:0 40px 80px rgba(0,0,0,.48);
+  transform:rotate(3deg);
+  overflow:hidden;
+}
+.tablet-screen{
+  height:100%;padding:26px;color:#fff;background:
+  radial-gradient(circle at 30% 50%,rgba(229,38,38,.22),transparent 30%),
+  linear-gradient(135deg,#111,#1b1c22);
+}
+.tablet-title{font-size:15px;color:#ddd;font-weight:800;margin-bottom:16px}
+.score-ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;border:8px solid var(--red);font-size:33px;font-weight:950;margin-bottom:16px}
+.bars{position:absolute;right:28px;top:76px;width:190px;display:flex;flex-direction:column;gap:14px}
+.bar{height:9px;border-radius:99px;background:#30323a;overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ffb36b)}
+.bar:nth-child(1) span{width:84%}.bar:nth-child(2) span{width:64%}.bar:nth-child(3) span{width:72%}
 
-/* ── 섹션 공통 ── */
-section { padding: 100px 24px; }
-.section-inner { max-width: 1080px; margin: 0 auto; }
-.section-eyebrow {
-  font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--blue);
-  text-transform: uppercase; margin-bottom: 14px; text-align: center;
-}
-.section-title {
-  font-size: clamp(32px, 5vw, 52px); font-weight: 900; line-height: 1.1;
-  letter-spacing: -1px; text-align: center; margin-bottom: 14px;
-}
-.section-sub {
-  font-size: 16px; color: var(--muted); text-align: center; max-width: 500px;
-  margin: 0 auto 60px; line-height: 1.7;
-}
+/* WHY */
+.section{padding:82px 0;background:#fff}
+.center{text-align:center}
+.label{font-size:13px;color:var(--red);font-weight:950;letter-spacing:.08em;margin-bottom:12px}
+.h2{font-size:38px;letter-spacing:-1.6px;line-height:1.2;font-weight:950}
+.why-grid{margin-top:36px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.why-card{padding:28px 22px;background:#fff;border:1px solid var(--gray200);border-radius:20px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.04)}
+.why-card .icon{font-size:34px;margin-bottom:16px;color:var(--red)}
+.why-card h3{font-size:17px;margin-bottom:10px}
+.why-card p{font-size:13px;color:var(--gray600);line-height:1.65}
 
-/* ── 데모 영상 섹션 ── */
-#demo { background: #060e1c; }
-.demo-placeholder {
-  width: 100%; max-width: 800px; margin: 0 auto;
-  aspect-ratio: 16/9; border-radius: 20px;
-  background: rgba(255,255,255,.04);
-  border: 2px dashed rgba(76,163,255,.25);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 16px; color: var(--muted);
-}
-.demo-placeholder .play-icon {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: rgba(232,160,32,.15); border: 2px solid rgba(232,160,32,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-}
-.demo-placeholder p { font-size: 14px; font-weight: 700; }
-.demo-placeholder small { font-size: 12px; opacity: .6; }
+/* MODES */
+.gray{background:linear-gradient(180deg,#fff 0%,#f3f5f7 100%)}
+.mode-layout{display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:start}
+.mode-intro{padding-top:10px}
+.mode-intro p{margin:18px 0 28px;color:var(--gray600);line-height:1.7}
+.outline-btn{display:inline-flex;align-items:center;gap:16px;padding:14px 22px;border:1px solid #111;border-radius:12px;font-weight:800}
+.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.mode-card{background:#fff;border:1px solid var(--gray200);border-radius:18px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.07);transition:.25s}
+.mode-card:hover{transform:translateY(-6px);box-shadow:0 30px 70px rgba(0,0,0,.12)}
+.mode-img{height:150px;background:linear-gradient(135deg,#111,#343844);position:relative}
+.mode-img:after{content:attr(data-img);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:rgba(255,255,255,.55);font-size:12px;font-weight:800}
+.mode-card-body{padding:22px}
+.mode-card h3{font-size:18px;margin-bottom:9px}
+.mode-card p{font-size:14px;line-height:1.6;color:var(--gray600)}
+.arrow{margin-top:18px;width:32px;height:32px;border-radius:50%;background:var(--gray100);display:grid;place-items:center;margin-left:auto}
 
-/* ── 기능 카드 ── */
-#features { background: linear-gradient(180deg, #060e1c 0%, var(--navy) 100%); }
-.features-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-}
-.feat-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 20px; padding: 32px 28px;
-  transition: border-color .2s, transform .2s, box-shadow .2s;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .5s, transform .5s, border-color .2s, box-shadow .2s;
-}
-.feat-card.visible { opacity: 1; transform: translateY(0); }
-.feat-card:hover { border-color: rgba(76,163,255,.4); box-shadow: 0 8px 32px rgba(0,0,0,.3); }
-.feat-icon {
-  width: 52px; height: 52px; border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; margin-bottom: 20px;
-}
-.feat-card h3 { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
-.feat-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+/* PRODUCT */
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stats-box,.screen-box{border-radius:24px;padding:38px;background:#fff;border:1px solid var(--gray200);box-shadow:0 20px 60px rgba(0,0,0,.07)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px}
+.stat strong{font-size:42px;color:var(--red);font-weight:950}
+.stat span{display:block;margin-top:8px;color:var(--gray600);font-size:14px}
+.screen-box{background:#08080a;color:#fff;position:relative;overflow:hidden}
+.screen-placeholder{margin-top:24px;border-radius:18px;height:260px;background:linear-gradient(135deg,#222,#0f0f12);border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;color:#aaa;font-weight:900;text-align:center;line-height:1.5}
 
-/* ── 사용법 ── */
-#howto { background: var(--navy); }
-.steps-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-}
-.step-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 20px; padding: 36px 28px;
-  position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .5s, transform .5s;
-}
-.step-card.visible { opacity: 1; transform: translateY(0); }
-.step-num {
-  font-size: 64px; font-weight: 900; line-height: 1;
-  margin-bottom: 20px; display: block;
-}
-.step-card:nth-child(1) .step-num { color: var(--gold); }
-.step-card:nth-child(2) .step-num { color: var(--blue); }
-.step-card:nth-child(3) .step-num { color: var(--green); }
-.step-card h3 { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
-.step-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
-.step-bg-num {
-  position: absolute; right: -10px; bottom: -20px;
-  font-size: 120px; font-weight: 900; opacity: .04; line-height: 1;
-  pointer-events: none;
-}
+/* CTA */
+.cta{padding:76px 0;background:#fff}
+.cta-box{border-radius:34px;background:linear-gradient(135deg,#0b0b0d,#1a1a20);color:#fff;padding:56px;display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center;box-shadow:var(--shadow)}
+.cta h2{font-size:40px;letter-spacing:-1.5px;margin-bottom:16px}
+.cta p{color:#c9c9cc;line-height:1.7}
+.contact-list{display:grid;gap:14px}
+.contact-item{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.contact-item b{font-size:15px}.contact-item span{color:#ddd;font-weight:800}
 
-/* ── 스크린샷 ── */
-#screenshots { background: #060e1c; }
-.screenshots-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-}
-.screenshot-placeholder {
-  aspect-ratio: 16/10; border-radius: 14px;
-  background: rgba(255,255,255,.04);
-  border: 2px dashed rgba(76,163,255,.2);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; color: var(--muted); font-size: 13px; font-weight: 700;
-}
-.screenshot-placeholder .icon { font-size: 28px; opacity: .5; }
+/* FOOTER */
+.footer{background:#050505;color:#fff;padding:34px 0}
+.footer .container{display:flex;align-items:center;justify-content:space-between;color:#8d8d93;font-size:13px}
+.footer-logo{color:#fff;font-weight:950;font-size:18px}
+.admin-hidden{opacity:.28;font-size:12px;margin-left:14px;transition:.2s}.admin-hidden:hover{opacity:1;color:#fff}
 
-/* ── 가격 ── */
-#pricing { background: var(--navy); }
-.pricing-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 720px; margin: 0 auto;
+@media(max-width:980px){
+  .nav-links{display:none}
+  .hero{padding-top:112px;min-height:auto}
+  .hero-grid,.mode-layout,.product-grid,.cta-box{grid-template-columns:1fr}
+  .hero h1{font-size:48px}
+  .hero-visual{height:420px}
+  .kicker-placeholder{width:100%;right:0;height:330px}
+  .tablet{width:330px;height:200px;right:20px}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .mode-grid{grid-template-columns:1fr 1fr}
 }
-.price-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 24px; padding: 40px 36px; text-align: center;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .5s, transform .5s;
-}
-.price-card.visible { opacity: 1; transform: translateY(0); }
-.price-card.featured {
-  border-color: var(--gold);
-  background: linear-gradient(180deg, rgba(232,160,32,.08) 0%, var(--card) 100%);
-  box-shadow: 0 0 40px rgba(232,160,32,.12);
-}
-.price-badge {
-  display: inline-block; padding: 4px 12px; border-radius: 999px;
-  background: rgba(232,160,32,.15); color: var(--gold);
-  font-size: 11px; font-weight: 900; margin-bottom: 16px; letter-spacing: .5px;
-}
-.price-card h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.price-card .price {
-  font-size: 48px; font-weight: 900; color: var(--gold);
-  line-height: 1; margin: 16px 0 4px;
-}
-.price-card .price-note { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
-.price-features { list-style: none; text-align: left; margin-bottom: 32px; }
-.price-features li {
-  padding: 8px 0; font-size: 14px; color: #cdd8e8;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  display: flex; gap: 8px; align-items: center;
-}
-.price-features li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
-.btn-price {
-  width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 900;
-  border: none; cursor: pointer; transition: opacity .2s;
-}
-.btn-price:hover { opacity: .88; }
-.btn-price.primary { background: linear-gradient(135deg, var(--gold), #c87d0a); color: #0A1628; }
-.btn-price.secondary { background: rgba(255,255,255,.08); color: #cdd8e8; border: 1.5px solid var(--border); }
-.pricing-note { text-align: center; margin-top: 24px; font-size: 13px; color: var(--muted); }
-
-/* ── 문의 ── */
-#contact {
-  background: linear-gradient(180deg, var(--navy) 0%, #060e1c 100%);
-}
-.contact-box {
-  max-width: 640px; margin: 0 auto; text-align: center;
-  background: rgba(255,255,255,.04); border: 1.5px solid var(--border);
-  border-radius: 28px; padding: 60px 48px;
-}
-.contact-box h2 { font-size: 36px; font-weight: 900; margin-bottom: 14px; }
-.contact-box p { color: var(--muted); font-size: 15px; margin-bottom: 36px; line-height: 1.7; }
-.btn-kakao {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 40px; border-radius: 14px; font-size: 17px; font-weight: 900;
-  background: #FEE500; color: #191919; border: none; cursor: pointer;
-  box-shadow: 0 8px 28px rgba(254,229,0,.25);
-  transition: transform .15s, box-shadow .15s;
-}
-.btn-kakao:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(254,229,0,.35); }
-.contact-hours { margin-top: 16px; font-size: 13px; color: var(--muted); }
-
-/* ── FAQ ── */
-#faq { background: #060e1c; }
-.faq-list { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-.faq-item {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 14px; overflow: hidden;
-}
-.faq-q {
-  width: 100%; padding: 20px 24px; text-align: left;
-  background: none; border: none; color: #fff;
-  font-size: 15px; font-weight: 800; cursor: pointer;
-  display: flex; justify-content: space-between; align-items: center; gap: 12px;
-  font-family: inherit;
-}
-.faq-q .arrow { font-size: 18px; transition: transform .25s; color: var(--muted); flex-shrink: 0; }
-.faq-item.open .faq-q .arrow { transform: rotate(180deg); }
-.faq-a {
-  max-height: 0; overflow: hidden;
-  transition: max-height .3s ease, padding .3s;
-  padding: 0 24px;
-  color: var(--muted); font-size: 14px; line-height: 1.75;
-}
-.faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
-
-/* ── 푸터 ── */
-footer {
-  background: #040b14;
-  border-top: 1px solid var(--border);
-  padding: 48px 40px 32px;
-}
-.footer-inner {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; justify-content: space-between; align-items: flex-start;
-  flex-wrap: wrap; gap: 32px;
-}
-.footer-logo { font-size: 16px; font-weight: 900; margin-bottom: 8px; }
-.footer-logo span { color: var(--gold); }
-.footer-desc { font-size: 13px; color: var(--muted); max-width: 280px; line-height: 1.6; }
-.footer-links { display: flex; flex-direction: column; gap: 8px; }
-.footer-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
-.footer-links a:hover { color: #fff; }
-.footer-copy {
-  max-width: 1080px; margin: 32px auto 0;
-  border-top: 1px solid var(--border); padding-top: 24px;
-  font-size: 12px; color: #3d5166; text-align: center;
-}
-
-/* ── 반응형 ── */
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links a:not(.btn-start):not(.btn-admin) { display: none; }
-  .features-grid, .steps-grid, .screenshots-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .contact-box { padding: 40px 24px; }
-  .hero-stats { gap: 28px; }
-  section { padding: 72px 20px; }
+@media(max-width:620px){
+  .container{width:min(100% - 32px,1180px)}
+  .hero h1{font-size:40px}
+  .hero-actions{flex-direction:column}
+  .hero-icons{grid-template-columns:1fr 1fr}
+  .why-grid,.mode-grid,.stats-row{grid-template-columns:1fr}
+  .h2{font-size:30px}
 }
 </style>
 </head>
 <body>
 
-<!-- 네비게이션 -->
-<nav>
-  <div class="nav-logo">
-    <div class="logo-icon">⚡</div>
-    AI <span>KICK</span> MASTER
-  </div>
-  <div class="nav-links">
-    <a href="#features">기능</a>
-    <a href="#howto">사용법</a>
-    <a href="#pricing">가격</a>
-    <a href="#contact">문의</a>
-    <a href="admin.html" class="btn-admin">⚙ 관리자</a>
-    <a href="kick_test.html" class="btn-start">▶ 프로그램 시작</a>
-  </div>
-</nav>
-
-<!-- 히어로 -->
-<section id="hero">
-  <div class="hero-badge">AI 모션 트래킹 기반 훈련</div>
-  <h1 class="hero-title">
-    발차기를 <span class="gold">데이터로</span>,<br>
-    훈련을 <span class="red">게임으로</span>.
-  </h1>
-  <p class="hero-sub">
-    AI가 당신의 발차기를 실시간으로 감지하고 분석합니다.<br>
-    카메라 하나로 시작하는 차세대 태권도 트레이닝.
-  </p>
-  <div class="hero-btns">
-    <a href="kick_test.html" class="btn-hero-primary">▶ 지금 바로 시작</a>
-    <a href="#features" class="btn-hero-secondary">더 알아보기 ↓</a>
-  </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="num">4종</div>
-      <div class="lbl">발차기 인식</div>
-    </div>
-    <div class="hero-stat">
-      <div class="num">실시간</div>
-      <div class="lbl">AI 분석</div>
-    </div>
-    <div class="hero-stat">
-      <div class="num">3가지</div>
-      <div class="lbl">훈련 모드</div>
-    </div>
-    <div class="hero-stat">
-      <div class="num">카메라</div>
-      <div class="lbl">하나면 충분</div>
-    </div>
-  </div>
-</section>
-
-<!-- 데모 영상 -->
-<section id="demo">
-  <div class="section-inner">
-    <div class="section-eyebrow">DEMO</div>
-    <h2 class="section-title">직접 보세요</h2>
-    <p class="section-sub">AI가 발차기를 어떻게 인식하는지 영상으로 확인하세요.</p>
-    <div class="demo-placeholder">
-      <div class="play-icon">▶</div>
-      <p>데모 영상</p>
-      <small>영상을 준비 중입니다</small>
-    </div>
-  </div>
-</section>
-
-<!-- 기능 소개 -->
-<section id="features">
-  <div class="section-inner">
-    <div class="section-eyebrow">FEATURES</div>
-    <h2 class="section-title">무엇이 다른가</h2>
-    <p class="section-sub">3가지 핵심 기술로 발차기 훈련을 새롭게 정의합니다.</p>
-    <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(232,160,32,.15)">🦵</div>
-        <h3>AI 발차기 감지</h3>
-        <p>카메라가 관절과 동작을 실시간 추적해 앞차기·돌려차기·옆차기를 자동으로 인식하고 카운트합니다.</p>
-      </div>
-      <div class="feat-card" style="transition-delay:.1s">
-        <div class="feat-icon" style="background:rgba(76,163,255,.15)">🎮</div>
-        <h3>게임 모드</h3>
-        <p>목표 차기 수, 타이머택, 풍선 격파, 콤보 챌린지까지. 훈련을 미션으로 바꿔 지루함 없이 몰입하게 만듭니다.</p>
-      </div>
-      <div class="feat-card" style="transition-delay:.2s">
-        <div class="feat-icon" style="background:rgba(46,204,113,.15)">📊</div>
-        <h3>실시간 분석</h3>
-        <p>속도·정확도·반응속도를 즉시 시각화하고 누적 기록으로 성장 그래프를 제공합니다.</p>
-      </div>
-      <div class="feat-card" style="transition-delay:.05s">
-        <div class="feat-icon" style="background:rgba(217,43,58,.15)">🏆</div>
-        <h3>겨루기 모드</h3>
-        <p>타이머와 점수판으로 실전 겨루기 환경을 구현합니다. 도장 수업에 바로 활용 가능합니다.</p>
-      </div>
-      <div class="feat-card" style="transition-delay:.15s">
-        <div class="feat-icon" style="background:rgba(76,163,255,.15)">📱</div>
-        <h3>태블릿 최적화</h3>
-        <p>갤럭시 탭 등 태블릿에서도 완벽하게 작동합니다. 도장 어디서든 설치 없이 바로 실행하세요.</p>
-      </div>
-      <div class="feat-card" style="transition-delay:.25s">
-        <div class="feat-icon" style="background:rgba(232,160,32,.15)">🔑</div>
-        <h3>라이선스 방식</h3>
-        <p>앱 설치 없이 라이선스 키 하나로 시작합니다. 30일 오프라인 사용 가능, 기기 추가 제한 없음.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 사용 화면 -->
-<section id="screenshots">
-  <div class="section-inner">
-    <div class="section-eyebrow">SCREENSHOTS</div>
-    <h2 class="section-title">실제 화면</h2>
-    <p class="section-sub">도장에서 바로 쓸 수 있는 직관적인 UI.</p>
-    <div class="screenshots-grid">
-      <div class="screenshot-placeholder">
-        <div class="icon">🖥️</div>
-        <span>발차기 모드 화면</span>
-      </div>
-      <div class="screenshot-placeholder">
-        <div class="icon">🎮</div>
-        <span>게임 모드 화면</span>
-      </div>
-      <div class="screenshot-placeholder">
-        <div class="icon">⚔️</div>
-        <span>겨루기 모드 화면</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 사용법 -->
-<section id="howto">
-  <div class="section-inner">
-    <div class="section-eyebrow">HOW TO USE</div>
-    <h2 class="section-title">3단계로 시작하기</h2>
-    <p class="section-sub">복잡한 설치 없이 바로 시작합니다.</p>
-    <div class="steps-grid">
-      <div class="step-card">
-        <span class="step-num">01</span>
-        <h3>라이선스 입력</h3>
-        <p>구매하신 라이선스 키를 입력해 프로그램을 활성화합니다. 최초 1회 입력 후 30일간 자동 유지됩니다.</p>
-        <div class="step-bg-num">01</div>
-      </div>
-      <div class="step-card" style="transition-delay:.1s">
-        <span class="step-num">02</span>
-        <h3>카메라 허용</h3>
-        <p>동작 인식을 위해 카메라 접근을 허용해 주세요. 영상은 저장되지 않으며 외부로 전송되지 않습니다.</p>
-        <div class="step-bg-num">02</div>
-      </div>
-      <div class="step-card" style="transition-delay:.2s">
-        <span class="step-num">03</span>
-        <h3>훈련 시작</h3>
-        <p>모드를 선택하고 발차기를 시작하세요. AI가 즉시 감지하고 실시간으로 분석합니다.</p>
-        <div class="step-bg-num">03</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 가격 -->
-<section id="pricing">
-  <div class="section-inner">
-    <div class="section-eyebrow">PRICING</div>
-    <h2 class="section-title">라이선스 안내</h2>
-    <p class="section-sub">도장 규모에 맞는 플랜을 선택하세요.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <h3>패키지 라이선스</h3>
-        <div class="price">문의</div>
-        <div class="price-note">가격은 카카오톡으로 문의해주세요</div>
-        <ul class="price-features">
-          <li>기간제 사용</li>
-          <li>모든 발차기 모드</li>
-          <li>게임·겨루기 모드</li>
-          <li>기기 제한 없음</li>
-          <li>3개월 AS 포함</li>
-        </ul>
-        <button class="btn-price secondary" onclick="location.href='#contact'">카카오톡 문의</button>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge">추천</div>
-        <h3>영구 라이선스</h3>
-        <div class="price">문의</div>
-        <div class="price-note">가격은 카카오톡으로 문의해주세요</div>
-        <ul class="price-features">
-          <li>평생 사용 가능</li>
-          <li>모든 발차기 모드</li>
-          <li>게임·겨루기 모드</li>
-          <li>기기 제한 없음</li>
-          <li>3개월 AS + 업데이트 포함</li>
-        </ul>
-        <button class="btn-price primary" onclick="location.href='#contact'">카카오톡 문의</button>
-      </div>
-    </div>
-    <p class="pricing-note">💬 정확한 가격과 도입 방법은 카카오톡으로 문의해 주세요.</p>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="section-inner">
-    <div class="section-eyebrow">FAQ</div>
-    <h2 class="section-title">자주 묻는 질문</h2>
-    <p class="section-sub" style="margin-bottom:40px">궁금한 점을 빠르게 확인하세요.</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          어떤 기기에서 사용할 수 있나요?
-          <span class="arrow">▼</span>
-        </button>
-        <div class="faq-a">노트북, 데스크탑, 태블릿(갤럭시 탭 등) 모두 사용 가능합니다. 카메라와 Chrome 브라우저만 있으면 됩니다. 별도 앱 설치는 필요 없습니다.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          인터넷이 없어도 사용할 수 있나요?
-          <span class="arrow">▼</span>
-        </button>
-        <div class="faq-a">AI 동작 인식에 인터넷 연결이 필요합니다. 단, 라이선스 인증은 최초 1회 후 30일간 자동 유지되므로 매번 인증할 필요는 없습니다.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          몇 대의 기기에서 사용할 수 있나요?
-          <span class="arrow">▼</span>
-        </button>
-        <div class="faq-a">라이선스 키 1개로 기기 수 제한 없이 사용 가능합니다. 도장 내 여러 태블릿에 동시 적용할 수 있습니다.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          어떤 발차기를 인식할 수 있나요?
-          <span class="arrow">▼</span>
-        </button>
-        <div class="faq-a">현재 앞차기(오른발·왼발), 돌려차기(오른발·왼발) 4가지를 인식합니다. 추후 업데이트로 더 많은 발차기가 추가될 예정입니다.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          카메라 영상이 저장되거나 외부로 전송되나요?
-          <span class="arrow">▼</span>
-        </button>
-        <div class="faq-a">아니요. 카메라 영상은 브라우저 내에서만 처리되며 저장되거나 외부로 전송되지 않습니다. 완전히 로컬에서 동작합니다.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 문의 -->
-<section id="contact">
-  <div class="section-inner">
-    <div class="contact-box">
-      <h2>도입 문의 / 구매</h2>
-      <p>도장, 개인 트레이닝 어디든.<br>라이선스와 설치 방법을 카카오톡으로 빠르게 안내해 드립니다.</p>
-      <a href="https://open.kakao.com/o/placeholder" class="btn-kakao">
-        💬 카카오톡 문의하기
-      </a>
-      <div class="contact-hours">평일 10:00 – 19:00 응답</div>
-    </div>
-  </div>
-</section>
-
-<!-- 푸터 -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">AI <span>KICK</span> MASTER</div>
-      <div class="footer-desc">태권도 AI 발차기 트레이닝 시스템.<br>카메라 하나로 시작하는 차세대 훈련.</div>
-    </div>
-    <div class="footer-links">
-      <a href="kick_test.html">▶ 프로그램 시작</a>
-      <a href="#features">기능 소개</a>
-      <a href="#howto">사용법</a>
-      <a href="#pricing">가격</a>
-      <a href="#faq">FAQ</a>
+<header class="nav">
+  <div class="container">
+    <a href="#" class="logo"><span class="logo-mark"></span>AI KICK MASTER</a>
+    <nav class="nav-links">
+      <a href="#why">소개</a>
+      <a href="#modes">모드</a>
+      <a href="#product">기능</a>
+      <a href="#effect">도입 효과</a>
       <a href="#contact">문의</a>
-      <a href="admin.html">관리자</a>
+    </nav>
+    <a class="nav-cta" data-akm-href="program_url" href="kick_test.html">프로그램 실행 →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow" data-akm="hero_eyebrow">AI 기술로 완성된 태권도 훈련의 새로운 기준</div>
+      <h1 data-akm-html="hero_title">발차기를 <strong>데이터</strong>로.<br>훈련을 <strong>게임</strong>으로.</h1>
+      <p data-akm="hero_desc">AI가 실시간으로 발차기를 분석하고 피드백하여 아이들의 실력을 빠르고 재미있게 성장시킵니다.</p>
+      <div class="hero-actions">
+        <a class="btn btn-red" data-akm-href="program_url" href="kick_test.html"><span data-akm="hero_btn1">프로그램 실행</span> <span>→</span></a>
+        <a class="btn btn-dark" href="#contact"><span data-akm="hero_btn2">도입 문의</span> <span>▶</span></a>
+      </div>
+      <div class="hero-icons">
+        <div class="hero-icon"><div class="ico">⌖</div><b>실시간 AI 분석</b><span>자세·높이·속도 측정</span></div>
+        <div class="hero-icon"><div class="ico">▥</div><b>정확한 데이터</b><span>수련 기록 자동 저장</span></div>
+        <div class="hero-icon"><div class="ico">🎮</div><b>게임형 훈련</b><span>아이들이 몰입하는 수업</span></div>
+        <div class="hero-icon"><div class="ico">↓</div><b>간편한 설치</b><span>태블릿 하나로 바로 사용</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="kicker-placeholder"></div>
+      <div class="tablet">
+        <div class="tablet-screen">
+          <div class="tablet-title">뒤후려차기 · 훈련 모드</div>
+          <div class="score-ring">87</div>
+          <div style="font-size:12px;color:#aaa">AI SCORE</div>
+          <div class="bars"><div class="bar"><span></span></div><div class="bar"><span></span></div><div class="bar"><span></span></div></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="footer-copy">© 2026 AI KICK MASTER. All rights reserved.</div>
+</section>
+
+<section class="section" id="why">
+  <div class="container center">
+    <div class="label">WHY AI KICK MASTER?</div>
+    <h2 class="h2" data-akm="why_title">아이들의 성장을 더 빠르고, 더 재미있게</h2>
+    <div class="why-grid">
+      <div class="why-card"><div class="icon">⌖</div><h3>정확한 AI 분석</h3><p>카메라 한 대로 발차기 높이, 속도, 균형을 분석합니다.</p></div>
+      <div class="why-card"><div class="icon">🎮</div><h3>재미있는 수련</h3><p>게임처럼 몰입하며 반복 훈련을 자연스럽게 만듭니다.</p></div>
+      <div class="why-card"><div class="icon">▥</div><h3>성장 데이터 관리</h3><p>수련 기록을 확인하고 아이의 변화를 볼 수 있습니다.</p></div>
+      <div class="why-card"><div class="icon">▣</div><h3>간편한 사용</h3><p>복잡한 장비 없이 태블릿과 카메라로 시작합니다.</p></div>
+      <div class="why-card"><div class="icon">✓</div><h3>안정적인 운영</h3><p>도장 수업 흐름에 맞춘 단순하고 직관적인 구조입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section gray" id="modes">
+  <div class="container mode-layout">
+    <div class="mode-intro">
+      <div class="label">PROGRAM MODE</div>
+      <h2 class="h2" data-akm-html="modes_title">다양한 모드로<br>즐겁게 성장하세요</h2>
+      <p data-akm="modes_desc">겨루기, 품새, 기본동작, 미션게임까지 아이들의 수준과 목적에 맞는 모드를 제공합니다.</p>
+      <a href="#contact" class="outline-btn">모든 모드 문의 →</a>
+    </div>
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="mode-img" data-img="/images/mode-sparring.jpg"></div>
+        <div class="mode-card-body"><h3>겨루기 모드</h3><p>실전 같은 겨루기로 반응 속도와 정확도 향상</p><div class="arrow">→</div></div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-img" data-img="/images/mode-poomsae.jpg"></div>
+        <div class="mode-card-body"><h3>품새 모드</h3><p>정확한 동작 분석으로 품새 완성도 향상</p><div class="arrow">→</div></div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-img" data-img="/images/mode-basic.jpg"></div>
+        <div class="mode-card-body"><h3>기본동작 모드</h3><p>발차기 기본기를 재미있게 반복 훈련</p><div class="arrow">→</div></div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-img" data-img="/images/mode-game.jpg"></div>
+        <div class="mode-card-body"><h3>미션 게임</h3><p>다양한 미션으로 즐겁게 실력 향상</p><div class="arrow">→</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="product">
+  <div class="container product-grid">
+    <div class="stats-box" id="effect">
+      <div class="label">RESULT</div>
+      <h2 class="h2">실제 도입 효과</h2>
+      <div class="stats-row">
+        <div class="stat"><strong>93%</strong><span>수련생 만족도 향상</span></div>
+        <div class="stat"><strong>45%</strong><span>집중도 향상</span></div>
+        <div class="stat"><strong>2.3배</strong><span>반복 연습량 증가</span></div>
+        <div class="stat"><strong>1.8배</strong><span>기술 습득 속도 향상</span></div>
+      </div>
+      <p style="margin-top:34px;color:var(--gray400);font-size:13px">* 위 수치는 예시 데이터입니다. 실제 운영 데이터로 교체 가능합니다.</p>
+    </div>
+    <div class="screen-box">
+      <div class="label">SCREEN</div>
+      <h2 class="h2" style="color:#fff">실제 프로그램 화면</h2>
+      <div class="screen-placeholder">프로그램 화면 이미지<br>/images/app-screen.png</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="cta-box">
+      <div>
+        <h2 data-akm-html="contact_title">지금 바로 도장 수업에<br>AI 훈련을 더하세요.</h2>
+        <p data-akm="contact_desc">AI KICK MASTER 도입 문의 및 무료 체험 상담을 신청하시면 도장 환경에 맞춰 안내해드립니다.</p>
+      </div>
+      <div class="contact-list">
+        <a class="contact-item" data-akm-href="kakao_url" href="#"><b>카카오톡 문의</b><span data-akm="kakao_label">바로 상담하기 →</span></a>
+        <a class="contact-item" data-akm-href="tel_url" href="#"><b>전화 문의</b><span data-akm="phone">010-0000-0000</span></a>
+        <div class="contact-item"><b>운영 시간</b><span data-akm="hours">평일 10:00 - 19:00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">AI KICK MASTER</div>
+    <div><span data-akm="copyright">© 2026 AI KICK MASTER. All rights reserved.</span><a class="admin-hidden" data-akm-href="admin_url" href="admin.html">관리</a></div>
+  </div>
 </footer>
 
+
 <script>
-// FAQ 토글
-function toggleFaq(btn) {
-  const item = btn.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
+const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker';
+const HOME_DATA_KEY = 'akm_home_data';
+const AKM_HOME_DEFAULT = {
+  program_url: 'kick_test.html',
+  admin_url: 'admin.html',
+  kakao_url: '#',
+  tel_url: 'tel:01000000000',
+  phone: '010-0000-0000',
+  hours: '평일 10:00 - 19:00',
+  copyright: '© 2026 AI KICK MASTER. All rights reserved.',
+  hero_eyebrow: 'AI 기술로 완성된 태권도 훈련의 새로운 기준',
+  hero_title: '발차기를 <strong>데이터</strong>로.<br>훈련을 <strong>게임</strong>으로.',
+  hero_desc: 'AI가 실시간으로 발차기를 분석하고 피드백하여 아이들의 실력을 빠르고 재미있게 성장시킵니다.',
+  hero_btn1: '프로그램 실행',
+  hero_btn2: '도입 문의',
+  hero_img: '',
+  why_title: '아이들의 성장을 더 빠르고, 더 재미있게',
+  modes_title: '다양한 모드로<br>즐겁게 성장하세요',
+  modes_desc: '겨루기, 품새, 기본동작, 미션게임까지 아이들의 수준과 목적에 맞는 모드를 제공합니다.',
+  contact_title: '지금 바로 도장 수업에<br>AI 훈련을 더하세요.',
+  contact_desc: 'AI KICK MASTER 도입 문의 및 무료 체험 상담을 신청하시면 도장 환경에 맞춰 안내해드립니다.',
+  kakao_label: '바로 상담하기 →'
+};
+function safe(v){ return v == null ? '' : String(v); }
+function applyHomeData(data){
+  const d = Object.assign({}, AKM_HOME_DEFAULT, data || {});
+  document.querySelectorAll('[data-akm]').forEach(el=>{ const k=el.dataset.akm; if(k in d) el.textContent=safe(d[k]); });
+  document.querySelectorAll('[data-akm-html]').forEach(el=>{ const k=el.dataset.akmHtml; if(k in d) el.innerHTML=safe(d[k]); });
+  document.querySelectorAll('[data-akm-href]').forEach(el=>{ const k=el.dataset.akmHref; if(k in d && d[k]) el.setAttribute('href', d[k]); });
+  if(d.hero_img){ document.documentElement.style.setProperty('--hero-img', `url('${String(d.hero_img).replace(/'/g,"%27")}')`); }
 }
-
-// 스크롤 애니메이션
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.feat-card, .step-card, .price-card').forEach(el => observer.observe(el));
-
-// 네비 스크롤 효과
-window.addEventListener('scroll', () => {
-  document.querySelector('nav').style.background =
-    window.scrollY > 40 ? 'rgba(10,22,40,0.97)' : 'rgba(10,22,40,0.88)';
-});
-
-// 관리자 데이터 적용
-function applyHomeData() {
-  try {
-    const raw = localStorage.getItem('akm_home_data');
-    if (!raw) return;
-    const d = JSON.parse(raw);
-
-    // 히어로 타이틀
-    if (d.hero_title1 || d.hero_title2) {
-      const t1 = (d.hero_title1 || '발차기를 데이터로,').replace('데이터로', '<span class="gold">데이터로</span>');
-      const t2 = (d.hero_title2 || '훈련을 게임으로.').replace('게임으로.', '<span class="red">게임으로.</span>');
-      const ht = document.querySelector('.hero-title');
-      if (ht) ht.innerHTML = t1 + '<br>' + t2;
-    }
-    if (d.hero_sub) {
-      const hs = document.querySelector('.hero-sub');
-      if (hs) hs.innerHTML = d.hero_sub.replace(/\n/g, '<br>');
-    }
-    const nums = document.querySelectorAll('.hero-stat .num');
-    const lbls = document.querySelectorAll('.hero-stat .lbl');
-    if (nums[0] && d.stat1_num) nums[0].textContent = d.stat1_num;
-    if (lbls[0] && d.stat1_lbl) lbls[0].textContent = d.stat1_lbl;
-    if (nums[1] && d.stat2_num) nums[1].textContent = d.stat2_num;
-    if (lbls[1] && d.stat2_lbl) lbls[1].textContent = d.stat2_lbl;
-
-    // 데모 영상
-    if (d.demo_url) {
-      const dp = document.querySelector('.demo-placeholder');
-      if (dp) {
-        const wrap = document.createElement('div');
-        wrap.style.cssText = 'width:100%;max-width:800px;margin:0 auto;aspect-ratio:16/9;border-radius:20px;overflow:hidden';
-        const iframe = document.createElement('iframe');
-        iframe.width = '100%'; iframe.height = '100%';
-        iframe.src = d.demo_url; iframe.frameBorder = '0'; iframe.allowFullscreen = true;
-        wrap.appendChild(iframe);
-        dp.replaceWith(wrap);
-      }
-    }
-
-    // 스크린샷
-    ['ss1','ss2','ss3'].forEach((k,i) => {
-      const ph = document.querySelectorAll('.screenshot-placeholder')[i];
-      if (!ph) return;
-      if (d[k+'_img']) {
-        const img = document.createElement('img');
-        img.src = d[k+'_img'];
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:14px';
-        ph.innerHTML = '';
-        ph.appendChild(img);
-      } else if (d[k+'_title']) {
-        const sp = ph.querySelector('span');
-        if (sp) sp.textContent = d[k+'_title'];
-      }
-    });
-
-    // 가격
-    const prices = document.querySelectorAll('.price');
-    if (prices[0] && d.price1) prices[0].textContent = d.price1;
-    if (prices[1] && d.price2) prices[1].textContent = d.price2;
-    const pnotes = document.querySelectorAll('.price-note');
-    if (pnotes[0] && d.price1_note) pnotes[0].textContent = d.price1_note;
-    if (pnotes[1] && d.price2_note) pnotes[1].textContent = d.price2_note;
-    const pn = document.querySelector('.pricing-note');
-    if (pn && d.price_note) pn.textContent = d.price_note;
-
-    // 카카오/문의
-    const kb = document.querySelector('.btn-kakao');
-    if (kb && d.kakao) kb.href = d.kakao;
-    const ch = document.querySelector('.contact-hours');
-    if (ch && d.hours) ch.textContent = d.hours;
-    const ct = document.querySelector('.contact-box h2');
-    if (ct && d.contact_title) ct.textContent = d.contact_title;
-    if (d.contact_desc) {
-      const cp = document.querySelector('.contact-box p');
-      if (cp) cp.innerHTML = d.contact_desc.replace(/\n/g, '<br>');
-    }
-
-    // 저작권
-    const fc = document.querySelector('.footer-copy');
-    if (fc && d.copyright) fc.textContent = d.copyright;
-
-    // FAQ
-    if (d.faqs && d.faqs.length) {
-      const faqList = document.querySelector('.faq-list');
-      if (faqList) {
-        faqList.innerHTML = d.faqs.map(f => {
-          const item = document.createElement('div');
-          item.className = 'faq-item';
-          item.innerHTML = '<button class="faq-q" onclick="toggleFaq(this)">' + f.q + '<span class="arrow">▼</span></button><div class="faq-a">' + f.a + '</div>';
-          return item.outerHTML;
-        }).join('');
-      }
-    }
-
-    // 기능 카드
-    if (d.feats && d.feats.length) {
-      const featGrid = document.querySelector('.features-grid');
-      if (featGrid) {
-        const colors = ['rgba(232,160,32,.15)','rgba(76,163,255,.15)','rgba(46,204,113,.15)','rgba(217,43,58,.15)','rgba(76,163,255,.15)','rgba(232,160,32,.15)'];
-        featGrid.innerHTML = d.feats.map((f,i) => {
-          return '<div class="feat-card"><div class="feat-icon" style="background:' + colors[i%colors.length] + '">' + f.icon + '</div><h3>' + f.title + '</h3><p>' + f.desc + '</p></div>';
-        }).join('');
-        document.querySelectorAll('.feat-card').forEach(el => observer.observe(el));
-      }
-    }
-
-  } catch(e) { console.warn('홈 데이터 로드 실패', e); }
+async function loadHomeData(){
+  try{
+    const res = await fetch(ADMIN_EDGE_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'GET_HOME_DATA', payload:{}})});
+    if(res.ok){ const data = await res.json(); applyHomeData(data?.data || data || {}); return; }
+  }catch(e){}
+  try{ applyHomeData(JSON.parse(localStorage.getItem(HOME_DATA_KEY)||'{}')); }catch(e){ applyHomeData({}); }
 }
-applyHomeData();
+loadHomeData();
 </script>
+
 </body>
 </html>

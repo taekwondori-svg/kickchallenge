@@ -1,0 +1,18 @@
+{
+  "name": "AI KICK MASTER",
+  "short_name": "킥마스터",
+  "description": "태권도 AI 발차기 훈련 시스템",
+  "start_url": "home.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#070707",
+  "theme_color": "#e52626",
+  "icons": [
+    {
+      "src": "logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

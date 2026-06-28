@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>AI KICK MASTER · 도장 홈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#050505;
+  --dark:#0b0d12;
+  --dark2:#121620;
+  --red:#e52626;
+  --red2:#c91515;
+  --white:#ffffff;
+  --bg:#f4f5f7;
+  --card:#ffffff;
+  --line:#e7e9ee;
+  --line2:#d9dde5;
+  --text:#111318;
+  --muted:#707783;
+  --muted2:#9aa1ad;
+  --green:#16a765;
+  --blue:#2563eb;
+  --gold:#f59e0b;
+  --radius:24px;
+  --shadow:0 24px 80px rgba(0,0,0,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;letter-spacing:-.25px}
+a{text-decoration:none;color:inherit}
+button,input,select{font-family:inherit}
+body{
+  background:
+    radial-gradient(circle at 88% 0%,rgba(229,38,38,.12),transparent 30%),
+    radial-gradient(circle at 12% 8%,rgba(37,99,235,.08),transparent 28%),
+    linear-gradient(180deg,#fff 0%,#f4f5f7 420px,#f4f5f7 100%);
+}
+.app{width:min(1240px,calc(100% - 36px));margin:0 auto;padding:22px 0 36px}
+.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.logo-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--red),#ff5a5a);position:relative;transform:skew(-12deg);box-shadow:0 14px 26px rgba(229,38,38,.25);flex:0 0 auto}
+.logo-mark:after{content:"";position:absolute;inset:11px 14px;background:#050505;border-radius:5px}
+.brand-title{line-height:1.05;min-width:0}
+.brand-title b{display:block;font-size:21px;font-weight:950;letter-spacing:-.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-title span{display:block;margin-top:4px;font-size:12px;font-weight:800;color:var(--muted)}
+.top-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.80);display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#333;box-shadow:0 8px 22px rgba(0,0,0,.035)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(22,167,101,.12)}
+.btn{border:0;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:950}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-dark{height:42px;padding:0 17px;border-radius:13px;background:#111318;color:#fff;box-shadow:0 14px 30px rgba(0,0,0,.14)}
+.btn-light{height:42px;padding:0 17px;border-radius:13px;background:#fff;color:#111318;border:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.04)}
+.hero{display:block;margin-bottom:18px}
+.hero-main{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#070707,#171821 58%,#080808);color:#fff;padding:30px 34px;min-height:230px;box-shadow:var(--shadow)}
+.hero-main:before{content:"";position:absolute;right:-130px;top:-170px;width:430px;height:430px;border-radius:50%;border:1px solid rgba(229,38,38,.42)}
+.hero-main:after{content:"";position:absolute;right:70px;bottom:-95px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(229,38,38,.28),transparent 62%)}
+.hero-content{position:relative;z-index:2;max-width:1040px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;height:31px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:900;color:#f0f0f2;margin-bottom:18px}
+.hero h1{font-size:44px;line-height:1.08;letter-spacing:-2px;font-weight:950;margin-bottom:12px;white-space:nowrap}
+.hero h1 span{color:#ff4b4b}
+.hero p{font-size:16px;line-height:1.6;color:#c8cbd2;font-weight:650;margin-bottom:22px;max-width:760px}
+.start-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.start-btn{height:64px;padding:0 28px;border-radius:18px;background:linear-gradient(135deg,var(--red),#ff5050);color:#fff;font-size:18px;box-shadow:0 20px 42px rgba(229,38,38,.34)}
+.secondary-btn{height:64px;padding:0 22px;border-radius:18px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.16);font-size:15px}
+.quick-card{position:relative;overflow:hidden;border-radius:28px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 60px rgba(0,0,0,.06);padding:24px;min-height:141px}
+.quick-card.dark{background:#111318;color:#fff;border-color:#111318}
+.quick-card h3{font-size:19px;font-weight:950;letter-spacing:-.6px;margin-bottom:8px}
+.quick-card p{font-size:13px;line-height:1.55;color:var(--muted);font-weight:750;margin-bottom:18px}.quick-card.dark p{color:#bbc0ca}
+.card-link{border:0;cursor:pointer;height:39px;padding:0 13px;border-radius:12px;background:#f3f4f6;font-size:12px;font-weight:950;display:inline-flex;align-items:center;gap:7px}.quick-card.dark .card-link{background:rgba(255,255,255,.10);color:#fff}.muted-link{cursor:default;opacity:.75}
+.grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px rgba(0,0,0,.055);overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.panel-title{display:flex;flex-direction:column;gap:4px}.panel-title h2{font-size:19px;font-weight:950;letter-spacing:-.6px}.panel-title span{font-size:12px;color:var(--muted);font-weight:800}
+.small-action{height:36px;padding:0 12px;border-radius:11px;background:#111318;color:#fff;font-size:12px}
+.student-tools{display:grid;grid-template-columns:1fr auto;gap:10px;padding:16px 24px;border-bottom:1px solid var(--line)}
+.search{height:46px;border-radius:15px;border:1px solid var(--line2);outline:none;padding:0 15px;font-size:14px;font-weight:800;background:#fafafa}.search:focus{border-color:#111318;background:#fff;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
+.select{height:46px;border-radius:15px;border:1px solid var(--line2);outline:none;padding:0 12px;background:#fff;font-size:13px;font-weight:900;min-width:128px}
+.student-list{padding:18px 24px 24px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-height:380px;overflow:auto}
+.student{height:78px;border-radius:18px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:12px;padding:0 14px;cursor:pointer;transition:.16s ease;text-align:left}
+.student:hover{border-color:#111318;transform:translateY(-1px);box-shadow:0 10px 28px rgba(0,0,0,.07)}
+.student.active{border-color:rgba(229,38,38,.56);background:#fff7f7;box-shadow:0 10px 28px rgba(229,38,38,.10)}
+.avatar{width:46px;height:46px;border-radius:16px;background:#111318;color:#fff;display:grid;place-items:center;font-weight:950;font-size:17px;flex:0 0 auto}.student.active .avatar{background:var(--red)}
+.student-info{min-width:0}.student-info b{display:block;font-size:16px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.student-info span{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty-add{height:78px;border-radius:18px;border:1.5px dashed #cbd1dc;background:#fafafa;color:#707783;font-size:14px;font-weight:950;cursor:pointer}.empty-state{grid-column:1/-1;border:1px dashed #cbd1dc;border-radius:18px;background:#fafafa;color:#707783;font-size:14px;font-weight:850;line-height:1.55;text-align:center;padding:28px 16px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 24px 16px}
+.roster-start-wrap{padding:0 24px 24px}
+.roster-start-btn{width:100%;height:62px;border-radius:18px;background:linear-gradient(135deg,var(--red),#ff5050);color:#fff;font-size:17px;box-shadow:0 18px 38px rgba(229,38,38,.26)}
+.roster-start-btn.is-disabled{background:#e6e8ee;color:#9aa1ad;box-shadow:none;pointer-events:none}
+.stat{border:1px solid var(--line);border-radius:20px;padding:17px;background:#fff}.stat b{display:block;font-size:28px;font-weight:950;letter-spacing:-1px}.stat span{display:block;margin-top:6px;font-size:11px;color:var(--muted);font-weight:850}.stat.red b{color:var(--red)}.stat.green b{color:var(--green)}.stat.gold b{color:var(--gold)}
+.menu-grid{padding:22px 24px 24px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.compact-menu{grid-template-columns:1fr}
+.menu-card{min-height:130px;border-radius:24px;border:1px solid var(--line);background:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between;transition:.18s ease;position:relative;overflow:hidden}.menu-card:hover{transform:translateY(-2px);box-shadow:0 18px 46px rgba(0,0,0,.08);border-color:#ccd2dd}.menu-card.primary{background:linear-gradient(135deg,#111318,#202634);color:#fff;border-color:#111318}.menu-card.primary:after{content:"";position:absolute;right:-46px;top:-46px;width:150px;height:150px;border-radius:50%;background:rgba(229,38,38,.20)}
+.menu-card h3{font-size:18px;font-weight:950;letter-spacing:-.6px;margin-top:12px}.menu-card p{font-size:12px;line-height:1.5;color:var(--muted);font-weight:750;margin-top:6px}.menu-card.primary p{color:#cfd3dc}.menu-more{margin-top:16px;font-size:12px;font-weight:950;color:#111318}.menu-card.primary .menu-more{color:#fff}
+.notice{padding:0 24px 24px}.notice-box{border-radius:22px;background:#fff8ed;border:1px solid #fde1b2;padding:17px 18px;color:#744600}.notice-box b{font-size:13px;font-weight:950}.notice-box p{margin-top:6px;font-size:12px;line-height:1.55;font-weight:750;color:#8a5a0a}
+.modal-bg{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}.modal-bg.show{display:flex}.modal{width:520px;max-width:96vw;max-height:92vh;overflow:auto;background:#fff;border-radius:28px;border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.32);padding:28px}.modal h2{font-size:23px;font-weight:950;letter-spacing:-.8px;margin-bottom:8px}.modal p{font-size:13px;line-height:1.6;color:var(--muted);font-weight:750;margin-bottom:20px}.field{margin-bottom:14px}.field label{display:block;font-size:12px;color:#6b7280;font-weight:950;margin-bottom:7px}.input{width:100%;height:48px;border-radius:15px;border:1px solid var(--line2);outline:none;padding:0 14px;font-size:14px;font-weight:800}.input:focus{border-color:#111318;box-shadow:0 0 0 4px rgba(0,0,0,.05)}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice{height:42px;border-radius:13px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:950;cursor:pointer}.choice.active{background:#111318;color:#fff;border-color:#111318}.modal-actions{display:flex;gap:10px;margin-top:20px}.modal-actions button{flex:1;height:50px;border-radius:15px;font-size:14px}.cancel{background:#f2f3f5;color:#555b66}.save{background:#111318;color:#fff}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);background:#111318;color:#fff;font-size:14px;font-weight:950;padding:13px 24px;border-radius:999px;box-shadow:0 20px 60px rgba(0,0,0,.24);transition:.28s;z-index:1000}.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:980px){.app{width:min(100% - 26px,1240px);padding-top:12px}.topbar{height:auto;align-items:flex-start}.hero-main{min-height:220px;padding:28px}.hero h1{font-size:36px;white-space:normal}.grid{grid-template-columns:1fr}.student-list{grid-template-columns:repeat(3,1fr);max-height:none}.student{height:82px}.menu-grid{grid-template-columns:repeat(2,1fr)}.compact-menu{grid-template-columns:1fr}}
+@media(max-width:680px){.topbar{flex-direction:column}.top-actions{width:100%;justify-content:flex-start}.brand-title b{font-size:19px}.hero-main{padding:24px;min-height:230px}.hero h1{font-size:31px;white-space:normal}.start-btn,.secondary-btn{width:100%;height:58px}.student-tools{grid-template-columns:1fr}.student-list{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.menu-grid{grid-template-columns:1fr}.compact-menu{grid-template-columns:1fr}.choice-grid{grid-template-columns:repeat(2,1fr)}}
+@media(orientation:landscape) and (max-height:620px){.hero-main{min-height:200px}.hero h1{font-size:34px}.hero p{margin-bottom:16px}.student-list{max-height:260px}.menu-card{min-height:112px}}
+
+/* AKM official logo */
+.brand-logo{display:block;width:224px;max-width:100%;height:auto;}
+.brand{gap:0;}
+.logo-mark,.brand-title{display:none!important;}
+@media(max-width:680px){.brand-logo{width:190px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="home.html" aria-label="AI KICK MASTER 홈">
+      <img class="brand-logo" src="logo.svg" alt="AI KICK MASTER">
+    </a>
+    <div class="top-actions">
+      <div class="pill"><span class="status-dot"></span><span id="licenseState">라이선스 확인됨</span></div>
+      <a class="btn btn-dark" href="index.html">홈페이지</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-content">
+        <div class="eyebrow">도장 메인 허브</div>
+        <h1>도장 운영을 준비하고 측정을 시작하세요.</h1>
+        <p>수련생 선택과 도장 관리는 이 화면에서 준비하고, 카메라와 MediaPipe는 발차기 프로그램에서만 실행합니다.</p>
+        <div class="start-row">
+          <a id="startKickLink" class="btn start-btn" href="aikickmaster.html">발차기 시작</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="panel" id="studentPanel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <h2>수련생</h2>
+          <span>측정에 참여할 수련생을 여러 명 선택</span>
+        </div>
+      </div>
+      <div class="student-tools">
+        <input id="studentSearch" class="search" type="search" placeholder="학생 이름 검색" oninput="renderStudents()" />
+        <select id="classFilter" class="select" onchange="renderStudents()">
+          <option value="all">전체 반</option>
+        </select>
+      </div>
+      <div id="studentList" class="student-list"></div>
+      <div class="summary">
+        <div class="stat red"><b id="studentCount">0</b><span>등록 학생</span></div>
+        <div class="stat green"><b id="selectedCount">0</b><span>선택 수련생</span></div>
+        <div class="stat gold"><b id="avgScore">-</b><span>최근 평균</span></div>
+      </div>
+      <div class="roster-start-wrap">
+        <a id="bottomStartKickLink" class="btn roster-start-btn is-disabled" href="aikickmaster.html">AI KICK MASTER 실행</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <h2>도장 관리</h2>
+          <span>학생 등록·기록·설정을 한 곳에서 관리</span>
+        </div>
+      </div>
+      <div class="menu-grid compact-menu">
+        <button class="menu-card primary" onclick="openStudentModal()">
+          <div>
+            <h3>학생 관리</h3>
+            <p>전체 명단에 새 학생을 등록합니다. 수련생 선택과 학생 추가를 분리합니다.</p>
+          </div>
+          <div class="menu-more">관리</div>
+        </button>
+        <a class="menu-card" href="records.html">
+          <div>
+            <h3>기록 / 그래프</h3>
+            <p>학생별 성장 기록, 평균 점수, 랭킹을 확인합니다.</p>
+          </div>
+          <div class="menu-more">보기</div>
+        </a>
+        <button class="menu-card" onclick="openSettings()">
+          <div>
+            <h3>도장 설정</h3>
+            <p>반, 띠 순서, 라이선스 정보를 관리합니다.</p>
+          </div>
+          <div class="menu-more">설정</div>
+        </button>
+      </div>
+      <div class="notice">
+        <div class="notice-box">
+          <b>설계 기준</b>
+          <p>수련생 영역은 여러 명 선택만 담당합니다. 학생 추가, 기록, 반과 띠 설정은 관리 영역에서 처리합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="studentModal" class="modal-bg" onclick="closeModalBg(event,'studentModal')">
+  <div class="modal">
+    <h2>학생 관리</h2>
+    <p>전체 도장 명단에 학생을 등록합니다. 측정에 참여할 학생은 왼쪽 수련생 영역에서 선택합니다.</p>
+    <div class="field"><label>이름</label><input id="newStudentName" class="input" placeholder="예: 김민준" /></div>
+    <div class="field"><label>반</label><div id="classChoices" class="choice-grid"></div></div>
+    <div class="field"><label>띠</label><div id="beltChoices" class="choice-grid"></div></div>
+    <div class="field"><label>생년월일 선택</label><input id="newStudentBirth" class="input" type="date" /></div>
+    <div class="modal-actions"><button class="btn cancel" onclick="closeStudentModal()">취소</button><button class="btn save" onclick="saveStudent()">저장</button></div>
+  </div>
+</div>
+
+<div id="settingsModal" class="modal-bg" onclick="closeModalBg(event,'settingsModal')">
+  <div class="modal">
+    <h2>도장 설정</h2>
+    <p>정식 버전에서는 반/띠 추가, 삭제, 꾹 눌러 순서 변경 기능이 들어갑니다. 현재 화면은 구조 확인용입니다.</p>
+    <div class="field"><label>도장 이름</label><input id="settingDojang" class="input" placeholder="예: 국가대표마스터태권도장" /></div>
+    <div class="field"><label>반 기본값</label><input id="settingClasses" class="input" placeholder="유치부, 초등부, 시범단" /></div>
+    <div class="field"><label>띠 기본값</label><input id="settingBelts" class="input" placeholder="흰띠, 노란띠, 초록띠, 파란띠, 빨간띠, 품띠" /></div>
+    <div class="modal-actions"><button class="btn cancel" onclick="closeSettings()">취소</button><button class="btn save" onclick="saveSettings()">저장</button></div>
+  </div>
+</div>
+
+<div id="toast" class="toast">저장되었습니다.</div>
+<script>
+const STORAGE_KEY = 'akm_home_state_v1';
+const defaultState = {
+  dojangName:'국가대표마스터태권도장',
+  classes:['유치부','초등부','시범단'],
+  belts:['흰띠','노란띠','초록띠','파란띠','빨간띠','품띠'],
+  selectedStudentIds:[],
+  students:[
+    {id:'s1',name:'김민준',className:'유치부',belt:'노란띠',birth:''},
+    {id:'s2',name:'이서준',className:'초등부',belt:'초록띠',birth:''},
+    {id:'s3',name:'박하윤',className:'초등부',belt:'파란띠',birth:''},
+    {id:'s4',name:'최지우',className:'시범단',belt:'빨간띠',birth:''}
+  ],
+  records:[]
+};
+let state = loadState();
+if(!Array.isArray(state.selectedStudentIds)){ state.selectedStudentIds = state.selectedStudentId ? [state.selectedStudentId] : []; delete state.selectedStudentId; }
+let tempClass = state.classes[0] || '';
+let tempBelt = state.belts[0] || '';
+function loadState(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? {...defaultState,...JSON.parse(raw)} : structuredClone(defaultState); }
+  catch(e){ return structuredClone(defaultState); }
+}
+function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function showToast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1700); }
+function render(){
+  document.getElementById('dojangName').textContent = state.dojangName || '도장 메인 허브';
+  document.getElementById('studentCount').textContent = state.students.length;
+  document.getElementById('selectedCount').textContent = (state.selectedStudentIds||[]).length;
+  document.getElementById('avgScore').textContent = state.records?.length ? Math.round(state.records.reduce((a,b)=>a+(b.avg||0),0)/state.records.length) : '-';
+  renderClassFilter(); renderStudents(); renderChoices();
+}
+function renderClassFilter(){
+  const filter=document.getElementById('classFilter'); const current=filter.value || 'all';
+  filter.innerHTML='<option value="all">전체 반</option>'+state.classes.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  filter.value = state.classes.includes(current) ? current : 'all';
+}
+function renderStudents(){
+  const list=document.getElementById('studentList');
+  const q=(document.getElementById('studentSearch').value||'').trim().toLowerCase();
+  const cls=document.getElementById('classFilter').value || 'all';
+  const students=state.students.filter(s=>(cls==='all'||s.className===cls) && (!q||s.name.toLowerCase().includes(q)));
+  if(!students.length){ list.innerHTML='<div class="empty-state">등록된 학생이 없습니다.<br>관리에서 학생을 등록하세요.</div>'; return; }
+  list.innerHTML=students.map(s=>`<button class="student ${(state.selectedStudentIds||[]).includes(s.id)?'active':''}" onclick="toggleStudent('${s.id}')">
+    <div class="avatar">${escapeHtml(s.name.slice(0,1))}</div><div class="student-info"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.className||'반 없음')} · ${escapeHtml(s.belt||'띠 없음')}</span></div>
+  </button>`).join('');
+  const selectedIds = state.selectedStudentIds || [];
+  const links=[document.getElementById('startKickLink'), document.getElementById('bottomStartKickLink')].filter(Boolean);
+  const bottomLink=document.getElementById('bottomStartKickLink');
+  if(selectedIds.length){
+    localStorage.setItem('akm_active_roster_v1', JSON.stringify(selectedIds));
+    const href = `aikickmaster.html?roster=${encodeURIComponent(selectedIds.join(','))}`;
+    links.forEach(link=>link.href=href);
+    if(bottomLink){ bottomLink.classList.remove('is-disabled'); bottomLink.textContent = `선택한 ${selectedIds.length}명으로 실행`; }
+  }else{
+    localStorage.removeItem('akm_active_roster_v1');
+    links.forEach(link=>link.href='aikickmaster.html');
+    if(bottomLink){ bottomLink.classList.add('is-disabled'); bottomLink.textContent = '수련생 선택 후 실행'; }
+  }
+  document.getElementById('selectedCount').textContent = selectedIds.length;
+}
+function toggleStudent(id){
+  state.selectedStudentIds = state.selectedStudentIds || [];
+  if(state.selectedStudentIds.includes(id)){
+    state.selectedStudentIds = state.selectedStudentIds.filter(x=>x!==id);
+    showToast('선택을 해제했습니다.');
+  }else{
+    state.selectedStudentIds.push(id);
+    showToast('수련생을 선택했습니다.');
+  }
+  persist(); renderStudents();
+}
+function renderChoices(){
+  document.getElementById('classChoices').innerHTML = state.classes.map(c=>`<button class="choice ${tempClass===c?'active':''}" onclick="tempClass='${escapeJs(c)}';renderChoices()">${escapeHtml(c)}</button>`).join('');
+  document.getElementById('beltChoices').innerHTML = state.belts.map(b=>`<button class="choice ${tempBelt===b?'active':''}" onclick="tempBelt='${escapeJs(b)}';renderChoices()">${escapeHtml(b)}</button>`).join('');
+}
+function openStudentModal(){ tempClass=state.classes[0]||''; tempBelt=state.belts[0]||''; document.getElementById('newStudentName').value=''; document.getElementById('newStudentBirth').value=''; renderChoices(); document.getElementById('studentModal').classList.add('show'); setTimeout(()=>document.getElementById('newStudentName').focus(),80); }
+function closeStudentModal(){ document.getElementById('studentModal').classList.remove('show'); }
+function saveStudent(){
+  const name=document.getElementById('newStudentName').value.trim(); if(!name){showToast('이름을 입력하세요.');return;}
+  const student={id:'s'+Date.now(),name,className:tempClass,belt:tempBelt,birth:document.getElementById('newStudentBirth').value||''};
+  state.students.push(student); persist(); closeStudentModal(); render(); showToast('학생을 등록했습니다.');
+}
+function openSettings(){
+  document.getElementById('settingDojang').value=state.dojangName||'';
+  document.getElementById('settingClasses').value=state.classes.join(', ');
+  document.getElementById('settingBelts').value=state.belts.join(', ');
+  document.getElementById('settingsModal').classList.add('show');
+}
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('show'); }
+function saveSettings(){
+  state.dojangName=document.getElementById('settingDojang').value.trim()||'AI KICK MASTER 도장';
+  state.classes=document.getElementById('settingClasses').value.split(',').map(x=>x.trim()).filter(Boolean);
+  state.belts=document.getElementById('settingBelts').value.split(',').map(x=>x.trim()).filter(Boolean);
+  state.students=state.students.map(s=>({...s,className:state.classes.includes(s.className)?s.className:(state.classes[0]||''),belt:state.belts.includes(s.belt)?s.belt:(state.belts[0]||'')}));
+  persist(); closeSettings(); render(); showToast('설정을 저장했습니다.');
+}
+function closeModalBg(e,id){ if(e.target.id===id){ document.getElementById(id).classList.remove('show'); } }
+function escapeHtml(str){ return String(str||'').replace(/[&<>'"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+function escapeJs(str){ return String(str||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function focusStudentSection(){ const el=document.getElementById('studentPanel'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+render();
+</script>
+</body>
+</html>

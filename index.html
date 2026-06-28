@@ -192,13 +192,22 @@ button{font-family:inherit}
   .why-grid,.mode-grid,.stats-row{grid-template-columns:1fr}
   .h2{font-size:30px}
 }
+
+/* AKM official logo */
+.akm-logo-img{display:block;width:210px;max-width:100%;height:auto;}
+.nav .akm-logo-img{width:190px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.22));}
+.footer-logo .akm-logo-img{width:170px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.22));}
+.logo{font-size:0;line-height:0;}
+.logo .logo-mark{display:none!important;}
+@media(max-width:560px){.nav .akm-logo-img{width:158px}.footer-logo .akm-logo-img{width:148px}}
+
 </style>
 </head>
 <body>
 
 <header class="nav">
   <div class="container">
-    <a href="#" class="logo" id="akmLogoSecret" aria-label="AI KICK MASTER"><span class="logo-mark"></span>AI KICK MASTER</a>
+    <a href="#" class="logo" id="akmLogoSecret" aria-label="AI KICK MASTER"><img class="akm-logo-img" src="logo-white.svg" alt="AI KICK MASTER"></a>
     <nav class="nav-links">
       <a href="#why">소개</a>
       <a href="#modes">모드</a>
@@ -323,7 +332,7 @@ button{font-family:inherit}
 
 <footer class="footer">
   <div class="container">
-    <div class="footer-logo">AI KICK MASTER</div>
+    <div class="footer-logo"><img class="akm-logo-img" src="logo-white.svg" alt="AI KICK MASTER"></div>
     <div><span data-akm="copyright">© 2026 AI KICK MASTER. All rights reserved.</span></div>
   </div>
 </footer>

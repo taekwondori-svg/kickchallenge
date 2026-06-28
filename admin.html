@@ -925,6 +925,15 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
   }
 }
 
+
+/* AKM official logo */
+.akm-admin-logo{display:block;width:235px;max-width:100%;height:auto;position:relative;z-index:1;}
+.login-box .akm-admin-logo{margin:0 0 14px;width:245px;}
+.top-logo{display:flex;align-items:center;gap:12px;min-width:0;}
+.top-logo .akm-admin-logo{width:220px;}
+.top-logo .admin-label{font-size:14px;font-weight:950;color:var(--red);white-space:nowrap;}
+@media(max-width:560px){.login-box .akm-admin-logo{width:210px}.top-logo .akm-admin-logo{width:180px}.top-logo .admin-label{font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -932,7 +941,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 <!-- 로그인 -->
 <div id="loginWrap">
   <div class="login-box">
-    <h1>AI <span>KICK</span> MASTER</h1>
+    <img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER">
     <p>통합 관리자 페이지</p>
     <input id="adminPw" class="f-input" type="password" placeholder="관리자 비밀번호" autocomplete="current-password" />
     <button class="btn-primary" onclick="adminLogin()">로그인</button>
@@ -945,7 +954,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 
   <!-- 탑바 -->
   <div class="top-bar">
-    <h2>AI <span>KICK</span> MASTER · 관리자</h2>
+    <div class="top-logo"><img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER"><span class="admin-label">관리자</span></div>
     <div class="top-actions">
       <button class="btn-sm-act btn-ghost" onclick="openPwModal()">🔑 비밀번호 변경</button>
       <button class="btn-sm-act btn-ghost" onclick="window.open('index.html','_blank')">👁 홈페이지 미리보기</button>

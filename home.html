@@ -106,9 +106,41 @@ body{
 .logo-mark,.brand-title{display:none!important;}
 @media(max-width:680px){.brand-logo{width:190px}}
 
+/* ===== 라이선스 인증 화면 ===== */
+#loginScreen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#070707,#171821 60%,#080808);display:flex;align-items:center;justify-content:center;padding:24px;}
+#loginScreen.hidden{display:none;}
+.login-box{width:100%;max-width:420px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px 36px;text-align:center;box-shadow:0 40px 120px rgba(0,0,0,.5);}
+.login-logo-img{width:220px;max-width:80%;height:auto;margin-bottom:12px;}
+.login-sub{font-size:13px;color:#9aa1ad;font-weight:800;margin-bottom:32px;letter-spacing:.2px;}
+.login-key-label{display:block;text-align:left;font-size:12px;color:#9aa1ad;font-weight:900;margin-bottom:8px;letter-spacing:.5px;}
+.login-key-help{font-size:12px;color:#6b7280;font-weight:750;line-height:1.55;margin-bottom:14px;text-align:left;}
+.login-field{width:100%;height:52px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:17px;font-weight:900;letter-spacing:1px;text-align:center;outline:none;margin-bottom:14px;padding:0 16px;}
+.login-field:focus{border-color:rgba(229,38,38,.6);background:rgba(255,255,255,.11);box-shadow:0 0 0 4px rgba(229,38,38,.12);}
+.login-field::placeholder{color:#555b66;font-size:14px;letter-spacing:.5px;}
+.login-btn{width:100%;height:54px;border-radius:16px;background:linear-gradient(135deg,#e52626,#ff5050);color:#fff;font-size:16px;font-weight:950;border:0;cursor:pointer;box-shadow:0 16px 40px rgba(229,38,38,.35);transition:.18s ease;margin-bottom:12px;}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 20px 48px rgba(229,38,38,.45);}
+.login-btn:disabled{background:#333;box-shadow:none;cursor:not-allowed;transform:none;}
+.login-error{min-height:20px;font-size:13px;color:#ff7a7a;font-weight:850;margin-bottom:8px;}
+.login-footer{font-size:11px;color:#4b5563;font-weight:750;line-height:1.6;margin-top:16px;}
+
 </style>
 </head>
 <body>
+
+<!-- ===== 라이선스 인증 화면 ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img class="login-logo-img" src="logo-white.svg" alt="AI KICK MASTER">
+    <div class="login-sub">태권도 AI 발차기 훈련 시스템</div>
+    <label class="login-key-label">🔑 라이선스 키</label>
+    <div class="login-key-help">구매 후 전달받은 라이선스 키를 입력하세요.<br>최초 1회 입력 후 자동으로 인증됩니다.</div>
+    <input id="licenseKeyInput" class="login-field" type="text" placeholder="AKM-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" />
+    <button class="login-btn" onclick="doLicenseActivate()">인증하기</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-footer">© AI KICK MASTER · aikickmaster.kr<br>구매 및 문의는 카카오톡으로 연락해주세요.</div>
+  </div>
+</div>
+
 <div class="app">
   <header class="topbar">
     <a class="brand" href="home.html" aria-label="AI KICK MASTER 홈">
@@ -117,6 +149,7 @@ body{
     <div class="top-actions">
       <div class="pill"><span class="status-dot"></span><span id="licenseState">라이선스 확인됨</span></div>
       <a class="btn btn-dark" href="index.html">홈페이지</a>
+      <button class="btn btn-light" onclick="logoutLicense()" style="font-size:12px;">로그아웃</button>
     </div>
   </header>
 
@@ -223,6 +256,103 @@ body{
 
 <div id="toast" class="toast">저장되었습니다.</div>
 <script>
+// ===== 라이선스 인증 (home.html 게이트) =====
+const EDGE_URL    = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/verify-license';
+const AKM_VERSION = '1.0.0';
+const CACHE_DAYS  = 7;
+const LS_KEY      = 'akm_license_v1';
+
+let _failCount = 0;
+let _failLockUntil = 0;
+
+function _getLicenseCache(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'null'); }catch(e){ return null; } }
+function _setLicenseCache(data){ try{ localStorage.setItem(LS_KEY, JSON.stringify(data)); }catch(e){} }
+function _clearLicenseCache(){ try{ localStorage.removeItem(LS_KEY); }catch(e){} }
+
+function activateHub(dojang_name){
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('licenseState').textContent = dojang_name || '라이선스 확인됨';
+  render();
+}
+
+async function _verifyWithServer(license_key){
+  const res = await fetch(EDGE_URL,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({license_key}) });
+  return await res.json();
+}
+
+async function doLicenseActivate(){
+  const key = document.getElementById('licenseKeyInput').value.trim().toUpperCase();
+  const errorEl = document.getElementById('loginError');
+  const btn = document.querySelector('.login-btn');
+
+  if(Date.now() < _failLockUntil){
+    const sec = Math.ceil((_failLockUntil - Date.now())/1000);
+    errorEl.textContent = `잠시 후 다시 시도해주세요. (${sec}초)`;
+    return;
+  }
+  if(!key){ errorEl.textContent='라이선스 키를 입력해주세요.'; return; }
+  if(!/^AKM-/.test(key)){ errorEl.textContent='올바른 형식의 키를 입력해주세요. (AKM-으로 시작)'; return; }
+
+  btn.textContent='인증 중...'; btn.disabled=true; errorEl.textContent='';
+
+  try{
+    const result = await _verifyWithServer(key);
+    if(!result.valid){
+      _failCount++;
+      if(_failCount >= 5){ _failLockUntil=Date.now()+30000; _failCount=0; errorEl.textContent='입력 오류가 많습니다. 30초 후 다시 시도해주세요.'; }
+      else{ errorEl.textContent=result.error||'유효하지 않은 라이선스 키입니다.'; }
+      btn.textContent='인증하기'; btn.disabled=false; return;
+    }
+    _failCount=0;
+    _setLicenseCache({ license_key:key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, cached_at:Date.now() });
+    activateHub(result.dojang_name);
+  }catch(e){
+    const cache = _getLicenseCache();
+    if(cache && cache.license_key===key){
+      const days=(Date.now()-cache.cached_at)/(1000*60*60*24);
+      if(days < CACHE_DAYS){ activateHub(cache.dojang_name); return; }
+    }
+    errorEl.textContent='네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.';
+    btn.textContent='인증하기'; btn.disabled=false;
+  }
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) doLicenseActivate();
+});
+
+// 로그아웃
+function logoutLicense(){
+  _clearLicenseCache();
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('licenseKeyInput').value='';
+  document.getElementById('loginError').textContent='';
+}
+
+// 페이지 로드 시 캐시 자동 확인
+window.addEventListener('load', async function(){
+  const cache = _getLicenseCache();
+  if(!cache){ return; } // 인증 화면 유지
+
+  const days=(Date.now()-cache.cached_at)/(1000*60*60*24);
+  if(days >= CACHE_DAYS){ _clearLicenseCache(); return; }
+
+  // 캐시 유효 → 바로 허브 진입
+  activateHub(cache.dojang_name);
+
+  // 백그라운드 재인증
+  try{
+    const result = await _verifyWithServer(cache.license_key);
+    if(!result.valid){
+      _clearLicenseCache();
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }else{
+      _setLicenseCache({ license_key:cache.license_key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, cached_at:Date.now() });
+    }
+  }catch(e){ /* 네트워크 오류 시 캐시로 계속 사용 */ }
+});
+
+// ===== 허브 로직 =====
 const STORAGE_KEY = 'akm_home_state_v1';
 const defaultState = {
   dojangName:'국가대표마스터태권도장',
@@ -248,7 +378,7 @@ function loadState(){
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function showToast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1700); }
 function render(){
-  document.getElementById('dojangName').textContent = state.dojangName || '도장 메인 허브';
+  const dn=document.getElementById('dojangName'); if(dn) dn.textContent = state.dojangName || '도장 메인 허브';
   document.getElementById('studentCount').textContent = state.students.length;
   document.getElementById('selectedCount').textContent = (state.selectedStudentIds||[]).length;
   document.getElementById('avgScore').textContent = state.records?.length ? Math.round(state.records.reduce((a,b)=>a+(b.avg||0),0)/state.records.length) : '-';

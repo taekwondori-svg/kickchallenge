@@ -2978,8 +2978,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     <label class="login-key-label">🔑 라이선스 키</label>
     <div class="login-key-help">구매 후 전달받은 라이선스 키를 입력하세요.<br>최초 1회 입력 후 자동으로 인증됩니다.</div>
     <input id="licenseKeyInput" class="login-field" type="text" placeholder="AKM-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" />
-    <button class="login-btn" onclick="doLicenseActivate()">인증하기</button>
-    <div class="login-error" id="loginError"></div>
+    <button class="login-btn" onclick="location.replace('home.html')">홈으로 돌아가기</button>
+    <div class="login-error" id="loginError">라이선스 인증이 필요합니다.</div>
     <div class="login-footer">© AI KICK MASTER · 라이선스 문의: aikickmaster.kr<br>구매 및 문의는 카카오톡으로 연락해주세요.</div>
   </div>
 </div>
@@ -4447,163 +4447,39 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 })();
 </script>
 
-<!-- ===== 라이선스 인증 로직 (Edge Function 방식) ===== -->
+<!-- ===== 라이선스 체크 (home.html에서 인증, 여기선 캐시 확인만) ===== -->
 <script>
-// Supabase 키 완전 제거 - Edge Function으로만 통신
-const EDGE_URL     = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/verify-license';
-const AKM_VERSION  = '1.0.0';
-const CACHE_DAYS   = 7;  // 영구 라이선스 기준 7일 캐시 (변경: 30일 → 7일)
-const LS_KEY       = 'akm_license_v1';
+const _AKM_LS_KEY   = 'akm_license_v1';
+const _AKM_CACHE_DAYS = 7;
 
-let _failCount = 0;
-let _failLockUntil = 0;
+(function(){
+  try{
+    const cache = JSON.parse(localStorage.getItem(_AKM_LS_KEY)||'null');
+    if(!cache){ location.replace('home.html'); return; }
+    const days=(Date.now()-cache.cached_at)/(1000*60*60*24);
+    if(days >= _AKM_CACHE_DAYS){ localStorage.removeItem(_AKM_LS_KEY); location.replace('home.html'); return; }
+    // 인증 통과 → 배지 표시
+    const nameEl=document.getElementById('panelDojangName');
+    const authEl=document.getElementById('panelAuth');
+    const verEl =document.getElementById('panelVersion');
+    if(nameEl) nameEl.textContent=cache.dojang_name||'';
+    if(authEl) authEl.textContent='✓ 정품 인증';
+    if(verEl)  verEl.textContent='v'+(cache.version||'1.0.0');
+    const lbName=document.getElementById('lbDojangName');
+    const lbVer =document.getElementById('lbVersion');
+    if(lbName) lbName.textContent=cache.dojang_name||'';
+    if(lbVer)  lbVer.textContent='v'+(cache.version||'1.0.0');
+    // 앱 실행
+    document.getElementById('loginScreen').classList.add('hidden');
+    if(window.__startApp) window.__startApp();
+  }catch(e){ location.replace('home.html'); }
+})();
 
-function _getLicenseCache() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e) { return null; }
-}
-function _setLicenseCache(data) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
-}
-function _clearLicenseCache() {
-  try { localStorage.removeItem(LS_KEY); } catch(e) {}
-}
-
-function showLicenseBadge(dojang_name, version) {
-  const nameEl = document.getElementById('panelDojangName');
-  const authEl = document.getElementById('panelAuth');
-  const verEl  = document.getElementById('panelVersion');
-  if (nameEl) nameEl.textContent = dojang_name;
-  if (authEl) authEl.textContent = '✓ 정품 인증';
-  if (verEl)  verEl.textContent  = 'v' + (version || AKM_VERSION);
-  document.getElementById('lbDojangName').textContent = dojang_name;
-  document.getElementById('lbVersion').textContent = 'v' + (version || AKM_VERSION);
-}
-
-function activateApp(dojang_name, license_type, version) {
-  document.getElementById('loginScreen').classList.add('hidden');
-  showLicenseBadge(dojang_name, version);
-  if (window.__startApp) window.__startApp();
-}
-
-function _resetPanel() {
-  const n=document.getElementById('panelDojangName'); if(n) n.textContent='AI KICK MASTER';
-  const a=document.getElementById('panelAuth'); if(a) a.textContent='';
-  const v=document.getElementById('panelVersion'); if(v) v.textContent='';
-}
-
-// Edge Function 호출 (Supabase 키 노출 없음)
-async function _verifyWithServer(license_key) {
-  const res = await fetch(EDGE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ license_key })
-  });
-  return await res.json();
-}
-
-async function doLicenseActivate() {
-  const key = document.getElementById('licenseKeyInput').value.trim().toUpperCase();
-  const errorEl = document.getElementById('loginError');
-  const btn = document.querySelector('.login-btn');
-
-  if (Date.now() < _failLockUntil) {
-    const sec = Math.ceil((_failLockUntil - Date.now()) / 1000);
-    errorEl.textContent = `잠시 후 다시 시도해주세요. (${sec}초)`;
-    return;
-  }
-
-  if (!key) { errorEl.textContent = '라이선스 키를 입력해주세요.'; return; }
-  if (!/^AKM-/.test(key)) { errorEl.textContent = '올바른 형식의 키를 입력해주세요. (AKM-으로 시작)'; return; }
-
-  btn.textContent = '인증 중...';
-  btn.disabled = true;
-  errorEl.textContent = '';
-
-  try {
-    const result = await _verifyWithServer(key);
-
-    if (!result.valid) {
-      _failCount++;
-      if (_failCount >= 5) {
-        _failLockUntil = Date.now() + 30000;
-        _failCount = 0;
-        errorEl.textContent = '입력 오류가 많습니다. 30초 후 다시 시도해주세요.';
-      } else {
-        errorEl.textContent = result.error || '유효하지 않은 라이선스 키입니다.';
-      }
-      btn.textContent = '인증하기'; btn.disabled = false;
-      return;
-    }
-
-    _failCount = 0;
-    const { dojang_name, license_type, version } = result;
-
-    _setLicenseCache({
-      license_key: key,
-      dojang_name,
-      license_type,
-      version: version || AKM_VERSION,
-      cached_at: Date.now()
-    });
-
-    activateApp(dojang_name, license_type, version || AKM_VERSION);
-
-  } catch(e) {
-    // 네트워크 오류 시 캐시 확인
-    const cache = _getLicenseCache();
-    if (cache && cache.license_key === key) {
-      const daysPassed = (Date.now() - cache.cached_at) / (1000 * 60 * 60 * 24);
-      if (daysPassed < CACHE_DAYS) {
-        activateApp(cache.dojang_name, cache.license_type, cache.version);
-        return;
-      }
-    }
-    errorEl.textContent = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.';
-    btn.textContent = '인증하기'; btn.disabled = false;
-  }
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
-    doLicenseActivate();
-  }
-});
-
-// 앱 시작 시 캐시 자동 확인 (7일 오프라인 사용)
-window.addEventListener('load', async function() {
-  const cache = _getLicenseCache();
-  if (!cache) return;
-
-  const daysPassed = (Date.now() - cache.cached_at) / (1000 * 60 * 60 * 24);
-  if (daysPassed >= CACHE_DAYS) {
-    _clearLicenseCache();
-    return;
-  }
-
-  // 캐시 유효 → 바로 앱 실행
-  activateApp(cache.dojang_name, cache.license_type, cache.version);
-
-  // 백그라운드 재인증 (조용히)
-  try {
-    const result = await _verifyWithServer(cache.license_key);
-    if (!result.valid) {
-      _clearLicenseCache();
-      document.getElementById('loginScreen').classList.remove('hidden');
-      _resetPanel();
-      document.getElementById('loginError').textContent = result.error || '라이선스가 비활성화되었습니다.';
-    } else {
-      _setLicenseCache({
-        license_key: cache.license_key,
-        dojang_name: result.dojang_name,
-        license_type: result.license_type,
-        version: result.version || AKM_VERSION,
-        cached_at: Date.now()
-      });
-    }
-  } catch(e) { /* 네트워크 오류 시 캐시로 계속 사용 */ }
-});
+window.logoutLicense=()=>{
+  try{ localStorage.removeItem(_AKM_LS_KEY); }catch(e){}
+  location.replace('home.html');
+};
 </script>
 
 </body>
 </html>
-

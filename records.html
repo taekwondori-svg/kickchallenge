@@ -7,289 +7,56 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --black:#050505;
-  --dark:#0b0d12;
-  --dark2:#121620;
-  --red:#e52626;
-  --red2:#c91515;
-  --white:#ffffff;
-  --bg:#f4f5f7;
-  --card:#ffffff;
-  --line:#e7e9ee;
-  --line2:#d9dde5;
-  --text:#111318;
-  --muted:#707783;
-  --muted2:#9aa1ad;
-  --green:#16a765;
-  --blue:#2563eb;
-  --gold:#f59e0b;
-  --radius:24px;
-  --shadow:0 24px 80px rgba(0,0,0,.10);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;letter-spacing:-.25px}
-a{text-decoration:none;color:inherit}
-button,input,select{font-family:inherit}
-body{
-  background:
-    radial-gradient(circle at 88% 0%,rgba(229,38,38,.12),transparent 30%),
-    radial-gradient(circle at 12% 8%,rgba(37,99,235,.08),transparent 28%),
-    linear-gradient(180deg,#fff 0%,#f4f5f7 420px,#f4f5f7 100%);
-}
-.app{width:min(1240px,calc(100% - 36px));margin:0 auto;padding:22px 0 36px}
-.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:13px;min-width:0}
-.logo-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--red),#ff5a5a);position:relative;transform:skew(-12deg);box-shadow:0 14px 26px rgba(229,38,38,.25);flex:0 0 auto}
-.logo-mark:after{content:"";position:absolute;inset:11px 14px;background:#050505;border-radius:5px}
-.brand-title{line-height:1.05;min-width:0}.brand-title b{display:block;font-size:21px;font-weight:950;letter-spacing:-.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-title span{display:block;margin-top:4px;font-size:12px;font-weight:800;color:var(--muted)}
-.top-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.pill{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.80);display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#333;box-shadow:0 8px 22px rgba(0,0,0,.035)}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(22,167,101,.12)}
-.btn{border:0;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:950}.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0)}
-.btn-dark{height:42px;padding:0 17px;border-radius:13px;background:#111318;color:#fff;box-shadow:0 14px 30px rgba(0,0,0,.14)}
-.btn-light{height:42px;padding:0 17px;border-radius:13px;background:#fff;color:#111318;border:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.04)}
-.hero{display:grid;grid-template-columns:1.22fr .78fr;gap:18px;margin-bottom:18px;align-items:stretch}
-.hero-main{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#070707,#171821 58%,#080808);color:#fff;padding:30px 34px;min-height:246px;box-shadow:var(--shadow)}
-.hero-main:before{content:"";position:absolute;right:-130px;top:-170px;width:430px;height:430px;border-radius:50%;border:1px solid rgba(229,38,38,.42)}
-.hero-main:after{content:"";position:absolute;right:70px;bottom:-95px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(229,38,38,.28),transparent 62%)}
-.hero-content{position:relative;z-index:2}.eyebrow{display:inline-flex;align-items:center;gap:8px;height:31px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:900;color:#f0f0f2;margin-bottom:18px}
-.hero h1{font-size:44px;line-height:1.08;letter-spacing:-2px;font-weight:950;margin-bottom:12px}.hero h1 span{color:#ff4b4b}.hero p{font-size:16px;line-height:1.6;color:#c8cbd2;font-weight:650;margin-bottom:22px;max-width:770px}
-.student-select{display:flex;gap:10px;flex-wrap:wrap}.select,.search{height:46px;border-radius:15px;border:1px solid rgba(255,255,255,.16);outline:none;padding:0 14px;font-size:14px;font-weight:900;background:rgba(255,255,255,.09);color:#fff;min-width:170px}.select option{color:#111}.search{min-width:230px}.search::placeholder{color:#aeb4bf}.select:focus,.search:focus{border-color:#fff;background:rgba(255,255,255,.13)}
-.profile-card{border-radius:32px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 60px rgba(0,0,0,.06);padding:24px;position:relative;overflow:hidden}.profile-card:before{content:"";position:absolute;right:-70px;top:-70px;width:170px;height:170px;border-radius:50%;background:rgba(229,38,38,.08)}
-.profile-top{display:flex;align-items:center;gap:14px;position:relative}.avatar{width:64px;height:64px;border-radius:22px;background:#111318;color:#fff;display:grid;place-items:center;font-weight:950;font-size:22px;box-shadow:0 16px 30px rgba(0,0,0,.14)}.profile-name b{font-size:24px;font-weight:950;letter-spacing:-.9px}.profile-name span{display:block;margin-top:5px;font-size:13px;color:var(--muted);font-weight:850}.belt{margin-top:18px;height:12px;border-radius:999px;background:linear-gradient(90deg,#fff 0 18%,#facc15 18% 36%,#fb923c 36% 54%,#22c55e 54% 72%,#2563eb 72% 88%,#111318 88%);border:1px solid var(--line)}
-.profile-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.mini{border-radius:16px;background:#fafafa;border:1px solid var(--line);padding:12px 8px;text-align:center}.mini b{display:block;font-size:20px;font-weight:950}.mini span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:850}
-.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.kpi-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px 20px;box-shadow:0 14px 44px rgba(0,0,0,.045);position:relative;overflow:hidden}.kpi-card:after{content:"";position:absolute;right:16px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--red);opacity:.65}.kpi-card .label{font-size:12px;color:var(--muted);font-weight:900;margin-bottom:10px}.kpi-card .num{font-size:38px;font-weight:950;line-height:1;color:#111318;letter-spacing:-1.4px}.kpi-card .num small{font-size:18px}.kpi-card .sub{font-size:12px;color:var(--green);font-weight:950;margin-top:9px}.kpi-card.dark{background:#111318;color:#fff;border-color:#111318}.kpi-card.dark .label{color:#bbc0ca}.kpi-card.dark .num{color:#fff}.kpi-card.gold .num{color:var(--gold)}.kpi-card.red .num{color:var(--red)}
-.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px rgba(0,0,0,.055);overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 24px 16px;border-bottom:1px solid var(--line)}.panel-title{display:flex;flex-direction:column;gap:4px}.panel-title h2{font-size:19px;font-weight:950;letter-spacing:-.6px}.panel-title span{font-size:12px;color:var(--muted);font-weight:800}.small-action{height:36px;padding:0 12px;border-radius:11px;background:#111318;color:#fff;font-size:12px}
-.chart-wrap{padding:24px}.growth-chart{height:270px;border-radius:22px;background:linear-gradient(180deg,#fafafa,#fff);border:1px solid var(--line);padding:20px 18px 16px;position:relative}.chart-grid{position:absolute;inset:20px 18px 48px;background:repeating-linear-gradient(to top,transparent 0 45px,#edf0f4 46px),repeating-linear-gradient(to right,transparent 0 calc(16.66% - 1px),#f0f2f5 calc(16.66%));border-radius:14px}.line-svg{position:absolute;inset:20px 18px 48px;overflow:visible}.line-svg polyline{fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 6px 10px rgba(229,38,38,.25))}.line-svg circle{fill:#fff;stroke:var(--red);stroke-width:4}.chart-labels{position:absolute;left:18px;right:18px;bottom:15px;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;color:var(--muted);font-weight:850;text-align:center}.score-tip{position:absolute;right:28px;top:28px;background:#111318;color:#fff;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:950;box-shadow:0 14px 28px rgba(0,0,0,.16)}
-.kick-bars{padding:22px 24px 24px;display:grid;gap:13px}.bar-row{display:grid;grid-template-columns:82px 1fr 48px;gap:12px;align-items:center}.bar-row b{font-size:13px;font-weight:950}.track{height:14px;border-radius:999px;background:#eef0f4;overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red),#ff7a7a)}.bar-row span{font-size:13px;font-weight:950;text-align:right}.fill.gold{background:linear-gradient(90deg,var(--gold),#ffd36b)}.fill.blue{background:linear-gradient(90deg,var(--blue),#75a7ff)}.fill.green{background:linear-gradient(90deg,var(--green),#7de0ae)}
-.timeline{padding:20px 24px 24px;display:grid;gap:12px}.session{display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:18px;background:#fff}.medal{width:42px;height:42px;border-radius:15px;background:#111318;color:#fff;display:grid;place-items:center;font-weight:950}.session-info b{font-size:15px;font-weight:950}.session-info span{display:block;margin-top:4px;font-size:12px;color:var(--muted);font-weight:800}.session-score{text-align:right}.session-score b{font-size:24px;font-weight:950}.session-score span{display:block;font-size:11px;color:var(--green);font-weight:950}.best{background:#fff7f7;border-color:rgba(229,38,38,.22)}.best .medal{background:var(--red)}
-.rank-list{padding:20px 24px 24px;display:grid;gap:10px}.rank-item{height:62px;border-radius:18px;border:1px solid var(--line);background:#fff;display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:12px;padding:0 14px}.rank-no{width:34px;height:34px;border-radius:12px;background:#f3f4f6;display:grid;place-items:center;font-size:13px;font-weight:950}.rank-item.me{border-color:rgba(229,38,38,.36);background:#fff7f7}.rank-item.me .rank-no{background:var(--red);color:#fff}.rank-name b{font-size:14px;font-weight:950}.rank-name span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:800}.rank-score{font-size:18px;font-weight:950}
-.notice{margin-top:18px;border-radius:26px;background:#111318;color:#fff;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 18px 60px rgba(0,0,0,.12)}.notice b{font-size:18px;font-weight:950}.notice span{display:block;margin-top:6px;color:#bbc0ca;font-size:13px;font-weight:750}.notice .btn{height:46px;padding:0 18px;border-radius:14px;background:var(--red);color:#fff;white-space:nowrap}
-.empty-profile{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;border:1.5px dashed #cbd1dc;border-radius:24px;background:#fafafa;color:var(--muted)}.empty-profile .icon{width:62px;height:62px;border-radius:22px;background:#111318;color:#fff;display:grid;place-items:center;font-size:28px;margin-bottom:14px;box-shadow:0 16px 30px rgba(0,0,0,.14)}.empty-profile b{font-size:19px;font-weight:950;color:#111318;letter-spacing:-.5px}.empty-profile span{display:block;margin-top:8px;font-size:13px;font-weight:800;line-height:1.5}.profile-filled{display:none}.has-student .profile-filled{display:block}.has-student .empty-profile{display:none}.report-area{display:none}.has-student .report-area{display:block}.select.empty{color:#aeb4bf}.choice-helper{margin-top:13px;color:#aeb4bf;font-size:12px;font-weight:800}.mission-list{padding:20px 24px 24px;display:grid;gap:10px}.mission-item{min-height:62px;border-radius:18px;border:1px solid var(--line);background:#fff;display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:12px;padding:12px 14px}.mission-icon{width:36px;height:36px;border-radius:13px;background:#111318;color:#fff;display:grid;place-items:center;font-size:16px;font-weight:950}.mission-item.hot{border-color:rgba(229,38,38,.24);background:#fff7f7}.mission-item.hot .mission-icon{background:var(--red)}.mission-text b{font-size:14px;font-weight:950}.mission-text span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:800}.mission-value{font-size:14px;font-weight:950;color:var(--red);white-space:nowrap}
-
-@media(max-width:1040px){.hero,.grid{grid-template-columns:1fr}.kpi{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:38px}.profile-mini{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:720px){.app{width:min(100% - 24px,1240px);padding-top:14px}.topbar{height:auto;align-items:flex-start}.brand-title b{font-size:18px}.top-actions{gap:6px}.pill{display:none}.btn-dark,.btn-light{height:38px;padding:0 12px;font-size:12px}.hero-main{padding:24px;border-radius:26px}.hero h1{font-size:31px;white-space:normal}.hero p{font-size:14px}.student-select{display:grid}.select,.search{width:100%;min-width:0}.kpi{grid-template-columns:1fr}.panel-head{padding:18px}.chart-wrap,.kick-bars,.timeline,.rank-list{padding:18px}.bar-row{grid-template-columns:70px 1fr 40px}.notice{align-items:flex-start;flex-direction:column}.notice .btn{width:100%}}
-
-/* =========================================================
-   RECORDS HEADER - matched to home/index wordmark size
-   ========================================================= */
-.akm-header{
-  height:154px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  gap:18px !important;
-  margin-bottom:18px !important;
-}
-.akm-logo-link{
-  display:flex !important;
-  align-items:center !important;
-  flex:0 0 auto !important;
-  text-decoration:none !important;
-}
-.akm-logo-svg{
-  width:430px !important;
-  max-width:44vw !important;
-  height:auto !important;
-  display:block !important;
-}
-.akm-header-actions{
-  display:flex !important;
-  gap:9px !important;
-  align-items:center !important;
-  flex-wrap:wrap !important;
-  justify-content:flex-end !important;
-}
-@media(max-width:1040px){
-  .akm-header{height:128px !important;}
-  .akm-logo-svg{width:360px !important;max-width:52vw !important;}
-}
-@media(max-width:720px){
-  .akm-header{
-    height:auto !important;
-    min-height:92px !important;
-    align-items:flex-start !important;
-    flex-direction:column !important;
-    padding-top:8px !important;
-  }
-  .akm-logo-svg{width:260px !important;max-width:86vw !important;}
-  .akm-header-actions{width:100%;justify-content:flex-start !important;}
-}
-
-
-/* Final logo size tuning: between previous too-small and too-large versions */
-.akm-header{
-  height:126px !important;
-  margin-bottom:16px !important;
-}
-.akm-logo-svg{
-  width:330px !important;
-  max-width:40vw !important;
-}
-@media(max-width:1040px){
-  .akm-header{height:112px !important;}
-  .akm-logo-svg{width:300px !important;max-width:48vw !important;}
-}
-@media(max-width:720px){
-  .akm-header{min-height:86px !important;}
-  .akm-logo-svg{width:230px !important;max-width:82vw !important;}
-}
-
+:root{--black:#050505;--dark:#0b0d12;--red:#e52626;--bg:#f4f5f7;--card:#fff;--line:#e7e9ee;--text:#111318;--muted:#707783;--green:#16a765;--blue:#2563eb;--gold:#f59e0b;--shadow:0 24px 80px rgba(0,0,0,.10)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;letter-spacing:-.25px}a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}body{background:radial-gradient(circle at 88% 0%,rgba(229,38,38,.12),transparent 30%),radial-gradient(circle at 12% 8%,rgba(37,99,235,.08),transparent 28%),linear-gradient(180deg,#fff 0%,#f4f5f7 420px,#f4f5f7 100%)}
+.app{width:min(1240px,calc(100% - 36px));margin:0 auto;padding:22px 0 40px}.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:13px;min-width:0}.logo-img{height:44px;max-width:260px;display:block}.top-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pill{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.80);display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#333;box-shadow:0 8px 22px rgba(0,0,0,.035)}.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(22,167,101,.12)}.btn{border:0;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:950}.btn:hover{transform:translateY(-1px)}.btn-dark{height:42px;padding:0 17px;border-radius:13px;background:#111318;color:#fff;box-shadow:0 14px 30px rgba(0,0,0,.14)}.btn-light{height:42px;padding:0 17px;border-radius:13px;background:#fff;color:#111318;border:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.04)}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}.hero-main{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(135deg,#070707,#171821 58%,#080808);color:#fff;padding:30px 34px;min-height:246px;box-shadow:var(--shadow)}.hero-main:before{content:"";position:absolute;right:-130px;top:-170px;width:430px;height:430px;border-radius:50%;border:1px solid rgba(229,38,38,.42)}.hero-content{position:relative;z-index:2}.eyebrow{display:inline-flex;align-items:center;gap:8px;height:31px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:900;color:#f0f0f2;margin-bottom:18px}.hero h1{font-size:44px;line-height:1.08;letter-spacing:-2px;font-weight:950;margin-bottom:12px}.hero h1 span{color:#ff4b4b}.hero p{font-size:16px;line-height:1.6;color:#c8cbd2;font-weight:650;margin-bottom:22px}.filters{display:flex;gap:10px;flex-wrap:wrap}.select,.search{height:46px;border-radius:15px;border:1px solid rgba(255,255,255,.16);outline:none;padding:0 14px;font-size:14px;font-weight:900;background:rgba(255,255,255,.09);color:#fff;min-width:170px}.select option{color:#111}.search{min-width:230px}.search::placeholder{color:#aeb4bf}.profile-card{border-radius:32px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 60px rgba(0,0,0,.06);padding:24px;position:relative;overflow:hidden}.avatar{width:64px;height:64px;border-radius:22px;background:#111318;color:#fff;display:grid;place-items:center;font-weight:950;font-size:22px;box-shadow:0 16px 30px rgba(0,0,0,.14)}.profile-top{display:flex;align-items:center;gap:14px}.profile-name b{font-size:24px;font-weight:950}.profile-name span{display:block;margin-top:5px;font-size:13px;color:var(--muted);font-weight:850}.profile-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.mini{border-radius:16px;background:#fafafa;border:1px solid var(--line);padding:12px 8px;text-align:center}.mini b{display:block;font-size:20px;font-weight:950}.mini span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:850}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.kpi-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px 20px;box-shadow:0 14px 44px rgba(0,0,0,.045);position:relative;overflow:hidden}.kpi-card:after{content:"";position:absolute;right:16px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--red);opacity:.65}.kpi-card .label{font-size:12px;color:var(--muted);font-weight:900;margin-bottom:10px}.kpi-card .num{font-size:38px;font-weight:950;line-height:1;color:#111318;letter-spacing:-1.4px}.kpi-card .num small{font-size:18px}.kpi-card.dark{background:#111318;color:#fff;border-color:#111318}.kpi-card.dark .label{color:#bbc0ca}.kpi-card.dark .num{color:#fff}.kpi-card.gold .num{color:var(--gold)}.kpi-card.red .num{color:var(--red)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px rgba(0,0,0,.055);overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 24px 16px;border-bottom:1px solid var(--line)}.panel-title h2{font-size:19px;font-weight:950}.panel-title span{display:block;margin-top:4px;font-size:12px;color:var(--muted);font-weight:800}.chart-wrap{padding:22px 24px 26px;height:300px;display:flex;align-items:flex-end;gap:8px}.bar{flex:1;min-width:20px;border-radius:13px 13px 6px 6px;background:linear-gradient(180deg,var(--red),#ff8b8b);position:relative}.bar span{position:absolute;left:50%;top:-24px;transform:translateX(-50%);font-size:11px;font-weight:950}.bar em{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font-style:normal;font-size:10px;color:var(--muted);font-weight:800;white-space:nowrap}.list{padding:18px 24px 24px;display:grid;gap:10px}.item{min-height:62px;border-radius:18px;border:1px solid var(--line);background:#fff;display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:12px;padding:12px 14px}.item.hot{border-color:rgba(229,38,38,.24);background:#fff7f7}.ico{width:36px;height:36px;border-radius:13px;background:#111318;color:#fff;display:grid;place-items:center;font-size:16px;font-weight:950}.item.hot .ico{background:var(--red)}.txt b{font-size:14px;font-weight:950}.txt span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:800}.value{font-size:14px;font-weight:950;color:var(--red);white-space:nowrap}.empty{padding:40px 24px;text-align:center;color:var(--muted);font-weight:850;line-height:1.6}.notice{margin-top:18px;background:#111318;color:#fff;border-radius:26px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 18px 60px rgba(0,0,0,.12)}.notice b{font-size:16px;font-weight:950}.notice span{display:block;margin-top:5px;color:#c9ced8;font-size:13px;font-weight:750;line-height:1.5}
+@media(max-width:980px){.hero,.grid{grid-template-columns:1fr}.kpi{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.app{width:min(100% - 24px,1240px);padding-top:14px}.topbar{height:auto;align-items:flex-start}.logo-img{height:36px}.top-actions{gap:6px}.pill{display:none}.btn-dark,.btn-light{height:38px;padding:0 12px;font-size:12px}.hero-main{padding:24px;border-radius:26px}.hero h1{font-size:31px}.filters{display:grid}.select,.search{width:100%;min-width:0}.kpi{grid-template-columns:1fr}.chart-wrap{height:240px;padding:18px}.notice{align-items:flex-start;flex-direction:column}.notice .btn{width:100%}}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="akm-header">
-    <a href="home.html" class="akm-logo-link" aria-label="AI KICK MASTER 홈으로 이동">
-      <svg class="akm-logo-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" zoomAndPan="magnify" viewBox="0 0 1440 809.999993" height="1080" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><g/><clipPath id="6b892d07e5"><path d="M 52.371094 217.375 L 279 217.375 L 279 359.265625 L 52.371094 359.265625 Z M 52.371094 217.375 " clip-rule="nonzero"/></clipPath><clipPath id="08b420e112"><path d="M 133.144531 217.375 L 258.863281 217.375 C 265.515625 217.375 271.722656 220.714844 275.382812 226.265625 C 279.046875 231.816406 279.675781 238.839844 277.054688 244.953125 L 239.921875 331.6875 C 232.757812 348.417969 216.3125 359.265625 198.113281 359.265625 L 72.394531 359.265625 C 65.742188 359.265625 59.535156 355.925781 55.875 350.371094 C 52.210938 344.820312 51.582031 337.800781 54.199219 331.6875 L 91.335938 244.953125 C 98.5 228.222656 114.945312 217.375 133.144531 217.375 Z M 133.144531 217.375 " clip-rule="nonzero"/></clipPath><clipPath id="647bc07246"><path d="M 0.371094 0.375 L 227 0.375 L 227 142.265625 L 0.371094 142.265625 Z M 0.371094 0.375 " clip-rule="nonzero"/></clipPath><clipPath id="fef0b2711a"><path d="M 81.144531 0.375 L 206.863281 0.375 C 213.515625 0.375 219.722656 3.714844 223.382812 9.265625 C 227.046875 14.816406 227.675781 21.839844 225.054688 27.953125 L 187.921875 114.6875 C 180.757812 131.417969 164.3125 142.265625 146.113281 142.265625 L 20.394531 142.265625 C 13.742188 142.265625 7.535156 138.925781 3.875 133.371094 C 0.210938 127.820312 -0.417969 120.800781 2.199219 114.6875 L 39.335938 27.953125 C 46.5 11.222656 62.945312 0.375 81.144531 0.375 Z M 81.144531 0.375 " clip-rule="nonzero"/></clipPath><clipPath id="4c6d8c6068"><rect x="0" width="227" y="0" height="143"/></clipPath><clipPath id="6abc27ccb3"><path d="M 148.265625 217.375 L 293.597656 217.375 L 293.597656 342.222656 L 148.265625 342.222656 Z M 148.265625 217.375 " clip-rule="nonzero"/></clipPath><clipPath id="086eb7a879"><path d="M 220.8125 342.222656 L 148.265625 217.375 L 293.363281 217.375 Z M 220.8125 342.222656 " clip-rule="nonzero"/></clipPath><clipPath id="1ff9a8998d"><path d="M 0.265625 0.375 L 145.519531 0.375 L 145.519531 125.222656 L 0.265625 125.222656 Z M 0.265625 0.375 " clip-rule="nonzero"/></clipPath><clipPath id="92a7aa4978"><path d="M 72.8125 125.222656 L 0.265625 0.375 L 145.363281 0.375 Z M 72.8125 125.222656 " clip-rule="nonzero"/></clipPath><clipPath id="6cc825fa43"><rect x="0" width="146" y="0" height="126"/></clipPath><clipPath id="dfafb914f1"><rect x="0" width="196" y="0" height="168"/></clipPath><clipPath id="c1247daf0f"><rect x="0" width="445" y="0" height="168"/></clipPath><clipPath id="3ebe6db6fc"><rect x="0" width="715" y="0" height="168"/></clipPath></defs><g clip-path="url(#6b892d07e5)"><g clip-path="url(#08b420e112)"><g transform="matrix(1, 0, 0, 1, 52, 217)"><g clip-path="url(#4c6d8c6068)"><g clip-path="url(#647bc07246)"><g clip-path="url(#fef0b2711a)"><path fill="#cc2200" d="M -9.605469 0.375 L 237.039062 0.375 L 237.039062 142.265625 L -9.605469 142.265625 Z M -9.605469 0.375 " fill-opacity="1" fill-rule="nonzero"/></g></g></g></g></g></g><g clip-path="url(#6abc27ccb3)"><g clip-path="url(#086eb7a879)"><g transform="matrix(1, 0, 0, 1, 148, 217)"><g clip-path="url(#6cc825fa43)"><g clip-path="url(#1ff9a8998d)"><g clip-path="url(#92a7aa4978)"><path fill="#cc2200" d="M 0.265625 0.375 L 145.597656 0.375 L 145.597656 125.222656 L 0.265625 125.222656 Z M 0.265625 0.375 " fill-opacity="1" fill-rule="nonzero"/></g></g></g></g></g></g><g transform="matrix(1, 0, 0, 1, 64, 197)"><g clip-path="url(#dfafb914f1)"><g fill="#ffffff" fill-opacity="1"><g transform="translate(0.75022, 131.448375)"><g><path d="M 111.265625 0 L 73.390625 0 L 78.859375 -15.15625 L 59.359375 -15.15625 L 52.40625 -22.109375 L 41.609375 0 L 3.484375 0 L 33.28125 -60.96875 C 34.113281 -62.875 35.210938 -64.632812 36.578125 -66.25 C 37.941406 -67.863281 39.535156 -69.210938 41.359375 -70.296875 L 58.984375 -78.984375 C 61.054688 -80.222656 63.289062 -80.84375 65.6875 -80.84375 L 111.515625 -80.84375 C 112.679688 -80.84375 113.738281 -80.695312 114.6875 -80.40625 C 115.632812 -80.125 116.398438 -79.648438 116.984375 -78.984375 L 130.515625 -66.4375 C 131.679688 -65.363281 132.382812 -64.019531 132.625 -62.40625 C 132.875 -60.789062 132.671875 -59.070312 132.015625 -57.25 Z M 69.171875 -55.265625 L 58 -32.90625 L 85.3125 -32.90625 L 93.390625 -55.265625 C 94.046875 -56.921875 93.960938 -58.347656 93.140625 -59.546875 C 92.316406 -60.742188 91.035156 -61.34375 89.296875 -61.34375 L 77.859375 -61.34375 C 76.117188 -61.34375 74.460938 -60.742188 72.890625 -59.546875 C 71.316406 -58.347656 70.078125 -56.921875 69.171875 -55.265625 Z M 69.171875 -55.265625 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(118.107443, 131.448375)"><g><path d="M 50.671875 -10.3125 C 49.835938 -8.15625 48.429688 -6.582031 46.453125 -5.59375 L 37.5 -1 C 36.425781 -0.332031 35.226562 0 33.90625 0 L 8.6875 0 L 34.28125 -70.53125 C 35.101562 -72.6875 36.507812 -74.257812 38.5 -75.25 L 47.4375 -79.859375 C 48.507812 -80.515625 49.710938 -80.84375 51.046875 -80.84375 L 76.25 -80.84375 Z M 50.671875 -10.3125 "/></g></g></g></g></g><g transform="matrix(1, 0, 0, 1, 275, 197)"><g clip-path="url(#c1247daf0f)"><g fill="#000000" fill-opacity="1"><g transform="translate(0.96636, 131.448375)"><g><path d="M 47.9375 0 L 6.078125 0 L 35.390625 -80.84375 L 77.25 -80.84375 L 63.578125 -43.09375 L 110.65625 -80.84375 L 154 -80.84375 L 153.75 -80.09375 L 104.1875 -40.734375 L 124.9375 -0.75 L 124.6875 0 L 81.34375 0 L 61.71875 -38.125 Z M 47.9375 0 "/></g></g></g><g fill="#000000" fill-opacity="1"><g transform="translate(128.258578, 131.448375)"><g><path d="M 50.671875 -10.3125 C 49.835938 -8.15625 48.429688 -6.582031 46.453125 -5.59375 L 37.5 -1 C 36.425781 -0.332031 35.226562 0 33.90625 0 L 8.6875 0 L 34.28125 -70.53125 C 35.101562 -72.6875 36.507812 -74.257812 38.5 -75.25 L 47.4375 -79.859375 C 48.507812 -80.515625 49.710938 -80.84375 51.046875 -80.84375 L 76.25 -80.84375 Z M 50.671875 -10.3125 "/></g></g></g><g fill="#000000" fill-opacity="1"><g transform="translate(183.894594, 131.448375)"><g><path d="M 129.28125 -80.84375 L 122.203125 -61.34375 L 77.125 -61.34375 C 75.550781 -61.34375 73.9375 -60.765625 72.28125 -59.609375 C 70.625 -58.453125 69.460938 -57.003906 68.796875 -55.265625 L 58 -25.578125 C 57.414062 -23.921875 57.535156 -22.492188 58.359375 -21.296875 C 59.191406 -20.097656 60.476562 -19.5 62.21875 -19.5 L 107.046875 -19.5 L 99.96875 0 L 31.296875 0 C 28.734375 0 26.867188 -0.617188 25.703125 -1.859375 L 14.65625 -10.796875 C 13.582031 -11.878906 12.941406 -13.226562 12.734375 -14.84375 C 12.523438 -16.457031 12.707031 -18.132812 13.28125 -19.875 L 26.953125 -57.375 C 29.847656 -65.40625 34.707031 -71.320312 41.53125 -75.125 C 48.363281 -78.9375 56.414062 -80.84375 65.6875 -80.84375 Z M 129.28125 -80.84375 "/></g></g></g><g fill="#000000" fill-opacity="1"><g transform="translate(289.081435, 131.448375)"><g><path d="M 47.9375 0 L 6.078125 0 L 35.390625 -80.84375 L 77.25 -80.84375 L 63.578125 -43.09375 L 110.65625 -80.84375 L 154 -80.84375 L 153.75 -80.09375 L 104.1875 -40.734375 L 124.9375 -0.75 L 124.6875 0 L 81.34375 0 L 61.71875 -38.125 Z M 47.9375 0 "/></g></g></g></g></g><g transform="matrix(1, 0, 0, 1, 721, 197)"><g clip-path="url(#3ebe6db6fc)"><g fill="#cc2200" fill-opacity="1"><g transform="translate(0.51579, 131.448375)"><g><path d="M 67.6875 0 L 57.875 0 L 58.609375 -45.078125 L 53.28125 -27.078125 L 43.46875 0 L 6.078125 0 L 35.390625 -80.84375 L 75.015625 -80.84375 L 74.015625 -31.171875 L 109.28125 -80.84375 L 148.90625 -80.84375 L 119.59375 0 L 82.09375 0 L 91.90625 -27.078125 L 99.84375 -45.078125 Z M 67.6875 0 "/></g></g></g><g fill="#cc2200" fill-opacity="1"><g transform="translate(126.193575, 131.448375)"><g><path d="M 111.265625 0 L 73.390625 0 L 78.859375 -15.15625 L 59.359375 -15.15625 L 52.40625 -22.109375 L 41.609375 0 L 3.484375 0 L 33.28125 -60.96875 C 34.113281 -62.875 35.210938 -64.632812 36.578125 -66.25 C 37.941406 -67.863281 39.535156 -69.210938 41.359375 -70.296875 L 58.984375 -78.984375 C 61.054688 -80.222656 63.289062 -80.84375 65.6875 -80.84375 L 111.515625 -80.84375 C 112.679688 -80.84375 113.738281 -80.695312 114.6875 -80.40625 C 115.632812 -80.125 116.398438 -79.648438 116.984375 -78.984375 L 130.515625 -66.4375 C 131.679688 -65.363281 132.382812 -64.019531 132.625 -62.40625 C 132.875 -60.789062 132.671875 -59.070312 132.015625 -57.25 Z M 69.171875 -55.265625 L 58 -32.90625 L 85.3125 -32.90625 L 93.390625 -55.265625 C 94.046875 -56.921875 93.960938 -58.347656 93.140625 -59.546875 C 92.316406 -60.742188 91.035156 -61.34375 89.296875 -61.34375 L 77.859375 -61.34375 C 76.117188 -61.34375 74.460938 -60.742188 72.890625 -59.546875 C 71.316406 -58.347656 70.078125 -56.921875 69.171875 -55.265625 Z M 69.171875 -55.265625 "/></g></g></g><g fill="#cc2200" fill-opacity="1"><g transform="translate(243.550798, 131.448375)"><g><path d="M 122.828125 -50.796875 L 113.015625 -23.59375 C 112.347656 -21.769531 111.332031 -20.113281 109.96875 -18.625 C 108.601562 -17.132812 107.007812 -15.851562 105.1875 -14.78125 L 82.21875 -1.859375 C 81.132812 -1.203125 80.035156 -0.726562 78.921875 -0.4375 C 77.804688 -0.144531 76.664062 0 75.5 0 L 5.59375 0 L 12.671875 -19.5 L 66.5625 -19.5 C 68.300781 -19.5 69.957031 -20.097656 71.53125 -21.296875 C 73.101562 -22.492188 74.179688 -23.921875 74.765625 -25.578125 L 76.5 -30.046875 L 16.515625 -30.046875 L 26.328125 -57.25 C 27.816406 -61.144531 30.550781 -64.207031 34.53125 -66.4375 L 57.25 -78.984375 C 58.40625 -79.648438 59.539062 -80.125 60.65625 -80.40625 C 61.78125 -80.695312 62.878906 -80.84375 63.953125 -80.84375 L 133.75 -80.84375 L 126.671875 -61.34375 L 73.015625 -61.34375 C 71.285156 -61.34375 69.59375 -60.765625 67.9375 -59.609375 C 66.28125 -58.453125 65.117188 -57.003906 64.453125 -55.265625 L 62.84375 -50.796875 Z M 122.828125 -50.796875 "/></g></g></g><g fill="#cc2200" fill-opacity="1"><g transform="translate(353.58094, 131.448375)"><g><path d="M 25.703125 -61.34375 L 32.78125 -80.84375 L 138.34375 -80.84375 L 131.265625 -61.34375 L 99.59375 -61.34375 L 81.09375 -10.3125 C 80.269531 -8.15625 78.863281 -6.582031 76.875 -5.59375 L 67.9375 -1 C 66.851562 -0.332031 65.648438 0 64.328125 0 L 35.140625 0 L 57.375 -61.34375 Z M 25.703125 -61.34375 "/></g></g></g><g fill="#cc2200" fill-opacity="1"><g transform="translate(466.094847, 131.448375)"><g><path d="M 70.53125 -61.34375 L 66.3125 -49.546875 L 116.109375 -49.546875 L 109.40625 -31.296875 L 59.609375 -31.296875 L 57.5 -25.578125 C 56.914062 -23.921875 57.035156 -22.492188 57.859375 -21.296875 C 58.691406 -20.097656 59.976562 -19.5 61.71875 -19.5 L 110.40625 -19.5 L 103.328125 0 L 31.296875 0 C 28.734375 0 26.867188 -0.617188 25.703125 -1.859375 L 14.65625 -10.796875 C 13.582031 -11.878906 12.941406 -13.226562 12.734375 -14.84375 C 12.523438 -16.457031 12.707031 -18.132812 13.28125 -19.875 L 35.390625 -80.84375 L 132.625 -80.84375 L 125.546875 -61.34375 Z M 70.53125 -61.34375 "/></g></g></g><g fill="#cc2200" fill-opacity="1"><g transform="translate(574.634767, 131.448375)"><g><path d="M 46.5625 0 L 6.078125 0 L 35.390625 -80.84375 L 111.03125 -80.84375 C 120.382812 -80.84375 127.085938 -78.9375 131.140625 -75.125 C 135.203125 -71.320312 135.78125 -65.40625 132.875 -57.375 L 128.53125 -45.703125 C 128.195312 -44.785156 127.757812 -43.953125 127.21875 -43.203125 C 126.6875 -42.460938 125.96875 -41.640625 125.0625 -40.734375 L 115.859375 -33.40625 C 114.367188 -32.082031 112.941406 -31.191406 111.578125 -30.734375 C 110.210938 -30.273438 108.828125 -30.046875 107.421875 -30.046875 L 102.328125 -30.046875 L 117.109375 -0.75 L 116.859375 0 L 73.015625 0 L 59.484375 -35.515625 Z M 68.796875 -61.34375 L 62.21875 -43.09375 L 79.234375 -43.09375 C 80.972656 -43.09375 82.691406 -43.710938 84.390625 -44.953125 C 86.085938 -46.191406 87.222656 -47.597656 87.796875 -49.171875 L 89.90625 -55.265625 C 90.570312 -57.003906 90.507812 -58.453125 89.71875 -59.609375 C 88.9375 -60.765625 87.71875 -61.34375 86.0625 -61.34375 Z M 68.796875 -61.34375 "/></g></g></g></g></g></svg>
-    </a>
-    <div class="akm-header-actions">
-      <div class="pill"><span class="status-dot"></span> 기록 화면 준비</div>
-      <a class="btn btn-light" href="home.html">← 홈</a>
-      <a class="btn btn-dark" href="aikickmaster.html">측정 시작</a>
-    </div>
+  <header class="topbar">
+    <a class="brand" href="home.html" aria-label="AI KICK MASTER 홈"><img class="logo-img" src="logo.svg" alt="AI KICK MASTER"></a>
+    <div class="top-actions"><div class="pill"><span class="status-dot"></span> 로컬 기록 조회</div><a class="btn btn-light" href="home.html">도장 홈</a><a id="startLink" class="btn btn-dark" href="aikickmaster.html">측정 시작</a></div>
   </header>
-
-
   <section class="hero">
     <div class="hero-main">
-      <div class="hero-content">
-        <div class="eyebrow">🥋 PERSONAL GROWTH REPORT</div>
-        <h1><span>학생 개인 성장</span>이<br>가장 잘 보이는 기록 화면</h1>
-        <p>도장 전체 평균보다 중요한 건 한 아이가 얼마나 성장했는지입니다. 평균, 최고점, 콤보, 발차기별 변화를 한눈에 보여줍니다.</p>
-        <div class="student-select">
-          <select class="select empty" id="studentSelect" aria-label="학생 선택">
-            <option value="" selected>수련생을 선택하세요</option>
-            <option>김민준 · 초2 · 초록띠</option>
-            <option>이서준 · 초3 · 노란띠</option>
-            <option>박하윤 · 초1 · 주황띠</option>
-            <option>최지우 · 유치부 · 흰띠</option>
-          </select>
-          <input class="search" id="studentSearch" list="studentList" placeholder="또는 이름으로 검색" />
-          <datalist id="studentList">
-            <option value="김민준">
-            <option value="이서준">
-            <option value="박하윤">
-            <option value="최지우">
-          </datalist>
-          <div class="choice-helper">검색하거나 선택하기 전까지는 어떤 학생 기록도 먼저 띄우지 않습니다.</div>
-        </div>
-      </div>
+      <div class="hero-content"><div class="eyebrow">STUDENT GROWTH RECORD</div><h1>학생별 <span>성장 기록</span>을<br>바로 확인하세요</h1><p>이 화면은 각 태블릿 브라우저의 localStorage에 저장된 학생과 측정 기록을 조회합니다.</p><div class="filters"><select class="select" id="studentSelect"></select><input class="search" id="studentSearch" list="studentList" placeholder="또는 이름으로 검색" /><datalist id="studentList"></datalist></div></div>
     </div>
-    <aside class="profile-card">
-      <div class="empty-profile">
-        <div class="icon">🔎</div>
-        <b>수련생을 먼저 선택하세요</b>
-        <span>학생을 선택하면 성장 그래프, 최고 기록, 최근 측정 요약이 표시됩니다.</span>
-      </div>
-      <div class="profile-filled">
-        <div class="profile-top">
-          <div class="avatar">-</div>
-          <div class="profile-name"><b>선택 전</b><span>학생을 선택하면 기록이 표시됩니다.</span></div>
-        </div>
-        <div class="belt" title="띠 성장 단계"></div>
-        <div class="profile-mini">
-          <div class="mini"><b>0</b><span>측정 수업</span></div>
-          <div class="mini"><b>0</b><span>성장 점수</span></div>
-          <div class="mini"><b>-</b><span>최근 평균</span></div>
-        </div>
-      </div>
-    </aside>
+    <aside class="profile-card" id="profileCard"><div class="profile-top"><div class="avatar" id="avatar">?</div><div class="profile-name"><b id="profileName">학생 선택</b><span id="profileMeta">학생을 선택하면 개인 기록이 표시됩니다.</span></div></div><div class="profile-mini"><div class="mini"><b id="miniCount">-</b><span>측정 횟수</span></div><div class="mini"><b id="miniBest">-</b><span>최고 기록</span></div><div class="mini"><b id="miniLast">-</b><span>최근 측정</span></div></div></aside>
   </section>
-
-  <div class="report-area">
-  <section class="kpi">
-    <div class="kpi-card dark"><div class="label">최근 평균 점수</div><div class="num">86<small>점</small></div><div class="sub">지난달보다 +8</div></div>
-    <div class="kpi-card red"><div class="label">개인 최고 점수</div><div class="num">97<small>점</small></div><div class="sub">신기록 달성</div></div>
-    <div class="kpi-card gold"><div class="label">최고 콤보</div><div class="num">18<small>COMBO</small></div><div class="sub">집중력 상승</div></div>
-    <div class="kpi-card"><div class="label">총 측정 횟수</div><div class="num">120<small>회</small></div><div class="sub">수업 12회 요약</div></div>
-  </section>
-
-  <main class="grid">
-    <section class="panel">
-      <div class="panel-head">
-        <div class="panel-title"><h2>성장 그래프</h2><span>수업 1회 요약 기록 기준</span></div>
-        <button class="btn small-action">월간 보기</button>
-      </div>
-      <div class="chart-wrap">
-        <div class="growth-chart">
-          <div class="chart-grid"></div>
-          <svg class="line-svg" viewBox="0 0 620 220" preserveAspectRatio="none" aria-label="성장 그래프">
-            <polyline points="0,166 124,145 248,118 372,92 496,80 620,42"></polyline>
-            <circle cx="0" cy="166" r="8"></circle><circle cx="124" cy="145" r="8"></circle><circle cx="248" cy="118" r="8"></circle><circle cx="372" cy="92" r="8"></circle><circle cx="496" cy="80" r="8"></circle><circle cx="620" cy="42" r="8"></circle>
-          </svg>
-          <div class="score-tip">최근 평균 86점</div>
-          <div class="chart-labels"><span>1회</span><span>3회</span><span>5회</span><span>7회</span><span>9회</span><span>12회</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head"><div class="panel-title"><h2>발차기별 평균</h2><span>어떤 발차기가 강한지 바로 확인</span></div></div>
-      <div class="kick-bars">
-        <div class="bar-row"><b>앞차기</b><div class="track"><div class="fill green" style="width:91%"></div></div><span>91</span></div>
-        <div class="bar-row"><b>돌려차기</b><div class="track"><div class="fill" style="width:86%"></div></div><span>86</span></div>
-        <div class="bar-row"><b>옆차기</b><div class="track"><div class="fill gold" style="width:78%"></div></div><span>78</span></div>
-        <div class="bar-row"><b>뒤차기</b><div class="track"><div class="fill blue" style="width:72%"></div></div><span>72</span></div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head"><div class="panel-title"><h2>최근 측정 기록</h2><span>발차기 한 번씩이 아니라 수업 1회 요약 저장</span></div></div>
-      <div class="timeline">
-        <div class="session best"><div class="medal">🏆</div><div class="session-info"><b>2026.06.28 발차기 측정</b><span>10회 측정 · 평균 86점 · 최고 97점</span></div><div class="session-score"><b>+8</b><span>성장</span></div></div>
-        <div class="session"><div class="medal">02</div><div class="session-info"><b>2026.06.21 발차기 측정</b><span>10회 측정 · 평균 78점 · 최고 90점</span></div><div class="session-score"><b>78</b><span>평균</span></div></div>
-        <div class="session"><div class="medal">03</div><div class="session-info"><b>2026.06.14 발차기 측정</b><span>8회 측정 · 평균 74점 · 최고 86점</span></div><div class="session-score"><b>74</b><span>평균</span></div></div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head"><div class="panel-title"><h2>개인 성장 미션</h2><span>남과 비교하지 않고 다음 목표를 보여줍니다</span></div></div>
-      <div class="mission-list">
-        <div class="mission-item hot"><div class="mission-icon">1</div><div class="mission-text"><b>평균 90점 도전</b><span>최근 평균에서 4점만 더 올리면 달성</span></div><div class="mission-value">86 / 90</div></div>
-        <div class="mission-item"><div class="mission-icon">2</div><div class="mission-text"><b>콤보 20회 도전</b><span>현재 최고 콤보 18회</span></div><div class="mission-value">18 / 20</div></div>
-        <div class="mission-item"><div class="mission-icon">3</div><div class="mission-text"><b>뒤차기 안정성 강화</b><span>발차기별 평균 중 가장 낮은 항목</span></div><div class="mission-value">72점</div></div>
-      </div>
-    </section>
-  </main>
-
-  <section class="notice">
-    <div><b>상담용 한 줄 요약</b><span id="summaryText">학생을 선택하면 상담용 성장 요약이 자동으로 표시됩니다.</span></div>
-    <button class="btn">리포트 저장</button>
-  </section>
-  </div>
+  <section class="kpi"><div class="kpi-card dark"><div class="label">최근 평균</div><div class="num" id="kAvg">-</div></div><div class="kpi-card gold"><div class="label">최고 점수</div><div class="num" id="kBest">-</div></div><div class="kpi-card red"><div class="label">최고 콤보</div><div class="num" id="kCombo">-</div></div><div class="kpi-card"><div class="label">누적 격파</div><div class="num" id="kBalloon">-</div></div></section>
+  <main class="grid"><section class="panel"><div class="panel-head"><div class="panel-title"><h2>최근 점수 흐름</h2><span>발차기 연습 평균 기록 기준</span></div></div><div class="chart-wrap" id="chart"></div></section><section class="panel"><div class="panel-head"><div class="panel-title"><h2>최근 측정 기록</h2><span>최신순 10개</span></div></div><div class="list" id="recentList"></div></section></main>
+  <section class="notice"><div><b>상담용 한 줄 요약</b><span id="summaryText">학생을 선택하면 상담용 성장 요약이 자동으로 표시됩니다.</span></div><button class="btn btn-light" onclick="window.print()">인쇄</button></section>
 </div>
 <script>
-const demo = {
-  '김민준 · 초2 · 초록띠': ['김민준','민','초2 · 초록띠 · 최근 측정 2026.06.28','86','97','18','120','12','+14','86'],
-  '이서준 · 초3 · 노란띠': ['이서준','준','초3 · 노란띠 · 최근 측정 2026.06.27','79','91','12','80','8','+9','79'],
-  '박하윤 · 초1 · 주황띠': ['박하윤','윤','초1 · 주황띠 · 최근 측정 2026.06.25','83','94','15','96','10','+11','83'],
-  '최지우 · 유치부 · 흰띠': ['최지우','우','유치부 · 흰띠 · 최근 측정 2026.06.24','68','82','8','52','6','+6','68']
-};
-const nameMap = { '김민준':'김민준 · 초2 · 초록띠', '이서준':'이서준 · 초3 · 노란띠', '박하윤':'박하윤 · 초1 · 주황띠', '최지우':'최지우 · 유치부 · 흰띠' };
-function showStudent(key){
-  const d = demo[key]; if(!d) return;
-  document.body.classList.add('has-student');
-  const select = document.getElementById('studentSelect');
-  select.value = key; select.classList.remove('empty');
-  document.querySelector('.profile-name b').textContent = d[0];
-  document.querySelector('.avatar').textContent = d[1];
-  document.querySelector('.profile-name span').textContent = d[2];
-  const minis = document.querySelectorAll('.profile-mini .mini b');
-  minis[0].textContent = d[7]; minis[1].textContent = d[8]; minis[2].textContent = d[9];
-  const nums = document.querySelectorAll('.kpi-card .num');
-  nums[0].innerHTML = d[3]+'<small>점</small>'; nums[1].innerHTML = d[4]+'<small>점</small>'; nums[2].innerHTML = d[5]+'<small>COMBO</small>'; nums[3].innerHTML = d[6]+'<small>회</small>';
-  document.getElementById('summaryText').textContent = `${d[0]} 학생은 최근 측정 기준 평균 ${d[3]}점, 최고 ${d[4]}점이며 이전 기록보다 꾸준히 성장 중입니다.`;
-}
-document.getElementById('studentSelect').addEventListener('change', e=>{
-  if(!e.target.value){ e.target.classList.add('empty'); return; }
-  showStudent(e.target.value);
-});
-document.getElementById('studentSearch').addEventListener('change', e=>{
-  const key = nameMap[e.target.value.trim()];
-  if(key) showStudent(key);
-});
+const STORAGE_KEY='akm_home_state_v1';
+const ACTIVE_KEY='akm_active_roster_v1';
+let state={students:[],records:[]};
+let currentStudentId='';
+function readState(){try{const raw=localStorage.getItem(STORAGE_KEY); state=raw?JSON.parse(raw):{students:[],records:[]};}catch(e){state={students:[],records:[]};} state.students=Array.isArray(state.students)?state.students:[]; state.records=Array.isArray(state.records)?state.records:[];}
+function activeIds(){try{return JSON.parse(localStorage.getItem(ACTIVE_KEY)||'[]')||[];}catch(e){return [];}}
+function fmtDate(iso){if(!iso)return '-'; const d=new Date(iso); if(isNaN(d))return '-'; return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function dateShort(iso){if(!iso)return '-'; const d=new Date(iso); if(isNaN(d))return '-'; return `${d.getMonth()+1}/${d.getDate()}`;}
+function esc(s){return String(s||'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
+function recordMainValue(r){if(r.kind==='drill')return (r.avg??0)+'점'; if(r.kind==='sparring')return (r.damage??0)+' dmg'; if(r.kind==='balloon')return (r.count??0)+'개'; return '-';}
+function recordSub(r){if(r.kind==='drill')return `${r.modeLabel||'발차기'} · ${r.count||0}회 · 최고 ${r.best??'-'}점`; if(r.kind==='sparring')return `겨루기 · 최고 ${r.maxCombo||0}콤보 · ${r.ko?'K.O.':'완료'}`; if(r.kind==='balloon')return `격파 모드 · 난이도 ${r.difficulty||'-'}`; return r.modeLabel||'';}
+function renderSelect(){const sel=document.getElementById('studentSelect'); const dl=document.getElementById('studentList'); sel.innerHTML='<option value="">학생 선택</option>'+state.students.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} · ${esc(s.className||'반 없음')} · ${esc(s.belt||'띠 없음')}</option>`).join(''); dl.innerHTML=state.students.map(s=>`<option value="${esc(s.name)}"></option>`).join('');}
+function selectStudent(id){currentStudentId=id; document.getElementById('studentSelect').value=id||''; const ids=id?[id]:[]; try{localStorage.setItem(ACTIVE_KEY,JSON.stringify(ids));}catch(e){} document.getElementById('startLink').href=id?`aikickmaster.html?roster=${encodeURIComponent(id)}`:'aikickmaster.html'; renderStudent();}
+function recordsOf(id){return state.records.filter(r=>r.studentId===id).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));}
+function renderStudent(){const s=state.students.find(x=>x.id===currentStudentId); const recs=s?recordsOf(s.id):[]; document.getElementById('avatar').textContent=s?(s.name||'?').slice(0,1):'?'; document.getElementById('profileName').textContent=s?s.name:'학생 선택'; document.getElementById('profileMeta').textContent=s?`${s.className||'반 없음'} · ${s.belt||'띠 없음'}`:'학생을 선택하면 개인 기록이 표시됩니다.'; document.getElementById('miniCount').textContent=s?recs.length:'-'; document.getElementById('miniBest').textContent=s?bestScore(recs):'-'; document.getElementById('miniLast').textContent=s&&recs[0]?fmtDate(recs[0].createdAt):'-';
+const drill=recs.filter(r=>r.kind==='drill'&&typeof r.avg==='number'); const avg=drill.length?Math.round(drill.slice(0,5).reduce((a,b)=>a+b.avg,0)/Math.min(5,drill.length)):null; document.getElementById('kAvg').innerHTML=avg==null?'-':avg+'<small>점</small>'; document.getElementById('kBest').innerHTML=bestScore(recs)==='-'?'-':bestScore(recs)+'<small>점</small>'; const combo=Math.max(0,...recs.map(r=>r.maxCombo||0)); document.getElementById('kCombo').innerHTML=combo?combo+'<small>COMBO</small>':'-'; const balloons=recs.filter(r=>r.kind==='balloon').reduce((a,b)=>a+(b.count||0),0); document.getElementById('kBalloon').innerHTML=balloons?balloons+'<small>개</small>':'-'; renderChart(drill); renderRecent(recs); renderSummary(s,recs,avg);}
+function bestScore(recs){const vals=[]; recs.forEach(r=>{if(typeof r.best==='number')vals.push(r.best); if(typeof r.avg==='number')vals.push(r.avg);}); return vals.length?Math.max(...vals):'-';}
+function renderChart(drill){const box=document.getElementById('chart'); const data=drill.slice(0,8).reverse(); if(!data.length){box.innerHTML='<div class="empty">아직 발차기 연습 기록이 없습니다.<br>측정을 완료하면 자동으로 표시됩니다.</div>';return;} box.innerHTML=data.map(r=>{const h=Math.max(12,Math.min(100,r.avg||0));return `<div class="bar" style="height:${h}%"><span>${r.avg}점</span><em>${dateShort(r.createdAt)}</em></div>`}).join('');}
+function renderRecent(recs){const list=document.getElementById('recentList'); if(!recs.length){list.innerHTML='<div class="empty">아직 저장된 측정 기록이 없습니다.</div>';return;} list.innerHTML=recs.slice(0,10).map((r,i)=>`<div class="item ${i===0?'hot':''}"><div class="ico">${i+1}</div><div class="txt"><b>${esc(r.modeLabel||r.kind||'측정')}</b><span>${esc(recordSub(r))} · ${fmtDate(r.createdAt)}</span></div><div class="value">${esc(recordMainValue(r))}</div></div>`).join('');}
+function renderSummary(s,recs,avg){const el=document.getElementById('summaryText'); if(!s){el.textContent='학생을 선택하면 상담용 성장 요약이 자동으로 표시됩니다.';return;} if(!recs.length){el.textContent=`${s.name} 학생은 아직 측정 기록이 없습니다. 먼저 발차기 측정을 진행하세요.`;return;} const best=bestScore(recs); const last=recs[0]; el.textContent=`${s.name} 학생은 총 ${recs.length}회 측정했고, 최근 평균 ${avg==null?'-':avg+'점'}, 최고 기록 ${best==='-'?'-':best+'점'}입니다. 최근 활동은 ${last.modeLabel||'측정'}입니다.`;}
+function init(){readState(); renderSelect(); const act=activeIds(); if(act.length && state.students.some(s=>s.id===act[0])) selectStudent(act[0]); else if(state.students.length) selectStudent(state.students[0].id); else renderStudent();}
+document.getElementById('studentSelect').addEventListener('change',e=>selectStudent(e.target.value));
+document.getElementById('studentSearch').addEventListener('change',e=>{const q=e.target.value.trim(); const s=state.students.find(x=>x.name===q)||state.students.find(x=>x.name.includes(q)); if(s)selectStudent(s.id);});
+init();
 </script>
 </body>
 </html>

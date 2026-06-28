@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>AI KICK MASTER - Taekwondo Training System</title>
 <!--
-  kick_test.html maintenance note
+  aikickmaster.html maintenance note
   - CSS has been consolidated into one ordered block.
   - Functional JavaScript is intentionally left unchanged for stability.
   - Future UI changes should be added inside the consolidated CSS block, not as new fix-style tags.
@@ -3334,6 +3334,62 @@ function loadRank(mode){
   }catch(e){ return []; }
 }
 function saveRank(mode,scores){ try{ localStorage.setItem('kickRank_'+mode,JSON.stringify({date:todayKey(),scores})); }catch(e){} }
+
+/* ── AKM 학생별 성장 기록 저장 ── */
+const AKM_HOME_STATE_KEY='akm_home_state_v1';
+const AKM_ACTIVE_ROSTER_KEY='akm_active_roster_v1';
+function akmReadHomeState(){
+  try{ return JSON.parse(localStorage.getItem(AKM_HOME_STATE_KEY)||'{}') || {}; }catch(e){ return {}; }
+}
+function akmWriteHomeState(st){
+  try{ localStorage.setItem(AKM_HOME_STATE_KEY, JSON.stringify(st)); }catch(e){}
+}
+function akmActiveStudentIds(){
+  try{
+    const q=new URLSearchParams(location.search).get('roster');
+    if(q) return q.split(',').map(x=>x.trim()).filter(Boolean);
+  }catch(e){}
+  try{
+    const raw=JSON.parse(localStorage.getItem(AKM_ACTIVE_ROSTER_KEY)||'[]');
+    return Array.isArray(raw)?raw.filter(Boolean):[];
+  }catch(e){ return []; }
+}
+function akmModeLabel(mode){
+  if(mode==='apcha_r') return '앞차기 오른발';
+  if(mode==='apcha_l') return '앞차기 왼발';
+  if(mode==='dollo_r') return '돌려차기 오른발';
+  if(mode==='dollo_l') return '돌려차기 왼발';
+  if(mode==='balloon') return '격파 모드';
+  if(mode==='sparring') return '겨루기 모드';
+  return mode || '측정';
+}
+function akmSaveRecord(kind, data){
+  const st=akmReadHomeState();
+  st.records=Array.isArray(st.records)?st.records:[];
+  const ids=akmActiveStudentIds();
+  if(!ids.length) return;
+  const students=Array.isArray(st.students)?st.students:[];
+  ids.forEach(function(studentId){
+    const student=students.find(s=>s && s.id===studentId) || {id:studentId,name:'이름 없음'};
+    st.records.push({
+      id:'r'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+      studentId:studentId,
+      studentName:student.name || '이름 없음',
+      className:student.className || '',
+      belt:student.belt || '',
+      kind:kind,
+      mode:currentMode,
+      modeLabel:akmModeLabel(currentMode),
+      difficulty:difficulty,
+      createdAt:new Date().toISOString(),
+      ...data
+    });
+  });
+  // 태블릿 localStorage 용량 방지: 최신 1000개만 유지
+  st.records=st.records.slice(-1000);
+  akmWriteHomeState(st);
+}
+
 function addRank(mode,value){
   let s=loadRank(mode); const entry={v:value,ts:Date.now()};
   s.push(entry); s.sort((a,b)=>b.v-a.v); s=s.slice(0,10); saveRank(mode,s);
@@ -3790,6 +3846,7 @@ function finishDrill(){
 
   setStartBtn(false,'🔁 다시!');
   setGrResult('결과: '+cfg.label+' '+drillDone+'회 · 평균 '+avg+'점');
+  akmSaveRecord('drill',{count:drillDone,avg:avg,best:drillScores.length?Math.max(...drillScores):avg,scores:drillScores.slice()});
 }
 
 /* ── 겨루기 모드 ── */
@@ -3908,6 +3965,7 @@ function finishSparring(){
   drillResult.classList.add('show');
   if(sparringHp<=0){ confetti(true); sndRecord(); }
   setTimeout(()=>drillResult.classList.remove('show'),2800);
+  akmSaveRecord('sparring',{damage:sparringDamage,maxCombo:sparringMaxCombo,ko:sparringHp<=0,remainHp:Math.max(0,Math.round(sparringHp))});
 }
 
 /* ── 격파 모드: 기존 풍선 로직 유지, 난이도별 이모지 타겟 표시 ── */
@@ -3969,6 +4027,7 @@ function finishBalloon(){
   const r=addRank('balloon',balloonCount); lastRankTs=r.newTs; renderCamRank();
   setGrResult('결과: 격파 '+balloonCount+'개');
   setStartBtn(false,'🔁 다시!'); celebrate(r.rank, balloonCount+'개');
+  akmSaveRecord('balloon',{count:balloonCount,rank:r.rank+1});
 }
 
 /* ── 공통 ── */

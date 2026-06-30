@@ -2788,6 +2788,14 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 .login-logo{font-size:0!important;line-height:0!important;}
 .login-logo-img{display:block;width:280px;max-width:100%;height:auto;margin:0 auto 8px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35));}
 
+
+/* AKM MediaPipe text */
+.akm-powered{display:block;color:#7a90aa;font-size:9px;font-weight:750;letter-spacing:.1px;line-height:1.15;white-space:nowrap}
+.akm-hud-meta{display:block;margin-top:3px}
+.login-brand-meta{display:flex;flex-direction:column;align-items:center;margin:-2px 0 16px}
+.login-brand-meta .akm-powered{color:rgba(255,255,255,.72);font-size:11px}
+@media (orientation:landscape) and (max-height:760px){.akm-hud-meta{margin-top:2px}.akm-powered{font-size:8px}}
+
 </style>
 
 
@@ -2975,6 +2983,9 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   <div class="login-box">
     <div class="login-logo"><img class="login-logo-img" src="logo-white.svg" alt="AI KICK MASTER"></div>
     <div class="login-sub">태권도 AI 발차기 훈련 시스템</div>
+    <div class="login-brand-meta">
+      <div class="akm-powered">Powered by Google MediaPipe</div>
+    </div>
     <label class="login-key-label">🔑 라이선스 키</label>
     <div class="login-key-help">구매 후 전달받은 라이선스 키를 입력하세요.<br>최초 1회 입력 후 자동으로 인증됩니다.</div>
     <input id="licenseKeyInput" class="login-field" type="text" placeholder="AKM-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" />
@@ -3056,6 +3067,9 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
         <div class="title-dojang" id="panelDojangName">AI KICK MASTER</div>
         <div class="title-auth" id="panelAuth"></div>
         <div class="title-version" id="panelVersion"></div>
+        <div class="akm-hud-meta">
+          <span class="akm-powered">Powered by Google MediaPipe</span>
+        </div>
         <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
       </div>
     </div>

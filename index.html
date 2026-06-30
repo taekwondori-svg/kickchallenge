@@ -201,6 +201,13 @@ button{font-family:inherit}
 .logo .logo-mark{display:none!important;}
 @media(max-width:560px){.nav .akm-logo-img{width:158px}.footer-logo .akm-logo-img{width:148px}}
 
+
+/* AKM brand/legal badge */
+.akm-brand-note{display:flex;flex-direction:column;align-items:flex-end;gap:7px;text-align:right}
+.akm-powered{font-size:12px;font-weight:750;color:#d8d8de;letter-spacing:.1px}
+.akm-copy{font-size:12px;color:#8d8d93;font-weight:700}
+@media(max-width:720px){.footer .container{flex-direction:column;gap:18px;text-align:center}.akm-brand-note{align-items:center;text-align:center}}
+
 </style>
 </head>
 <body>
@@ -333,7 +340,10 @@ button{font-family:inherit}
 <footer class="footer">
   <div class="container">
     <div class="footer-logo"><img class="akm-logo-img" src="logo-white.svg" alt="AI KICK MASTER"></div>
-    <div><span data-akm="copyright">© 2026 AI KICK MASTER. All rights reserved.</span></div>
+    <div class="akm-brand-note">
+      <div class="akm-powered">Powered by Google MediaPipe</div>
+      <div class="akm-copy"><span data-akm="copyright">© 2026 AI KICK MASTER. All rights reserved.</span></div>
+    </div>
   </div>
 </footer>
 

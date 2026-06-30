@@ -934,6 +934,15 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 .top-logo .admin-label{font-size:14px;font-weight:950;color:var(--red);white-space:nowrap;}
 @media(max-width:560px){.login-box .akm-admin-logo{width:210px}.top-logo .akm-admin-logo{width:180px}.top-logo .admin-label{font-size:12px}}
 
+
+/* AKM MediaPipe text */
+.top-logo{flex-direction:column;align-items:flex-start;gap:3px}
+.top-logo-row{display:flex;align-items:center;gap:12px}
+.akm-powered{font-size:11px;font-weight:750;color:#707783;letter-spacing:.1px;line-height:1}
+.login-brand-meta{display:flex;flex-direction:column;align-items:center;margin:-4px 0 18px}
+.login-brand-meta .akm-powered{color:#707783;font-size:11px}
+@media(max-width:760px){.top-bar{height:auto}.akm-powered{font-size:10px}}
+
 </style>
 </head>
 <body>
@@ -943,6 +952,9 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
   <div class="login-box">
     <img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER">
     <p>통합 관리자 페이지</p>
+    <div class="login-brand-meta">
+      <div class="akm-powered">Powered by Google MediaPipe</div>
+    </div>
     <input id="adminPw" class="f-input" type="password" placeholder="관리자 비밀번호" autocomplete="current-password" />
     <button class="btn-primary" onclick="adminLogin()">로그인</button>
     <div class="err-msg" id="adminErr"></div>
@@ -954,7 +966,10 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 
   <!-- 탑바 -->
   <div class="top-bar">
-    <div class="top-logo"><img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER"><span class="admin-label">관리자</span></div>
+    <div class="top-logo">
+      <div class="top-logo-row"><img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER"><span class="admin-label">관리자</span></div>
+      <div class="akm-powered">Powered by Google MediaPipe</div>
+    </div>
     <div class="top-actions">
       <button class="btn-sm-act btn-ghost" onclick="openPwModal()">🔑 비밀번호 변경</button>
       <button class="btn-sm-act btn-ghost" onclick="window.open('index.html','_blank')">👁 홈페이지 미리보기</button>

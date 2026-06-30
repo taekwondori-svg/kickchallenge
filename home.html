@@ -224,6 +224,14 @@ body{
   .hero-title{font-size:29px}
   .student-list{max-height:260px}
 }
+
+/* AKM MediaPipe text */
+.brand{flex-direction:column;align-items:flex-start;gap:3px}
+.akm-powered{font-size:11px;font-weight:750;color:#707783;letter-spacing:.1px;line-height:1}
+.login-brand-meta{display:flex;flex-direction:column;align-items:center;margin:-2px 0 18px}
+.login-brand-meta .akm-powered{color:rgba(255,255,255,.72);font-size:11px}
+@media(max-width:720px){.topbar{gap:10px}.brand-logo{width:190px}.akm-powered{font-size:10px}}
+
 </style>
 </head>
 <body>
@@ -232,6 +240,9 @@ body{
   <div class="login-box">
     <img class="login-logo-img" src="logo-white.svg" alt="AI KICK MASTER">
     <div class="login-sub">태권도 AI 발차기 훈련 시스템</div>
+    <div class="login-brand-meta">
+      <div class="akm-powered">Powered by Google MediaPipe</div>
+    </div>
     <label class="login-key-label">🔑 라이선스 키</label>
     <div class="login-key-help">구매 후 전달받은 라이선스 키를 입력하세요.<br>최초 1회 입력 후 자동으로 인증됩니다.</div>
     <input id="licenseKeyInput" class="login-field" type="text" placeholder="AKM-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" />
@@ -245,6 +256,7 @@ body{
   <header class="topbar">
     <a class="brand" href="home.html" aria-label="AI KICK MASTER 홈">
       <img class="brand-logo" src="logo.svg" alt="AI KICK MASTER">
+      <div class="akm-powered">Powered by Google MediaPipe</div>
     </a>
     <div class="top-actions">
       <div class="pill"><span class="status-dot"></span><span id="licenseState">라이선스 확인됨</span></div>
@@ -413,20 +425,730 @@ window.addEventListener('load', async function(){
 const STORAGE_KEY = 'akm_home_state_v1';
 const defaultState = {
   dojangName:'',
-  classes:['유치부','초등부','시범단'],
-  belts:['흰띠','노란띠','초록띠','파란띠','빨간띠','품띠'],
+  classes:  [
+    "7세",
+    "초4",
+    "초1",
+    "초6",
+    "초2",
+    "초5",
+    "초3",
+    "6세",
+    "5세",
+    "고등학생",
+    "중1",
+    "일반"
+  ],
+  belts:  [
+    "파밤띠",
+    "3품심사대상",
+    "2품심사대상",
+    "3품 30급",
+    "1품 2급",
+    "3품 20급",
+    "1품 4급",
+    "3품 32급",
+    "2품 8급",
+    "2품 2급",
+    "2품 12급",
+    "2품 14급",
+    "노란띠",
+    "2품 16급",
+    "밤띠",
+    "2품 22급",
+    "1품심사대상",
+    "1품 6급",
+    "1품 8급",
+    "1품 10급",
+    "초록띠",
+    "밤빨띠",
+    "파란띠",
+    "빨간띠",
+    "주황띠",
+    "보라띠",
+    "2품 6급",
+    "4품 이상",
+    "3품 10급",
+    "흰노띠",
+    "흰띠"
+  ],
   selectedStudentIds:[],
-  students:[
-    {id:'s1',name:'김민준',className:'유치부',belt:'노란띠',birth:''},
-    {id:'s2',name:'이서준',className:'초등부',belt:'초록띠',birth:''},
-    {id:'s3',name:'박하윤',className:'초등부',belt:'파란띠',birth:''},
-    {id:'s4',name:'최지우',className:'시범단',belt:'빨간띠',birth:''}
+  students:  [
+      {
+          "id": "dp1",
+          "name": "이태우",
+          "className": "7세",
+          "belt": "파밤띠",
+          "birth": "2020-08-11"
+      },
+      {
+          "id": "dp2",
+          "name": "김산",
+          "className": "초4",
+          "belt": "3품심사대상",
+          "birth": ""
+      },
+      {
+          "id": "dp3",
+          "name": "김솔",
+          "className": "초1",
+          "belt": "2품심사대상",
+          "birth": ""
+      },
+      {
+          "id": "dp4",
+          "name": "서상혁",
+          "className": "초6",
+          "belt": "3품 30급",
+          "birth": "2014-06-09"
+      },
+      {
+          "id": "dp5",
+          "name": "서승현",
+          "className": "초2",
+          "belt": "1품 2급",
+          "birth": "2018-11-22"
+      },
+      {
+          "id": "dp6",
+          "name": "최은우",
+          "className": "초5",
+          "belt": "3품 20급",
+          "birth": "2015-12-21"
+      },
+      {
+          "id": "dp7",
+          "name": "이루호",
+          "className": "초3",
+          "belt": "3품심사대상",
+          "birth": "2017-05-04"
+      },
+      {
+          "id": "dp8",
+          "name": "김도원",
+          "className": "초3",
+          "belt": "1품 4급",
+          "birth": ""
+      },
+      {
+          "id": "dp9",
+          "name": "이홍준",
+          "className": "초6",
+          "belt": "3품 30급",
+          "birth": "2014-12-11"
+      },
+      {
+          "id": "dp10",
+          "name": "허원",
+          "className": "초4",
+          "belt": "3품 32급",
+          "birth": "2016-03-14"
+      },
+      {
+          "id": "dp11",
+          "name": "노유찬",
+          "className": "초3",
+          "belt": "2품 8급",
+          "birth": "2017-02-13"
+      },
+      {
+          "id": "dp12",
+          "name": "권다온",
+          "className": "초4",
+          "belt": "3품심사대상",
+          "birth": "2016-02-23"
+      },
+      {
+          "id": "dp13",
+          "name": "권다성",
+          "className": "초2",
+          "belt": "2품 2급",
+          "birth": "2017-08-28"
+      },
+      {
+          "id": "dp16",
+          "name": "김동우",
+          "className": "초4",
+          "belt": "2품 2급",
+          "birth": "2016-02-04"
+      },
+      {
+          "id": "dp17",
+          "name": "김동준",
+          "className": "초2",
+          "belt": "2품 12급",
+          "birth": "2018-05-10"
+      },
+      {
+          "id": "dp18",
+          "name": "김동하",
+          "className": "초3",
+          "belt": "2품 12급",
+          "birth": "2017-03-18"
+      },
+      {
+          "id": "dp19",
+          "name": "강하윤",
+          "className": "초4",
+          "belt": "2품 14급",
+          "birth": "2016-05-22"
+      },
+      {
+          "id": "dp20",
+          "name": "강하은",
+          "className": "6세",
+          "belt": "파밤띠",
+          "birth": "2021-08-26"
+      },
+      {
+          "id": "dp21",
+          "name": "강하율",
+          "className": "5세",
+          "belt": "노란띠",
+          "birth": "2022-08-16"
+      },
+      {
+          "id": "dp22",
+          "name": "정보겸",
+          "className": "초1",
+          "belt": "2품심사대상",
+          "birth": "2019-12-05"
+      },
+      {
+          "id": "dp24",
+          "name": "양지훈",
+          "className": "초1",
+          "belt": "2품심사대상",
+          "birth": "2019-06-27"
+      },
+      {
+          "id": "dp25",
+          "name": "권윤우",
+          "className": "초2",
+          "belt": "2품심사대상",
+          "birth": "2018-01-09"
+      },
+      {
+          "id": "dp26",
+          "name": "김서아",
+          "className": "초1",
+          "belt": "1품 2급",
+          "birth": "2019-08-14"
+      },
+      {
+          "id": "dp27",
+          "name": "양우빈",
+          "className": "초2",
+          "belt": "2품심사대상",
+          "birth": "2018-12-20"
+      },
+      {
+          "id": "dp29",
+          "name": "문서준",
+          "className": "초3",
+          "belt": "2품심사대상",
+          "birth": "2017-02-15"
+      },
+      {
+          "id": "dp30",
+          "name": "윤채원",
+          "className": "초4",
+          "belt": "2품 14급",
+          "birth": "2016-10-14"
+      },
+      {
+          "id": "dp31",
+          "name": "윤지아",
+          "className": "초2",
+          "belt": "1품 2급",
+          "birth": ""
+      },
+      {
+          "id": "dp32",
+          "name": "신서하",
+          "className": "초4",
+          "belt": "2품 16급",
+          "birth": "2016-09-21"
+      },
+      {
+          "id": "dp33",
+          "name": "배준수",
+          "className": "초1",
+          "belt": "1품 4급",
+          "birth": "2017-03-17"
+      },
+      {
+          "id": "dp34",
+          "name": "배준우",
+          "className": "6세",
+          "belt": "밤띠",
+          "birth": "2021-04-07"
+      },
+      {
+          "id": "dp35",
+          "name": "이시문",
+          "className": "초3",
+          "belt": "2품심사대상",
+          "birth": "2017-05-16"
+      },
+      {
+          "id": "dp36",
+          "name": "이서준",
+          "className": "초2",
+          "belt": "2품심사대상",
+          "birth": ""
+      },
+      {
+          "id": "dp37",
+          "name": "이나경",
+          "className": "초4",
+          "belt": "2품 22급",
+          "birth": "2016-12-09"
+      },
+      {
+          "id": "dp38",
+          "name": "최주원",
+          "className": "초2",
+          "belt": "1품 4급",
+          "birth": "2017-05-12"
+      },
+      {
+          "id": "dp39",
+          "name": "최서원",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-05-20"
+      },
+      {
+          "id": "dp40",
+          "name": "김지혁",
+          "className": "초2",
+          "belt": "1품 2급",
+          "birth": "2018-10-07"
+      },
+      {
+          "id": "dp41",
+          "name": "김채윤",
+          "className": "초4",
+          "belt": "2품심사대상",
+          "birth": "2016-06-07"
+      },
+      {
+          "id": "dp42",
+          "name": "이소율",
+          "className": "초2",
+          "belt": "1품 6급",
+          "birth": "2018-10-10"
+      },
+      {
+          "id": "dp43",
+          "name": "이지호",
+          "className": "초1",
+          "belt": "1품 8급",
+          "birth": "2019-11-26"
+      },
+      {
+          "id": "dp44",
+          "name": "장연지",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-02-03"
+      },
+      {
+          "id": "dp47",
+          "name": "김연우",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-03-31"
+      },
+      {
+          "id": "dp48",
+          "name": "배시온",
+          "className": "초1",
+          "belt": "1품 10급",
+          "birth": "2019-08-28"
+      },
+      {
+          "id": "dp49",
+          "name": "김태하",
+          "className": "7세",
+          "belt": "밤띠",
+          "birth": "2020-01-03"
+      },
+      {
+          "id": "dp50",
+          "name": "백동윤",
+          "className": "7세",
+          "belt": "밤띠",
+          "birth": "2020-07-31"
+      },
+      {
+          "id": "dp51",
+          "name": "박진우",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-01-11"
+      },
+      {
+          "id": "dp52",
+          "name": "김미소",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-06-03"
+      },
+      {
+          "id": "dp53",
+          "name": "정은호",
+          "className": "6세",
+          "belt": "초록띠",
+          "birth": "2020-11-20"
+      },
+      {
+          "id": "dp55",
+          "name": "김주오",
+          "className": "7세",
+          "belt": "파밤띠",
+          "birth": "2020-03-10"
+      },
+      {
+          "id": "dp56",
+          "name": "김도아",
+          "className": "6세",
+          "belt": "",
+          "birth": ""
+      },
+      {
+          "id": "dp59",
+          "name": "전윤찬",
+          "className": "7세",
+          "belt": "밤빨띠",
+          "birth": "2020-01-14"
+      },
+      {
+          "id": "dp60",
+          "name": "김시윤",
+          "className": "7세",
+          "belt": "1품심사대상",
+          "birth": "2020-05-06"
+      },
+      {
+          "id": "dp61",
+          "name": "설이안",
+          "className": "초3",
+          "belt": "밤빨띠",
+          "birth": "2018-09-27"
+      },
+      {
+          "id": "dp62",
+          "name": "최지안",
+          "className": "6세",
+          "belt": "파란띠",
+          "birth": "2021-02-04"
+      },
+      {
+          "id": "dp63",
+          "name": "김주한",
+          "className": "초3",
+          "belt": "빨간띠",
+          "birth": "2017-05-10"
+      },
+      {
+          "id": "dp64",
+          "name": "하우진",
+          "className": "초1",
+          "belt": "빨간띠",
+          "birth": "2019-01-14"
+      },
+      {
+          "id": "dp65",
+          "name": "이시은",
+          "className": "초2",
+          "belt": "",
+          "birth": "2017-07-18"
+      },
+      {
+          "id": "dp66",
+          "name": "정태하",
+          "className": "초2",
+          "belt": "1품심사대상",
+          "birth": "2018-12-05"
+      },
+      {
+          "id": "dp68",
+          "name": "임지유",
+          "className": "6세",
+          "belt": "파밤띠",
+          "birth": "2021-08-16"
+      },
+      {
+          "id": "dp69",
+          "name": "박도윤",
+          "className": "7세",
+          "belt": "파밤띠",
+          "birth": "2020-09-10"
+      },
+      {
+          "id": "dp71",
+          "name": "한우주",
+          "className": "6세",
+          "belt": "노란띠",
+          "birth": "2021-08-05"
+      },
+      {
+          "id": "dp73",
+          "name": "한승재",
+          "className": "7세",
+          "belt": "파란띠",
+          "birth": "2020-01-11"
+      },
+      {
+          "id": "dp74",
+          "name": "김건우",
+          "className": "7세",
+          "belt": "파란띠",
+          "birth": "2020-05-20"
+      },
+      {
+          "id": "dp75",
+          "name": "김채민",
+          "className": "7세",
+          "belt": "파란띠",
+          "birth": "2020-08-26"
+      },
+      {
+          "id": "dp76",
+          "name": "김채원",
+          "className": "초1",
+          "belt": "주황띠",
+          "birth": ""
+      },
+      {
+          "id": "dp77",
+          "name": "김이현",
+          "className": "초6",
+          "belt": "1품 8급",
+          "birth": "2014-10-07"
+      },
+      {
+          "id": "dp78",
+          "name": "박주안",
+          "className": "초1",
+          "belt": "파란띠",
+          "birth": "2019-06-10"
+      },
+      {
+          "id": "dp79",
+          "name": "박승안",
+          "className": "6세",
+          "belt": "보라띠",
+          "birth": "2021-04-16"
+      },
+      {
+          "id": "dp80",
+          "name": "윤라원",
+          "className": "초1",
+          "belt": "초록띠",
+          "birth": "2019-02-26"
+      },
+      {
+          "id": "dp81",
+          "name": "한이준",
+          "className": "7세",
+          "belt": "주황띠",
+          "birth": "2020-01-30"
+      },
+      {
+          "id": "dp82",
+          "name": "신예강",
+          "className": "7세",
+          "belt": "초록띠",
+          "birth": "2020-06-14"
+      },
+      {
+          "id": "dp83",
+          "name": "이승후",
+          "className": "6세",
+          "belt": "노란띠",
+          "birth": "2021-01-26"
+      },
+      {
+          "id": "dp84",
+          "name": "박우진",
+          "className": "6세",
+          "belt": "노란띠",
+          "birth": "2021-01-15"
+      },
+      {
+          "id": "dp85",
+          "name": "박우찬",
+          "className": "6세",
+          "belt": "노란띠",
+          "birth": "2021-01-15"
+      },
+      {
+          "id": "dp87",
+          "name": "서은호",
+          "className": "초3",
+          "belt": "주황띠",
+          "birth": "2018-03-29"
+      },
+      {
+          "id": "dp88",
+          "name": "이주원",
+          "className": "초4",
+          "belt": "2품 6급",
+          "birth": "2016-10-24"
+      },
+      {
+          "id": "dp89",
+          "name": "이지아",
+          "className": "7세",
+          "belt": "주황띠",
+          "birth": "2020-03-20"
+      },
+      {
+          "id": "dp90",
+          "name": "김민준",
+          "className": "고등학생",
+          "belt": "4품 이상",
+          "birth": "2010-11-26"
+      },
+      {
+          "id": "dp91",
+          "name": "이준기",
+          "className": "중1",
+          "belt": "3품 10급",
+          "birth": ""
+      },
+      {
+          "id": "dp92",
+          "name": "곽리안",
+          "className": "초4",
+          "belt": "2품심사대상",
+          "birth": "2016-02-25"
+      },
+      {
+          "id": "dp93",
+          "name": "곽로운",
+          "className": "초1",
+          "belt": "2품심사대상",
+          "birth": "2019-04-09"
+      },
+      {
+          "id": "dp94",
+          "name": "김가을",
+          "className": "초4",
+          "belt": "1품심사대상",
+          "birth": "2016-11-05"
+      },
+      {
+          "id": "dp95",
+          "name": "김수아",
+          "className": "초1",
+          "belt": "1품심사대상",
+          "birth": ""
+      },
+      {
+          "id": "dp96",
+          "name": "김수현",
+          "className": "6세",
+          "belt": "파란띠",
+          "birth": "2020-04-10"
+      },
+      {
+          "id": "dp107",
+          "name": "최서우",
+          "className": "5세",
+          "belt": "노란띠",
+          "birth": "2022-03-03"
+      },
+      {
+          "id": "dp110",
+          "name": "이나원",
+          "className": "초6",
+          "belt": "초록띠",
+          "birth": "2014-03-08"
+      },
+      {
+          "id": "dp111",
+          "name": "정아윤",
+          "className": "초1",
+          "belt": "흰노띠",
+          "birth": "2019-06-27"
+      },
+      {
+          "id": "dp112",
+          "name": "하준혁",
+          "className": "7세",
+          "belt": "노란띠",
+          "birth": "2020-03-31"
+      },
+      {
+          "id": "dp115",
+          "name": "이완수",
+          "className": "일반",
+          "belt": "4품 이상",
+          "birth": ""
+      },
+      {
+          "id": "dp116",
+          "name": "김우람",
+          "className": "초1",
+          "belt": "노란띠",
+          "birth": "2019-11-05"
+      },
+      {
+          "id": "dp117",
+          "name": "한은별",
+          "className": "초1",
+          "belt": "흰띠",
+          "birth": ""
+      },
+      {
+          "id": "dp118",
+          "name": "권민솔",
+          "className": "7세",
+          "belt": "초록띠",
+          "birth": ""
+      },
+      {
+          "id": "dp119",
+          "name": "최서우",
+          "className": "7세",
+          "belt": "흰노띠",
+          "birth": "2020-08-06"
+      },
+      {
+          "id": "dp120",
+          "name": "박시온",
+          "className": "6세",
+          "belt": "흰띠",
+          "birth": "2021-03-26"
+      }
   ],
   records:[]
 };
 let state = loadState();
 if(state.dojangName === 'AI KICK MASTER 도장' || state.dojangName === '국가대표마스터태권도장'){ state.dojangName = ''; persist(); }
 if(!Array.isArray(state.selectedStudentIds)){ state.selectedStudentIds = state.selectedStudentId ? [state.selectedStudentId] : []; delete state.selectedStudentId; }
+// 도장프로 DB 1회 가져오기: 기존 브라우저에 샘플 학생이 남아 있어도 재원생 명단으로 교체
+const DOJANGPRO_IMPORT_KEY = 'dojangpro_students_import_20260630_v1';
+function isDefaultSampleStudents(list){
+  const names = (list||[]).map(s=>s && s.name).filter(Boolean).join(',');
+  return names === '김민준,이서준,박하윤,최지우';
+}
+if(!state[DOJANGPRO_IMPORT_KEY]){
+  const currentStudents = Array.isArray(state.students) ? state.students : [];
+  const hasNoRealData = !currentStudents.length || isDefaultSampleStudents(currentStudents);
+  if(hasNoRealData){
+    state.students = structuredClone(defaultState.students);
+    state.classes = structuredClone(defaultState.classes);
+    state.belts = structuredClone(defaultState.belts);
+    state.selectedStudentIds = [];
+    state[DOJANGPRO_IMPORT_KEY] = true;
+    persist();
+  }
+}
 let manageTab = 'records';
 let editingStudentId = null;
 

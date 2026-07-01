@@ -1371,6 +1371,15 @@ function renderSettingsTab(box){
         <div id="beltTagList" class="tag-list">${renderSettingTags('belt')}</div>
         <div class="tag-add-row"><input id="newBeltInput" class="input" placeholder="띠 이름 입력" onkeydown="if(event.key==='Enter') addSettingItem('belt')" /><button class="tag-add-btn" onclick="addSettingItem('belt')">추가</button></div>
       </div>
+      <div class="setting-card">
+        <div class="setting-card-title"><b>데이터 백업</b><span>학생 명단 · 훈련 기록을 파일로 저장/복원</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <button class="btn btn-dark" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="exportBackup()">⬇️ 내보내기 (백업 파일 저장)</button>
+          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="document.getElementById('importFileInput').click()">⬆️ 불러오기 (백업 파일 복원)</button>
+          <input type="file" id="importFileInput" accept="application/json,.json" style="display:none" onchange="importBackup(event)" />
+        </div>
+        <div class="subtle-box">· 내보내기: 지금까지 등록된 학생 명단과 훈련 기록 전체를 JSON 파일로 만들어 태블릿의 다운로드 폴더에 저장합니다.<br>· 불러오기: 이전에 내보낸 백업 파일을 선택하면, 현재 이 태블릿에 저장된 데이터를 그 파일 내용으로 전부 대체합니다.</div>
+      </div>
     </div>`;
 }
 function renderSettingTags(type){
@@ -1400,6 +1409,61 @@ function removeSettingItem(type,item){
   persist(); render(); showToast('항목을 삭제했습니다.');
 }
 function saveInlineSettings(){ saveDojangName(); }
+
+// ===== 데이터 백업 (내보내기 / 불러오기) =====
+function exportBackup(){
+  try{
+    const payload = {
+      app: 'AI KICK MASTER',
+      backupVersion: 1,
+      exportedAt: new Date().toISOString(),
+      dojangName: state.dojangName || '',
+      data: state
+    };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const d = new Date();
+    const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+    const safeName = (state.dojangName || '도장').replace(/[\\/:*?"<>|]/g,'').trim() || '도장';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AKM_백업_${safeName}_${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    showToast('백업 파일을 다운로드했습니다.');
+  }catch(e){
+    showToast('백업 중 오류가 발생했습니다.');
+  }
+}
+function importBackup(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if(!file) return;
+  if(!confirm('불러오기를 진행하면 이 태블릿에 저장된 현재 학생·기록 데이터가\n선택한 백업 파일 내용으로 전부 대체됩니다.\n\n계속하시겠습니까?')) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const parsed = JSON.parse(e.target.result);
+      const incoming = (parsed && typeof parsed === 'object' && parsed.data) ? parsed.data : parsed;
+      if(!incoming || typeof incoming !== 'object' || !Array.isArray(incoming.students)){
+        showToast('올바른 AI KICK MASTER 백업 파일이 아닙니다.');
+        return;
+      }
+      state = {...structuredClone(defaultState), ...structuredClone(incoming)};
+      persist();
+      manageTab = 'students';
+      render();
+      showToast('백업 데이터를 불러왔습니다.');
+    }catch(err){
+      showToast('파일을 읽을 수 없습니다. JSON 백업 파일인지 확인해주세요.');
+    }
+  };
+  reader.onerror = function(){ showToast('파일을 읽는 중 오류가 발생했습니다.'); };
+  reader.readAsText(file, 'utf-8');
+}
 
 render();
 

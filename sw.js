@@ -1,4 +1,4 @@
-const CACHE_NAME = 'akm-v3-20260630-final';
+const CACHE_NAME = 'akm-v4-20260702-fieldfix';
 const ASSETS = [
   './',
   'home.html',

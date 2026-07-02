@@ -51,7 +51,7 @@
   #camRank{display:none;position:absolute;top:16px;left:16px;
     background:rgba(9,22,40,.82);border:2px solid rgba(232,160,32,.6);
     border-radius:14px;padding:10px 14px;z-index:8;min-width:130px;}
-  #camRank.show{display:block;}
+  #camRank.show{display:none !important;}
   #camRankTitle{font-size:11px;color:var(--gold);font-weight:800;margin-bottom:6px;}
   #camRankList{list-style:none;display:flex;flex-direction:column;gap:3px;}
   .cr-item{display:flex;align-items:center;gap:6px;font-weight:800;}
@@ -304,7 +304,7 @@ body.hud-v21.sparring-mode .stats-row{top:238px;}
 
 /* 랭킹/타이머 */
 body.hud-v21 #camRank{display:none; position:absolute; top:318px !important; left:14px !important; min-width:145px; padding:9px 12px; border-radius:14px; z-index:8; background:rgba(7,18,34,.76); border:1px solid rgba(232,160,32,.52); box-shadow:0 0 20px rgba(232,160,32,.12); backdrop-filter:blur(8px);}
-body.hud-v21 #camRank.show{display:block;}
+body.hud-v21 #camRank.show{display:none !important;}
 body.hud-v21.sparring-mode #camRank{display:none !important;}
 body.hud-v21 #camRankTitle{font-size:12px; color:#ffd76b; font-weight:900; margin-bottom:6px;}
 body.hud-v21 #camRankList{list-style:none; display:flex; flex-direction:column; gap:4px;}
@@ -3062,8 +3062,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
       <div id="timerBadgeLabel">남은 시간</div>
     </div>
 
-    <div id="camRank">
-      <div id="camRankTitle">🏆 오늘의 랭킹</div>
+    <div id="camRank" aria-hidden="true">
+      <div id="camRankTitle">오늘의 랭킹</div>
       <ol id="camRankList"></ol>
     </div>
 
@@ -3118,7 +3118,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
           <option value="10" selected>10회</option>
         </select>
       </div>
-      <button id="startBtn" class="primary-start" onclick="startGame()">▶ 시작!</button>
+      <button id="startBtn" class="primary-start" onclick="startGame()">시작!</button>
       <div id="gameResult"></div>
     </div>
 
@@ -3150,7 +3150,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
           <option value="45">45초</option>
         </select>
       </div>
-      <button id="startBtn2" class="primary-start" onclick="startGame()">▶ 시작!</button>
+      <button id="startBtn2" class="primary-start" onclick="startGame()">시작!</button>
       <div id="gameResult2" style="text-align:center;font-size:13px;font-weight:700;color:var(--green);min-height:18px;"></div>
     </div>
 
@@ -3175,7 +3175,6 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     </div>
 
     <div class="btns">
-      <button class="btn-new" id="newBtn">👤 다음 아이</button>
       <button class="btn-flip" id="flipBtn">📷 카메라 전환</button>
       <button class="btn-flip" id="fsBtn" onclick="toggleFullscreen()">⛶ 전체화면</button>
     </div>
@@ -3251,7 +3250,7 @@ const damagePopup=document.getElementById('damagePopup');
 
 /* ── 모드 설정 ── */
 const MODE_CFG={
-  balloon:  {rank:true,  isDrill:false, unit:'개',   title:'격파 모드'},
+  balloon:  {rank:false, isDrill:false, unit:'개',   title:'격파 모드'},
   sparring: {rank:false, isDrill:false, unit:'점',   title:'겨루기 모드'},
   apcha_r:  {rank:false, isDrill:true,  label:'앞차기 오른발', kick:'apcha', foot:'right'},
   apcha_l:  {rank:false, isDrill:true,  label:'앞차기 왼발',   kick:'apcha', foot:'left'},
@@ -3488,7 +3487,7 @@ function renderCamRank(){
   const list=loadRank(currentMode).slice(0,5);
   if(list.length===0){ camRank.classList.remove('show'); return; }
   camRank.classList.add('show');
-  camRankTitle.textContent='🏆 '+cfg.title;
+  camRankTitle.textContent=cfg.title;
   const medals=['1위','2위','3위','4위','5위'];
   camRankList.innerHTML=list.map((e,i)=>{
     const me=(e.ts===lastRankTs)?' me':'';
@@ -3610,9 +3609,9 @@ function analyzeTraj(){
     score=Math.max(40,Math.min(100,score));
     const ok=riseY>0.050 && absDX<riseY*1.35;
     let msg;
-    if(score>=98) msg='🏆 완벽한 앞차기!';
-    else if(score>=90) msg='🔥 아주 좋아요!';
-    else if(score>=80) msg='✅ 좋아요!';
+    if(score>=98) msg='완벽한 앞차기!';
+    else if(score>=90) msg='아주 좋아요!';
+    else if(score>=80) msg='좋아요!';
     else if(absDX>riseY*1.35) msg='↕️ 더 직선으로!';
     else msg='🦵 더 높이!';
     return {score,ok,msg};
@@ -3625,9 +3624,9 @@ function analyzeTraj(){
     score=Math.max(40,Math.min(100,score));
     const ok=riseY>0.042 && outward>0.030;
     let msg;
-    if(score>=98) msg='🏆 완벽한 돌려차기!';
-    else if(score>=90) msg='🔥 아주 좋아요!';
-    else if(score>=80) msg='✅ 좋아요!';
+    if(score>=98) msg='완벽한 돌려차기!';
+    else if(score>=90) msg='아주 좋아요!';
+    else if(score>=80) msg='좋아요!';
     else if(outward<=0.030) msg=(side<0?'↖ 왼쪽으로 더 휘어요!':'↗ 오른쪽으로 더 휘어요!');
     else msg='🔄 더 높이!';
     return {score,ok,msg};
@@ -3910,7 +3909,7 @@ function finishDrill(){
 
   // 과한 리액션 기준: 평균 80점 이상
   if(avg>=80){
-    const icon=avg>=95?'🏆':avg>=90?'🥇':'🎉';
+    const icon=avg>=95?'최고':avg>=90?'우수':'완료';
     const txt=avg>=95?'완벽해요!!':avg>=90?'아주 잘했어요!':'훌륭해요!';
     drillResultIcon.textContent=icon;
     drillResultText.textContent=txt;
@@ -3922,7 +3921,7 @@ function finishDrill(){
     drillResultTimer=setTimeout(()=>drillResult.classList.remove('show'),3500);
   } else {
     // 평범한 결과
-    drillResultIcon.textContent='💪';
+    drillResultIcon.textContent='완료';
     drillResultText.textContent='수고했어요!';
     drillResultText.style.color='#fff';
     drillResultSub.textContent=cfg.label+' '+drillDone+'회 · 평균 '+avg+'점';
@@ -3931,7 +3930,7 @@ function finishDrill(){
     drillResultTimer=setTimeout(()=>drillResult.classList.remove('show'),2500);
   }
 
-  setStartBtn(false,'🔁 다시!');
+  setStartBtn(false,'다시!');
   setGrResult('결과: '+cfg.label+' '+drillDone+'회 · 평균 '+avg+'점');
   akmSaveRecord('drill',{count:drillDone,avg:avg,best:drillScores.length?Math.max(...drillScores):avg,scores:drillScores.slice()});
 }
@@ -4044,8 +4043,8 @@ function finishSparring(){
   timerBadge.classList.remove('show');
   sparringHud?.classList.remove('show');
   setGrResult('결과: 총 데미지 '+sparringDamage+' · 최고 '+sparringMaxCombo+'콤보');
-  setStartBtn(false,'🔁 다시!');
-  drillResultIcon.textContent=sparringHp<=0?'🏆':'🥋';
+  setStartBtn(false,'다시!');
+  drillResultIcon.textContent=sparringHp<=0?'K.O.':'완료';
   drillResultText.textContent=sparringHp<=0?'K.O.!':'수련 완료!';
   drillResultText.style.color=sparringHp<=0?'#E8A020':'#4ca3ff';
   drillResultSub.textContent='총 데미지 '+sparringDamage+' · 최고 '+sparringMaxCombo+'콤보';
@@ -4111,17 +4110,19 @@ function clearBalloons(){ balloons.forEach(b=>{ if(b._lifeTimer) clearTimeout(b.
 function startBalloon(){ balloonCount=0; clearBalloons(); spawnBalloon(); spawnBalloon(); }
 function finishBalloon(){
   running=false; setPlayingUi(false); timerBadge.classList.remove('show'); clearBalloons();
-  const r=addRank('balloon',balloonCount); lastRankTs=r.newTs; renderCamRank();
+  camRank?.classList.remove('show');
   setGrResult('결과: 격파 '+balloonCount+'개');
-  setStartBtn(false,'🔁 다시!'); celebrate(r.rank, balloonCount+'개');
-  akmSaveRecord('balloon',{count:balloonCount,rank:r.rank+1});
+  setStartBtn(false,'다시!');
+  statusEl.style.opacity='1';
+  statusEl.textContent='완료! 격파 '+balloonCount+'개';
+  akmSaveRecord('balloon',{count:balloonCount});
 }
 
 /* ── 공통 ── */
 function celebrate(rank,label){
   statusEl.style.opacity='1';
-  if(rank===0){ confetti(true); sndRecord(); statusEl.textContent='🏆 오늘 1등! '+label; }
-  else if(rank>0&&rank<5){ statusEl.textContent='👏 오늘 '+(rank+1)+'위! '+label; }
+  if(rank===0){ confetti(true); sndRecord(); statusEl.textContent='오늘 1등! '+label; }
+  else if(rank>0&&rank<5){ statusEl.textContent='오늘 '+(rank+1)+'위! '+label; }
   else { statusEl.textContent='완료! '+label; }
 }
 function runReadyCountdown(subText,cb){
@@ -4170,7 +4171,7 @@ function setGrResult(text){ gameResult.textContent=text; gameResult2.textContent
 window.startGame=()=>{
   if(running){
     stopGame();
-    setStartBtn(false,'▶ 시작!');
+    setStartBtn(false,'시작!');
     setGrResult('중단됨');
     statusEl.style.opacity='1'; statusEl.textContent='중단했습니다. 다시 시작하려면 시작 버튼을 누르세요.';
     renderStats(); renderCamRank();
@@ -4260,16 +4261,17 @@ window.setMode=(mode)=>{
   if(drillHome) drillHome.classList.toggle('active',isDrill);
   drillCountArea.style.display=isDrill?'flex':'none';
   gameArea.style.display=(!isDrill)?'flex':'none';
-  setStartBtn(false,'▶ 시작!'); setGrResult('');
+  setStartBtn(false,'시작!'); setGrResult('');
   resetCounters(); renderStats(); renderCamRank();
   statusEl.style.opacity='1';
   if(isDrill) statusEl.textContent='시작 버튼을 눌러 '+MODE_CFG[mode].label+' 연습을 시작하세요';
   else statusEl.textContent='시작 버튼을 누르세요';
 };
 
-document.getElementById('newBtn').onclick=()=>{
+const newBtnEl=document.getElementById('newBtn');
+if(newBtnEl) newBtnEl.onclick=()=>{
   stopGame(); resetCounters();
-  setStartBtn(false,'▶ 시작!'); setGrResult('');
+  setStartBtn(false,'시작!'); setGrResult('');
   renderStats(); renderCamRank();
   akmNextStudent();
   const isDrill=MODE_CFG[currentMode].isDrill;

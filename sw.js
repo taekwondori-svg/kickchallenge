@@ -1,4 +1,4 @@
-const CACHE_NAME = 'akm-v6-20260702-record-stability';
+const CACHE_NAME = 'akm-v6-20260702-record-ui';
 const ASSETS = [
   './',
   'home.html',

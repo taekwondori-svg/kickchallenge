@@ -367,6 +367,87 @@ body{
 @media(max-width:1100px){.record-top-grid-v3,.akm-analytics-grid-v3{grid-template-columns:1fr}.report-metrics-v3{grid-template-columns:repeat(2,1fr)}.record-summary.akm-premium-summary{grid-template-columns:repeat(2,1fr)!important}.record-rank-list.akm-rank-premium{grid-template-columns:1fr}}
 @media(max-width:640px){.empty-steps-v3{grid-template-columns:1fr}.report-metrics-v3{grid-template-columns:1fr}.record-report-v3 h3{font-size:24px}.akm-mode-row-v3{grid-template-columns:64px 1fr 38px}}
 
+
+/* =========================================================
+   RECORD DASHBOARD v4 — EXP + hex ability radar
+   - visual level/experience card for kids
+   - six-stat radar derived from saved records
+   ========================================================= */
+.akm-growth-grid-v4{display:grid;grid-template-columns:minmax(300px,.88fr) minmax(0,1.12fr);gap:16px;align-items:stretch}
+.akm-exp-card-v4{position:relative;overflow:hidden;border-radius:30px;background:linear-gradient(135deg,#111318 0%,#1b1c24 58%,#070707 100%);color:#fff;padding:24px;box-shadow:0 28px 80px rgba(0,0,0,.20);min-height:270px}
+.akm-exp-card-v4:before{content:"";position:absolute;right:-90px;top:-100px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(229,38,38,.42),rgba(229,38,38,.08) 62%,transparent 72%)}
+.akm-exp-head-v4{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.akm-exp-profile-v4{display:flex;align-items:center;gap:13px;min-width:0}
+.akm-exp-avatar-v4{width:58px;height:58px;border-radius:22px;background:linear-gradient(135deg,#fff,#ffe4e4);color:#111318;display:grid;place-items:center;font-size:29px;font-weight:950;box-shadow:0 16px 40px rgba(0,0,0,.20)}
+.akm-exp-name-v4{min-width:0}.akm-exp-name-v4 span{display:block;font-size:11px;color:#ff8080;font-weight:950;letter-spacing:.9px;margin-bottom:5px}.akm-exp-name-v4 b{display:block;font-size:24px;font-weight:950;letter-spacing:-.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.akm-level-badge-v4{height:42px;padding:0 14px;border-radius:999px;background:#fff;color:#111318;font-size:14px;font-weight:950;display:flex;align-items:center;box-shadow:0 12px 30px rgba(255,255,255,.12);white-space:nowrap}
+.akm-exp-main-v4{position:relative;z-index:1;margin-top:4px}.akm-exp-number-v4{font-size:42px;line-height:1;font-weight:950;letter-spacing:-1.4px}.akm-exp-number-v4 small{font-size:15px;color:#cbd0da;font-weight:900;margin-left:6px}
+.akm-exp-bar-wrap-v4{margin-top:16px}.akm-exp-bar-meta-v4{display:flex;align-items:center;justify-content:space-between;color:#cbd0da;font-size:11px;font-weight:850;margin-bottom:8px}.akm-exp-track-v4{height:18px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.13);overflow:hidden}.akm-exp-fill-v4{height:100%;border-radius:999px;background:linear-gradient(90deg,#e52626,#ffb36b);box-shadow:0 0 26px rgba(229,38,38,.45)}
+.akm-exp-foot-v4{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.akm-exp-mini-v4{border:1px solid rgba(255,255,255,.13);border-radius:18px;background:rgba(255,255,255,.065);padding:12px}.akm-exp-mini-v4 b{display:block;font-size:19px;font-weight:950}.akm-exp-mini-v4 span{display:block;margin-top:5px;font-size:10px;color:#c8cbd2;font-weight:850}
+.akm-radar-card-v4{border:1px solid var(--line);border-radius:30px;background:#fff;padding:24px;box-shadow:0 22px 64px rgba(0,0,0,.06);min-height:270px}
+.akm-radar-head-v4{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.akm-radar-head-v4 b{font-size:18px;font-weight:950;letter-spacing:-.5px}.akm-radar-head-v4 span{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:850}.akm-radar-score-v4{height:34px;padding:0 12px;border-radius:999px;background:#fff7f7;color:#e52626;border:1px solid rgba(229,38,38,.18);display:flex;align-items:center;font-size:12px;font-weight:950;white-space:nowrap}
+.akm-radar-body-v4{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:center}.akm-radar-svg-v4{width:220px;height:220px}.akm-radar-grid-v4{fill:none;stroke:#e6e8ee;stroke-width:1.1}.akm-radar-axis-v4{stroke:#eef1f5;stroke-width:1}.akm-radar-poly-v4{fill:rgba(229,38,38,.18);stroke:#e52626;stroke-width:4;stroke-linejoin:round}.akm-radar-dot-v4{fill:#fff;stroke:#e52626;stroke-width:3}.akm-radar-label-v4{font-size:10px;font-weight:900;fill:#555b66;text-anchor:middle}.akm-ability-list-v4{display:grid;gap:9px}.akm-ability-row-v4{display:grid;grid-template-columns:58px 1fr 36px;gap:9px;align-items:center}.akm-ability-row-v4 span{font-size:12px;color:#555b66;font-weight:950;white-space:nowrap}.akm-ability-track-v4{height:10px;background:#f0f2f5;border-radius:999px;overflow:hidden}.akm-ability-fill-v4{height:100%;border-radius:999px;background:linear-gradient(90deg,#111318,#e52626)}.akm-ability-row-v4 b{font-size:12px;font-weight:950;text-align:right;color:#111318}
+@media(max-width:1100px){.akm-growth-grid-v4{grid-template-columns:1fr}.akm-radar-body-v4{grid-template-columns:220px 1fr}}
+@media(max-width:720px){.akm-radar-body-v4{grid-template-columns:1fr}.akm-radar-svg-v4{margin:0 auto}.akm-exp-foot-v4{grid-template-columns:1fr}.akm-exp-head-v4{align-items:flex-start;flex-direction:column}.akm-level-badge-v4{height:36px}}
+
+
+
+/* =========================================================
+   AKM HOME UI v36 — left roster select/manage integration
+   ========================================================= */
+.main-grid{grid-template-columns:minmax(230px,2.15fr) minmax(0,7.85fr)!important;gap:16px!important;}
+#studentPanel{min-width:0;}
+#studentPanel .panel-head{padding:18px 18px 12px!important;}
+#studentPanel .panel-title h2{font-size:18px!important;}
+.student-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 18px 12px;border-bottom:1px solid var(--line);}
+.student-mode-btn{height:38px;border-radius:13px;background:#f3f4f6;color:#6b7280;font-size:12px;font-weight:850;border:1px solid #e4e7ee;}
+.student-mode-btn.active{background:#111318;color:#fff;border-color:#111318;box-shadow:0 10px 24px rgba(0,0,0,.12);}
+.student-mode-btn#studentModeManage.active{background:linear-gradient(135deg,var(--red),#ff5050);border-color:var(--red);box-shadow:0 12px 26px rgba(229,38,38,.22);}
+.student-panel-add{height:42px;border-radius:14px;background:#111318;color:#fff;font-size:13px;font-weight:900;box-shadow:0 12px 24px rgba(0,0,0,.11);}
+.student-panel-add.hidden{display:none!important;}
+.student-panel-form{padding:0 18px 16px;}
+.student-panel-form:empty{display:none;}
+#studentPanel .student-tools{padding:12px 16px!important;gap:7px!important;}
+#studentPanel .student-list{padding:12px 16px 14px!important;max-height:390px!important;gap:7px!important;}
+#studentPanel .student{height:60px!important;border-radius:15px!important;padding-left:13px!important;}
+#studentPanel .student-info b{font-size:14px!important;font-weight:850!important;}
+#studentPanel .student-info span{font-size:10.5px!important;}
+.student-manage-item{cursor:default!important;display:grid!important;grid-template-columns:1fr auto!important;align-items:center!important;gap:8px!important;}
+.student-manage-item:hover{transform:none!important;}
+.student-manage-actions{display:flex;gap:5px;align-items:center;}
+.student-manage-actions .icon-btn{width:30px;height:30px;border-radius:10px;background:#f3f4f6;font-size:13px;display:grid;place-items:center;}
+.student-manage-actions .icon-btn.danger{background:#fff1f2;color:#dc2626;}
+.student-panel-form .inline-form{margin-top:0!important;border-radius:18px!important;padding:16px!important;background:#fafafa!important;border:1px solid var(--line)!important;box-shadow:none!important;}
+.student-panel-form .inline-form h3{font-size:15px!important;margin-bottom:12px!important;}
+.student-panel-form .form-grid{grid-template-columns:1fr!important;gap:9px!important;}
+.student-panel-form .field label{font-size:11px!important;}
+.student-panel-form .input,.student-panel-form .select{height:40px!important;border-radius:12px!important;font-size:13px!important;}
+.student-panel-form .inline-actions{margin-top:12px!important;gap:7px!important;}
+.student-panel-form .inline-actions .btn{height:38px!important;border-radius:12px!important;font-size:12px!important;}
+#studentPanel .summary{grid-template-columns:1fr!important;gap:7px!important;padding:12px 16px!important;}
+#studentPanel .summary .stat{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:44px!important;padding:10px 12px!important;border-radius:15px!important;}
+#studentPanel .summary .stat b{font-size:22px!important;}
+#studentPanel .summary .stat span{margin-top:0!important;font-size:11px!important;font-weight:800!important;}
+#studentPanel .summary:before{content:'운영 정보';display:block;font-size:11px;font-weight:900;color:#8b9099;margin-bottom:1px;}
+.manage-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+.manage-tab{min-width:0!important;}
+/* graph v36 premium polish */
+.record-dashboard-v3{gap:18px!important;}
+.record-report-v3{min-height:280px!important;border:1px solid rgba(255,255,255,.08);}
+.record-report-v3:before{background:radial-gradient(circle,rgba(229,38,38,.48),rgba(229,38,38,.10) 58%,transparent 72%)!important;}
+.akm-growth-grid-v4{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)!important;}
+.akm-exp-card-v4,.akm-radar-card-v4,.akm-chart-card-v3,.akm-mode-card-v3{box-shadow:0 22px 70px rgba(17,19,24,.075)!important;border-color:rgba(231,233,238,.95)!important;}
+.akm-exp-fill-v4,.akm-ability-fill-v4,.akm-mode-fill-v3{background:linear-gradient(90deg,#e52626,#ff8a3d,#f7c15c)!important;}
+.akm-radar-poly-v4{filter:drop-shadow(0 10px 18px rgba(229,38,38,.22));}
+.akm-radar-dot-v4{filter:drop-shadow(0 4px 8px rgba(229,38,38,.22));}
+.akm-achieve-strip-v36{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.akm-achieve-v36{border:1px solid var(--line);border-radius:20px;background:#fff;padding:15px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 14px 36px rgba(0,0,0,.045);}
+.akm-achieve-ico-v36{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;background:#111318;color:#fff;font-size:19px;flex:0 0 auto;}
+.akm-achieve-v36 b{display:block;font-size:13px;font-weight:950;letter-spacing:-.2px;}
+.akm-achieve-v36 span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:750;}
+@media(max-width:1100px){.main-grid{grid-template-columns:1fr!important}.akm-achieve-strip-v36{grid-template-columns:repeat(2,1fr)}#studentPanel .summary{grid-template-columns:repeat(3,1fr)!important}.student-panel-form .form-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:640px){.akm-achieve-strip-v36{grid-template-columns:1fr}.manage-tabs{grid-template-columns:1fr!important}}
+
 </style>
 </head>
 <body>
@@ -419,14 +500,19 @@ body{
     <div class="panel" id="studentPanel">
       <div class="panel-head">
         <div class="panel-title">
-          <h2>수련생 선택</h2>
+          <h2>수련생</h2>
         </div>
+      </div>
+      <div class="student-mode-tabs" role="tablist" aria-label="수련생 모드">
+        <button id="studentModeSelect" class="student-mode-btn active" onclick="setStudentPanelMode('select')">👦 선택</button>
+        <button id="studentModeManage" class="student-mode-btn" onclick="setStudentPanelMode('manage')">⚙ 관리</button>
       </div>
       <div class="student-tools">
         <input id="studentSearch" class="search" type="search" placeholder="학생 이름 검색" oninput="renderStudents()" />
         <select id="classFilter" class="select" onchange="renderStudents()">
           <option value="all">전체 반</option>
         </select>
+        <button id="studentPanelAddBtn" class="student-panel-add hidden" onclick="beginAddStudentInPanel()">+ 학생 등록</button>
       </div>
       <div id="selectedRosterBar" class="selected-roster-bar">
         <div class="selected-roster-head">
@@ -436,6 +522,7 @@ body{
         <div id="selectedRosterChips" class="selected-roster-chips"></div>
       </div>
       <div id="studentList" class="student-list"></div>
+      <div id="studentPanelForm" class="student-panel-form"></div>
       <div class="summary">
         <div class="stat red"><b id="studentCount">0</b><span>등록 학생</span></div>
         <div class="stat green"><b id="selectedCount">0</b><span>선택 수련생</span></div>
@@ -454,7 +541,6 @@ body{
       </div>
       <div class="manage-tabs" role="tablist" aria-label="운영 메뉴">
         <button id="tabRecords" class="manage-tab active" onclick="setManageTab('records')">기록 · 그래프</button>
-        <button id="tabStudents" class="manage-tab" onclick="setManageTab('students')">학생 관리</button>
         <button id="tabSettings" class="manage-tab" onclick="setManageTab('settings')">도장 설정</button>
         <button id="tabLicense" class="manage-tab" onclick="setManageTab('license')">내 라이선스</button>
       </div>
@@ -1296,6 +1382,7 @@ if(!state[DOJANGPRO_IMPORT_KEY]){
 let manageTab = 'records';
 let recordRange = 'all';
 let editingStudentId = null;
+let studentPanelMode = 'select';
 
 function loadState(){
   try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? {...structuredClone(defaultState),...JSON.parse(raw)} : structuredClone(defaultState); }
@@ -1393,22 +1480,48 @@ function renderClassFilter(){
   filter.innerHTML='<option value="all">전체 반</option>'+state.classes.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   filter.value = state.classes.includes(current) ? current : 'all';
 }
+function setStudentPanelMode(mode){
+  studentPanelMode = mode === 'manage' ? 'manage' : 'select';
+  editingStudentId = null;
+  const selectBtn=document.getElementById('studentModeSelect');
+  const manageBtn=document.getElementById('studentModeManage');
+  if(selectBtn) selectBtn.classList.toggle('active', studentPanelMode==='select');
+  if(manageBtn) manageBtn.classList.toggle('active', studentPanelMode==='manage');
+  renderStudents();
+}
 function renderStudents(){
   const list=document.getElementById('studentList');
-  const q=(document.getElementById('studentSearch').value||'').trim().toLowerCase();
+  const formBox=document.getElementById('studentPanelForm');
+  const addBtn=document.getElementById('studentPanelAddBtn');
+  const search=document.getElementById('studentSearch');
+  const q=(search?.value||'').trim().toLowerCase();
   const cls=document.getElementById('classFilter').value || 'all';
-  const students=state.students.filter(s=>(cls==='all'||s.className===cls) && (!q||s.name.toLowerCase().includes(q)));
+  const students=state.students.filter(s=>(cls==='all'||s.className===cls) && (!q||s.name.toLowerCase().includes(q)||String(s.className||'').toLowerCase().includes(q)||String(s.belt||'').toLowerCase().includes(q)));
   const selectedIds = state.selectedStudentIds || [];
+  const manageMode = studentPanelMode === 'manage';
+  document.getElementById('studentModeSelect')?.classList.toggle('active', !manageMode);
+  document.getElementById('studentModeManage')?.classList.toggle('active', manageMode);
+  if(addBtn) addBtn.classList.toggle('hidden', !manageMode);
+  if(search) search.placeholder = manageMode ? '학생 이름, 반, 띠 검색' : '학생 이름 검색';
   renderSelectedRosterBar();
-  if(!students.length){ list.innerHTML='<div class="empty-state">등록된 학생이 없습니다.<br>학생 관리에서 등록하세요.</div>'; return; }
-  list.innerHTML=students.map(s=>{
-    const idx=selectedIds.indexOf(s.id);
-    const isSelected=idx!==-1;
-    return `<button class="student ${isSelected?'active':''}" onclick="toggleStudent('${s.id}')">
-    ${isSelected?`<span class="student-select-num">${idx+1}</span>`:''}
-    <div class="student-info"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.className||'반 없음')} · ${escapeHtml(s.belt||'띠 없음')}</span></div>
-  </button>`;
-  }).join('');
+  if(formBox) formBox.innerHTML = manageMode && editingStudentId ? studentEditForm(editingStudentId) : '';
+  if(!students.length){
+    list.innerHTML = manageMode ? '<div class="empty-state">등록된 학생이 없습니다.<br>+ 학생 등록을 눌러 추가하세요.</div>' : '<div class="empty-state">등록된 학생이 없습니다.<br>관리모드에서 등록하세요.</div>';
+  } else if(manageMode){
+    list.innerHTML=students.map(s=>`<div class="student student-manage-item">
+      <div class="student-info"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.className||'반 없음')} · ${escapeHtml(s.belt||'띠 없음')}${s.birth?' · '+escapeHtml(s.birth):''}</span></div>
+      <div class="student-manage-actions"><button class="icon-btn" title="수정" onclick="beginEditStudentInPanel('${s.id}')">✏️</button><button class="icon-btn danger" title="삭제" onclick="deleteStudent('${s.id}')">🗑</button></div>
+    </div>`).join('');
+  } else {
+    list.innerHTML=students.map(s=>{
+      const idx=selectedIds.indexOf(s.id);
+      const isSelected=idx!==-1;
+      return `<button class="student ${isSelected?'active':''}" onclick="toggleStudent('${s.id}')">
+      ${isSelected?`<span class="student-select-num">${idx+1}</span>`:''}
+      <div class="student-info"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.className||'반 없음')} · ${escapeHtml(s.belt||'띠 없음')}</span></div>
+    </button>`;
+    }).join('');
+  }
   const links=[document.getElementById('startKickLink'), document.getElementById('bottomStartKickLink')].filter(Boolean);
   const bottomLink=document.getElementById('bottomStartKickLink');
   if(selectedIds.length){
@@ -1476,11 +1589,12 @@ function renderManageContent(){
   if(manageTab==='records'){ renderRecordsTab(box); return; }
   if(manageTab==='settings'){ renderSettingsTab(box); return; }
   if(manageTab==='license'){ renderLicenseTab(box); return; }
-  renderStudentManager();
+  manageTab='records'; renderRecordsTab(box);
 }
 
 function renderRecordsTab(box){
   const selectedIds = state.selectedStudentIds || [];
+  const selectedNames = selectedIds.map(getStudentNameById).filter(Boolean);
   const all = getRecords().map(normalizeRecord).sort((a,b)=>String(b.date||b.createdAt||'').localeCompare(String(a.date||a.createdAt||'')));
   const sourceAll = filterRecordsForSelection(all, selectedIds);
   const todayAll = sourceAll.filter(r=>r.dateKey===todayKey());
@@ -1553,8 +1667,53 @@ function renderRecordsTab(box){
   source.forEach(r=>{ const l=labelOf(r); modeMap[l]=(modeMap[l]||0)+1; });
   const modes = Object.entries(modeMap).map(([name,count])=>({name,count,pct: total ? Math.round(count/total*100) : 0})).sort((a,b)=>b.count-a.count).slice(0,5);
   const modeHtml = modes.length ? modes.map(m=>`<div class="akm-mode-row-v3"><span>${escapeHtml(m.name)}</span><div class="akm-mode-track-v3"><div class="akm-mode-fill-v3" style="width:${Math.max(6,m.pct)}%"></div></div><b>${m.count}회</b></div>`).join('') : '<div class="insight-row-v3"><span>종목 기록</span><b>대기</b></div>';
+  const expRecords = sourceAll.length ? sourceAll : source;
+  const expScores = expRecords.map(scoreOf);
+  const expTotalScore = expScores.reduce((sum,v)=>sum+v,0);
+  const expBest = expScores.length ? Math.max(...expScores) : 0;
+  const expAvg = expScores.length ? Math.round(expTotalScore/expScores.length) : 0;
+  const expCombo = expRecords.length ? Math.max(...expRecords.map(comboOf)) : 0;
+  const totalExp = Math.max(0, Math.round((expRecords.length*35) + expTotalScore + (expBest*4) + (expCombo*12) + Math.max(0,delta)*18));
+  const level = Math.floor(totalExp/500) + 1;
+  const levelExp = totalExp % 500;
+  const nextExp = 500;
+  const expPct = Math.max(3, Math.min(100, Math.round(levelExp/nextExp*100)));
+  const expName = selectedNames.length === 1 ? selectedNames[0] : (selectedNames.length > 1 ? `선택 ${selectedNames.length}명` : '도장 전체');
+  const expScope = selectedNames.length === 1 ? 'PLAYER GROWTH' : 'TEAM GROWTH';
+  const clampAbility = v => Math.max(8, Math.min(100, Math.round(v||0)));
+  const avgSpeedField = expRecords.map(r=>Number(r.speed||r.footSpeed||r.kickSpeed||0)).filter(Boolean);
+  const avgHeightField = expRecords.map(r=>Number(r.height||r.maxHeight||r.kickHeight||0)).filter(Boolean);
+  const speedScore = clampAbility(avgSpeedField.length ? avgArr(avgSpeedField) : (expAvg*0.82 + Math.min(18, expCombo*1.2)));
+  const powerScore = clampAbility(expBest ? (expBest*0.78 + expAvg*0.22) : expAvg);
+  const accuracyScore = clampAbility(expAvg);
+  const heightScore = clampAbility(avgHeightField.length ? avgArr(avgHeightField) : (expAvg*0.72 + Math.min(22, expBest*0.18)));
+  const comboScore = clampAbility(expCombo ? Math.min(100, expCombo*4) : expAvg*0.45);
+  const consistencyScore = clampAbility(Math.min(100, expRecords.length*7 + Math.max(0,delta)*2));
+  const abilities = [
+    {name:'스피드',value:speedScore},
+    {name:'파워',value:powerScore},
+    {name:'정확도',value:accuracyScore},
+    {name:'높이',value:heightScore},
+    {name:'콤보',value:comboScore},
+    {name:'꾸준함',value:consistencyScore}
+  ];
+  const radarCenter = 110;
+  const radarRadius = 78;
+  const radarPoint = (i,val=100)=>{
+    const angle = (-90 + i*60) * Math.PI/180;
+    const r = radarRadius * (val/100);
+    return {x:Math.round((radarCenter + Math.cos(angle)*r)*10)/10, y:Math.round((radarCenter + Math.sin(angle)*r)*10)/10};
+  };
+  const radarRings = [25,50,75,100].map(v=>`<polygon class="akm-radar-grid-v4" points="${abilities.map((_,i)=>{const p=radarPoint(i,v);return p.x+','+p.y}).join(' ')}"></polygon>`).join('');
+  const radarAxes = abilities.map((_,i)=>{const p=radarPoint(i,100);return `<line class="akm-radar-axis-v4" x1="${radarCenter}" y1="${radarCenter}" x2="${p.x}" y2="${p.y}"></line>`}).join('');
+  const radarPoly = abilities.map((a,i)=>{const p=radarPoint(i,a.value);return p.x+','+p.y}).join(' ');
+  const radarDots = abilities.map((a,i)=>{const p=radarPoint(i,a.value);return `<circle class="akm-radar-dot-v4" cx="${p.x}" cy="${p.y}" r="4"><title>${a.name} ${a.value}</title></circle>`}).join('');
+  const radarLabels = abilities.map((a,i)=>{const p=radarPoint(i,116);return `<text class="akm-radar-label-v4" x="${p.x}" y="${p.y+4}">${a.name}</text>`}).join('');
+  const abilityAvg = abilities.length ? Math.round(abilities.reduce((sum,a)=>sum+a.value,0)/abilities.length) : 0;
+  const abilityListHtml = abilities.map(a=>`<div class="akm-ability-row-v4"><span>${a.name}</span><div class="akm-ability-track-v4"><div class="akm-ability-fill-v4" style="width:${a.value}%"></div></div><b>${a.value}</b></div>`).join('');
+  const achieveHtml = total ? `<div class="akm-achieve-strip-v36"><div class="akm-achieve-v36"><div class="akm-achieve-ico-v36">🏅</div><div><b>레벨 ${level}</b><span>누적 EXP ${totalExp.toLocaleString()}</span></div></div><div class="akm-achieve-v36"><div class="akm-achieve-ico-v36">🔥</div><div><b>최고 콤보 ${expCombo}</b><span>연속 성공 기록</span></div></div><div class="akm-achieve-v36"><div class="akm-achieve-ico-v36">📈</div><div><b>${deltaText}</b><span>최근 성장 흐름</span></div></div><div class="akm-achieve-v36"><div class="akm-achieve-ico-v36">🎯</div><div><b>종합 ${abilityAvg}</b><span>육각형 능력치</span></div></div></div>` : '';
+  const growthHtml = total ? `<div class="akm-growth-grid-v4"><div class="akm-exp-card-v4"><div class="akm-exp-head-v4"><div class="akm-exp-profile-v4"><div class="akm-exp-avatar-v4">🥋</div><div class="akm-exp-name-v4"><span>${expScope}</span><b>${escapeHtml(expName)}</b></div></div><div class="akm-level-badge-v4">LV ${level}</div></div><div class="akm-exp-main-v4"><div class="akm-exp-number-v4">${totalExp.toLocaleString()}<small>EXP</small></div><div class="akm-exp-bar-wrap-v4"><div class="akm-exp-bar-meta-v4"><span>다음 레벨까지 ${nextExp-levelExp} EXP</span><span>${levelExp}/${nextExp}</span></div><div class="akm-exp-track-v4"><div class="akm-exp-fill-v4" style="width:${expPct}%"></div></div></div></div><div class="akm-exp-foot-v4"><div class="akm-exp-mini-v4"><b>${expRecords.length}</b><span>누적 측정</span></div><div class="akm-exp-mini-v4"><b>${expAvg}</b><span>누적 평균</span></div><div class="akm-exp-mini-v4"><b>${expCombo}</b><span>최고 콤보</span></div></div></div><div class="akm-radar-card-v4"><div class="akm-radar-head-v4"><div><b>육각형 능력치</b><span>저장 기록을 기준으로 계산한 성장 지표</span></div><div class="akm-radar-score-v4">종합 ${abilityAvg}</div></div><div class="akm-radar-body-v4"><svg class="akm-radar-svg-v4" viewBox="0 0 220 220" aria-label="육각형 능력치">${radarRings}${radarAxes}<polygon class="akm-radar-poly-v4" points="${radarPoly}"></polygon>${radarDots}${radarLabels}</svg><div class="akm-ability-list-v4">${abilityListHtml}</div></div></div></div>` : '';
   const mvp = ranks[0];
-  const selectedNames = selectedIds.map(getStudentNameById).filter(Boolean);
   const scopeTitle = selectedNames.length === 1 ? `${selectedNames[0]} 성장 리포트` : (selectedNames.length > 1 ? `선택 수련생 ${selectedNames.length}명 리포트` : '도장 전체 성장 리포트');
   const scopeSub = recordRange==='today' ? '오늘 기록만 보고 있습니다.' : (recordRange==='7d' ? '최근 7일 기록을 보고 있습니다.' : '누적된 전체 기록을 보고 있습니다.');
   const lastRecord = sourceAll[0] || all[0] || null;
@@ -1598,12 +1757,27 @@ function renderRecordsTab(box){
         <div class="record-mini"><b>${best}</b><span>최고 기록</span></div>
         <div class="record-mini"><b>${deltaText}</b><span>최근 성장 변화</span></div>
       </div>
+      ${growthHtml}
+      ${achieveHtml}
       ${total ? `<div class="akm-analytics-grid-v3"><div class="akm-chart-card-v3"><div class="akm-chart-head-v3"><div><b>최근 성장 흐름</b><span>최근 ${chartRows.length}개 기록 기준</span></div><div class="akm-trend-badge-v3 ${deltaClass}">${deltaText}</div></div>${trendSvg}</div><div class="akm-mode-card-v3"><div class="akm-chart-head-v3"><div><b>훈련 종목 분포</b><span>표시 범위 내 기록</span></div></div><div class="akm-mode-list-v3">${modeHtml}</div></div></div>
       <div class="record-rank-list akm-rank-premium">${rankHtml}</div>
       <div class="record-table"><div class="record-row head"><span>학생</span><span>종목</span><span>기록</span><span>날짜</span></div>${tableHtml}</div>` : `<div class="empty-report-v3"><b>${escapeHtml(emptyTitle)}</b><p>${escapeHtml(emptyDesc)}</p><div class="empty-steps-v3"><div class="empty-step-v3"><strong>1. 수련생 선택</strong><span>왼쪽에서 학생을 선택합니다.</span></div><div class="empty-step-v3"><strong>2. AKM 실행</strong><span>발차기 시작 후 측정을 진행합니다.</span></div><div class="empty-step-v3"><strong>3. 자동 누적</strong><span>저장된 기록이 그래프로 표시됩니다.</span></div></div></div>`}
     </div>`;
 }
 
+
+function beginAddStudentInPanel(){
+  studentPanelMode='manage';
+  editingStudentId='new';
+  renderStudents();
+  setTimeout(()=>document.getElementById('editName')?.focus(),60);
+}
+function beginEditStudentInPanel(id){
+  studentPanelMode='manage';
+  editingStudentId=id;
+  renderStudents();
+  setTimeout(()=>document.getElementById('editName')?.focus(),60);
+}
 function renderStudentManager(keepFocus=false){
   const box=document.getElementById('manageContent');
   const q=(document.getElementById('manageStudentSearch')?.value||'').trim().toLowerCase();
@@ -1631,9 +1805,9 @@ function studentEditForm(id){
     <div class="inline-actions"><button class="btn cancel" onclick="cancelEditStudent()">취소</button><button class="btn save" onclick="saveInlineStudent()">저장</button></div>
   </div>`;
 }
-function beginAddStudent(){ editingStudentId='new'; renderStudentManager(); setTimeout(()=>document.getElementById('editName')?.focus(),60); }
-function beginEditStudent(id){ editingStudentId=id; renderStudentManager(); setTimeout(()=>document.getElementById('editName')?.focus(),60); }
-function cancelEditStudent(){ editingStudentId=null; renderStudentManager(); }
+function beginAddStudent(){ beginAddStudentInPanel(); }
+function beginEditStudent(id){ beginEditStudentInPanel(id); }
+function cancelEditStudent(){ editingStudentId=null; if(studentPanelMode==='manage') renderStudents(); else renderStudentManager(); }
 function saveInlineStudent(){
   const name=document.getElementById('editName').value.trim();
   if(!name){ showToast('이름을 입력하세요.'); return; }
@@ -1824,7 +1998,8 @@ function importBackup(event){
       }
       state = {...structuredClone(defaultState), ...structuredClone(incoming)};
       persist();
-      manageTab = 'students';
+      studentPanelMode = 'manage';
+      manageTab = 'records';
       render();
       showToast('백업 데이터를 불러왔습니다.');
     }catch(err){

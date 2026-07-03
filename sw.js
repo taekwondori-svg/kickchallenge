@@ -1,4 +1,4 @@
-const CACHE_NAME = 'akm-v7-20260703-graph-css-clean';
+const CACHE_NAME = 'akm-v8-20260703-panel-graph';
 const ASSETS = [
   './',
   'home.html',

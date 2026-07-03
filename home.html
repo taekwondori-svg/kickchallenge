@@ -406,6 +406,7 @@ body{
         <button id="tabRecords" class="manage-tab active" onclick="setManageTab('records')">기록 · 그래프</button>
         <button id="tabStudents" class="manage-tab" onclick="setManageTab('students')">학생 관리</button>
         <button id="tabSettings" class="manage-tab" onclick="setManageTab('settings')">도장 설정</button>
+        <button id="tabLicense" class="manage-tab" onclick="setManageTab('license')">내 라이선스</button>
       </div>
       <div id="manageContent" class="manage-content"></div>
     </div>
@@ -441,7 +442,8 @@ function activateHub(dojang_name){
 }
 
 async function _verifyWithServer(license_key){
-  const res = await fetch(EDGE_URL,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({license_key}) });
+  const device_id = _getOrCreateDeviceId();
+  const res = await fetch(EDGE_URL,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({license_key, device_id}) });
   return await res.json();
 }
 
@@ -469,7 +471,7 @@ async function doLicenseActivate(){
       btn.textContent='인증하기'; btn.disabled=false; return;
     }
     _failCount=0;
-    _setLicenseCache({ license_key:key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, cached_at:Date.now() });
+    _setLicenseCache({ license_key:key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, device_slots:result.device_slots||[], max_devices:result.max_devices||2, cached_at:Date.now() });
     activateHub(result.dojang_name);
   }catch(e){
     const cache = _getLicenseCache();
@@ -508,7 +510,7 @@ window.addEventListener('load', async function(){
       _clearLicenseCache();
       document.getElementById('loginScreen').classList.remove('hidden');
     }else{
-      _setLicenseCache({ license_key:cache.license_key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, cached_at:Date.now() });
+      _setLicenseCache({ license_key:cache.license_key, dojang_name:result.dojang_name, license_type:result.license_type, version:result.version||AKM_VERSION, device_slots:result.device_slots||[], max_devices:result.max_devices||2, cached_at:Date.now() });
     }
   }catch(e){}
 });
@@ -1408,11 +1410,11 @@ function toggleStudent(id){
 function setManageTab(tab){
   manageTab = tab;
   editingStudentId = null;
-  ['Records','Students','Settings'].forEach(name=>{
+  ['Records','Students','Settings','License'].forEach(name=>{
     const el=document.getElementById('tab'+name);
     if(el) el.classList.remove('active');
   });
-  const activeMap={records:'tabRecords',students:'tabStudents',settings:'tabSettings'};
+  const activeMap={records:'tabRecords',students:'tabStudents',settings:'tabSettings',license:'tabLicense'};
   const active=document.getElementById(activeMap[tab]);
   if(active) active.classList.add('active');
   renderManageContent();
@@ -1423,6 +1425,7 @@ function renderManageContent(){
   if(!box) return;
   if(manageTab==='records'){ renderRecordsTab(box); return; }
   if(manageTab==='settings'){ renderSettingsTab(box); return; }
+  if(manageTab==='license'){ renderLicenseTab(box); return; }
   renderStudentManager();
 }
 
@@ -1567,6 +1570,71 @@ function deleteStudent(id){
   state.selectedStudentIds=(state.selectedStudentIds||[]).filter(x=>x!==id);
   if(editingStudentId===id) editingStudentId=null;
   persist(); render(); showToast('학생을 삭제했습니다.');
+}
+
+function renderLicenseTab(box){
+  const cache = _getLicenseCache() || {};
+  const myId = _getOrCreateDeviceId();
+  const maxDevices = Number(cache.max_devices) || 2;
+  const slots = Array.isArray(cache.device_slots) ? cache.device_slots : [];
+
+  let cards = '';
+  for(let i=0; i<maxDevices; i++){
+    const slot = slots[i];
+    if(slot){
+      const isMe = slot.device_id === myId;
+      const dateStr = slot.registered_at ? new Date(slot.registered_at).toLocaleDateString('ko-KR') : '-';
+      cards += `<div class="license-slot-card ${isMe?'is-me':''}">
+        <div class="license-slot-status">✅ 사용 중${isMe?' <span class="license-slot-badge">이 태블릿</span>':''}</div>
+        <div class="license-slot-sub">등록일: ${dateStr}</div>
+      </div>`;
+    } else {
+      cards += `<div class="license-slot-card is-empty">
+        <div class="license-slot-status">⬜ 사용 가능</div>
+        <div class="license-slot-sub">새 태블릿에서 같은 키로 로그인하면 등록됩니다.</div>
+      </div>`;
+    }
+  }
+  cards += `<div class="license-slot-card is-locked">
+    <div class="license-slot-status">🔒 추가 슬롯</div>
+    <div class="license-slot-sub">더 많은 태블릿에서 쓰려면<br>도장 관리자(운영자)에게 문의해주세요.</div>
+  </div>`;
+
+  box.innerHTML = `<div class="manage-top"><div><h3>내 라이선스</h3><span>이 라이선스 키로 등록된 태블릿 현황</span></div></div>
+    <div class="settings-grid">
+      <div class="setting-card">
+        <div class="setting-card-title"><b>라이선스 정보</b><span>${escapeHtml(cache.license_type || '기본')} 플랜</span></div>
+        <div class="subtle-box">라이선스 키: ${escapeHtml(cache.license_key || '-')}<br>등록 가능 태블릿: 최대 ${maxDevices}대</div>
+      </div>
+      <div class="setting-card">
+        <div class="setting-card-title"><b>기기 슬롯</b><span>도장 태블릿 등록 현황</span></div>
+        <div class="license-slot-grid">${cards}</div>
+      </div>
+    </div>
+    <style>
+      .license-slot-grid{display:flex;gap:10px;flex-wrap:wrap;}
+      .license-slot-card{flex:1 1 140px;min-width:140px;border-radius:14px;padding:14px;border:1px solid #e5e5e5;background:#fafafa;}
+      .license-slot-card.is-me{border-color:#22a35a;background:#eefbf3;}
+      .license-slot-card.is-empty{opacity:.65;border-style:dashed;}
+      .license-slot-card.is-locked{opacity:.55;border-style:dashed;}
+      .license-slot-status{font-weight:700;font-size:13px;margin-bottom:6px;}
+      .license-slot-badge{display:inline-block;font-size:11px;background:#22a35a;color:#fff;border-radius:8px;padding:1px 6px;margin-left:4px;}
+      .license-slot-sub{font-size:12px;color:#777;line-height:1.4;}
+    </style>`;
+}
+
+function _getOrCreateDeviceId(){
+  const KEY = 'akm_device_id';
+  try{
+    let id = localStorage.getItem(KEY);
+    if(!id){
+      id = 'dev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10);
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  }catch(e){
+    return 'dev-fallback';
+  }
 }
 
 function renderSettingsTab(box){

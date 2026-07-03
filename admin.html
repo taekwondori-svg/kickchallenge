@@ -1132,6 +1132,24 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
     <input id="mVersion" class="f-input" type="text" placeholder="예) 1.0.0" value="1.0.0" />
     <label>라이선스 키 <span style="color:var(--muted);font-weight:400">(자동 생성)</span></label>
     <input id="mKey" class="f-input" type="text" readonly style="letter-spacing:1px" />
+    <input id="mMaxDevices" type="hidden" value="2" />
+    <div class="modal-section" id="deviceSlotSection" style="display:none;">
+      <div class="modal-section-title">🖥 기기 슬롯</div>
+      <div id="deviceSlotsBox" class="admin-slot-grid"></div>
+      <button type="button" class="btn-sm btn-toggle" style="margin-top:10px;" onclick="resetDeviceSlots()">전체 기기 초기화 (재발급 시 사용)</button>
+    </div>
+    <style>
+      .admin-slot-grid{display:flex;gap:8px;flex-wrap:wrap;}
+      .admin-slot-card{flex:1 1 130px;min-width:130px;border-radius:14px;padding:12px;border:1px solid var(--line);background:#fafafa;cursor:default;}
+      .admin-slot-card.is-used{border-color:#22a35a;background:#eefbf3;}
+      .admin-slot-card.is-empty{opacity:.6;border-style:dashed;}
+      .admin-slot-card.is-toggle{cursor:pointer;transition:transform .1s;}
+      .admin-slot-card.is-toggle:hover{transform:translateY(-1px);}
+      .admin-slot-card.is-locked{opacity:.55;border-style:dashed;background:#fff;}
+      .admin-slot-status{font-weight:950;font-size:13px;margin-bottom:6px;}
+      .admin-slot-sub{font-size:11px;color:#8b9099;line-height:1.4;}
+      .admin-slot-card .btn-sm{margin-top:6px;}
+    </style>
     <div id="expireSection">
       <div class="modal-section">
         <div class="modal-section-title">📅 만료일 설정</div>
@@ -1161,13 +1179,6 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
       <input id="mPhone" class="f-input" type="tel" placeholder="예) 010-1234-5678" />
       <label>메모</label>
       <textarea id="mMemo" class="f-textarea" placeholder="특이사항, 계약 조건 등"></textarea>
-    </div>
-    <div class="modal-section" id="deviceSlotSection" style="display:none;">
-      <div class="modal-section-title">🖥 기기 슬롯</div>
-      <label>등록 가능 태블릿 수</label>
-      <input id="mMaxDevices" class="f-input" type="number" min="1" max="99" value="2" />
-      <div id="deviceSlotsBox" style="margin-top:10px;"></div>
-      <button type="button" class="btn-sm btn-toggle" style="margin-top:8px;" onclick="resetDeviceSlots()">전체 기기 초기화 (재발급 시 사용)</button>
     </div>
     <div class="err-msg" id="modalErr"></div>
     <div class="modal-btns">
@@ -1455,17 +1466,69 @@ let currentEditLicenseId = null;
 function renderDeviceSlotsUI() {
   const box = document.getElementById('deviceSlotsBox');
   if (!box) return;
-  if (!currentEditDeviceSlots.length) {
-    box.innerHTML = '<div class="sub-text">아직 등록된 기기가 없습니다.</div>';
-    return;
+  const maxDevices = Number(document.getElementById('mMaxDevices').value) || 2;
+  let html = '';
+  for (let i = 0; i < 2; i++) {
+    const slot = currentEditDeviceSlots[i];
+    if (slot) {
+      const dateStr = slot.registered_at ? slot.registered_at.slice(0,10) : '-';
+      html += `<div class="admin-slot-card is-used">
+        <div class="admin-slot-status">✅ 사용 중</div>
+        <div class="admin-slot-sub">등록일 ${dateStr}</div>
+        <button type="button" class="btn-sm btn-del" onclick="removeDeviceSlot(${i})">기기 해제</button>
+      </div>`;
+    } else {
+      html += `<div class="admin-slot-card is-empty">
+        <div class="admin-slot-status">⬜ 사용 가능</div>
+        <div class="admin-slot-sub">기본 포함 슬롯</div>
+      </div>`;
+    }
   }
-  box.innerHTML = currentEditDeviceSlots.map((s, i) => {
-    const dateStr = s.registered_at ? s.registered_at.slice(0,10) : '-';
-    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;">
-      <span style="font-size:13px;">기기 ${i+1} · 등록일 ${dateStr}</span>
-      <button type="button" class="btn-sm btn-del" onclick="removeDeviceSlot(${i})">삭제</button>
+  // 3번째 확장 슬롯: 관리자가 클릭해서 열고 닫음
+  if (maxDevices >= 3) {
+    const slot3 = currentEditDeviceSlots[2];
+    if (slot3) {
+      const dateStr = slot3.registered_at ? slot3.registered_at.slice(0,10) : '-';
+      html += `<div class="admin-slot-card is-used is-toggle" onclick="toggleSlot3()">
+        <div class="admin-slot-status">✅ 사용 중</div>
+        <div class="admin-slot-sub">등록일 ${dateStr}<br>클릭하면 슬롯을 닫습니다</div>
+      </div>`;
+    } else {
+      html += `<div class="admin-slot-card is-empty is-toggle" onclick="toggleSlot3()">
+        <div class="admin-slot-status">🔓 확장 슬롯 열림</div>
+        <div class="admin-slot-sub">사용 가능 · 클릭하면 닫습니다</div>
+      </div>`;
+    }
+  } else {
+    html += `<div class="admin-slot-card is-locked is-toggle" onclick="toggleSlot3()">
+      <div class="admin-slot-status">🔒 확장 슬롯 잠김</div>
+      <div class="admin-slot-sub">클릭하면 3번째 기기를<br>등록할 수 있게 엽니다</div>
     </div>`;
-  }).join('');
+  }
+  box.innerHTML = html;
+}
+
+async function toggleSlot3() {
+  if (!currentEditLicenseId) return;
+  const maxDevices = Number(document.getElementById('mMaxDevices').value) || 2;
+  if (maxDevices >= 3) {
+    if (!confirm('확장 슬롯을 닫을까요? 3번째로 등록된 기기가 있다면 함께 해제됩니다.')) return;
+    const newSlots = currentEditDeviceSlots.slice(0, 2);
+    try {
+      await edgeCall('UPDATE_LICENSE', { id: currentEditLicenseId, max_devices: 2, device_slots: newSlots });
+      document.getElementById('mMaxDevices').value = 2;
+      currentEditDeviceSlots = newSlots;
+      renderDeviceSlotsUI();
+      await loadLicenses();
+    } catch (err) { alert('변경 실패: ' + err.message); }
+  } else {
+    try {
+      await edgeCall('UPDATE_LICENSE', { id: currentEditLicenseId, max_devices: 3 });
+      document.getElementById('mMaxDevices').value = 3;
+      renderDeviceSlotsUI();
+      await loadLicenses();
+    } catch (err) { alert('변경 실패: ' + err.message); }
+  }
 }
 
 async function removeDeviceSlot(idx) {

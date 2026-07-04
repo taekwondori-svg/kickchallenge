@@ -294,61 +294,6 @@ button{font-family:inherit}
 .akm-copy{font-size:12px;color:#8d8d93;font-weight:700}
 @media(max-width:720px){.footer .container{flex-direction:column;gap:18px;text-align:center}.akm-brand-note{align-items:center;text-align:center}}
 
-
-/* =========================================================
-   AKM PREMIUM UI/UX POLISH — DESIGN ONLY
-   - 2026-07-04
-   - CSS override only. Core JavaScript / data / license logic untouched.
-   ========================================================= */
-:root{
-  --akm-ease:cubic-bezier(.2,.8,.2,1);
-  --akm-soft-shadow:0 18px 54px rgba(17,19,24,.075);
-  --akm-hard-shadow:0 34px 110px rgba(17,19,24,.14);
-  --akm-hairline:rgba(17,19,24,.08);
-  --akm-glass:rgba(255,255,255,.72);
-}
-*{scrollbar-width:thin;scrollbar-color:rgba(17,19,24,.22) transparent;}
-::-webkit-scrollbar{width:10px;height:10px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(17,19,24,.18);border:3px solid transparent;border-radius:999px;background-clip:padding-box;}
-button,a,.btn,.tab-btn,.student,.mode-card,.why-card,.contact-item{transition:transform .16s var(--akm-ease), box-shadow .16s var(--akm-ease), border-color .16s var(--akm-ease), background .16s var(--akm-ease), color .16s var(--akm-ease), opacity .16s var(--akm-ease);}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(229,38,38,.22)!important;outline-offset:3px!important;}
-
-body{letter-spacing:-.28px;}
-.container{width:min(1160px,calc(100% - 48px));}
-.nav{height:72px;background:rgba(5,5,5,.70);box-shadow:0 1px 0 rgba(255,255,255,.05);}
-.nav-links{gap:28px;color:rgba(255,255,255,.78);}
-.nav-links a:hover{color:#fff;}
-.nav-cta{border-radius:999px;padding:12px 19px;background:#fff;color:#111318;box-shadow:0 16px 42px rgba(0,0,0,.24);}
-.nav-cta:hover{background:var(--red);color:#fff;transform:translateY(-1px);}
-.hero{min-height:720px;padding-top:122px;background:radial-gradient(circle at 72% 32%, rgba(229,38,38,.18), transparent 24%),radial-gradient(circle at 54% 5%, rgba(255,255,255,.10), transparent 18%),linear-gradient(135deg,#030304 0%,#111116 55%,#050506 100%);}
-.hero:before{opacity:.55;}
-.hero:after{background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.50) 48%,rgba(0,0,0,.20));}
-.eyebrow{display:inline-flex;align-items:center;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.06);font-size:13px;color:rgba(255,255,255,.76);margin-bottom:22px;}
-.hero h1{font-size:clamp(46px,5.3vw,66px);letter-spacing:-3.4px;}
-.hero h1 strong{color:#ff4040;text-shadow:0 0 36px rgba(229,38,38,.24);}
-.hero p{max-width:520px;font-size:18px;color:rgba(255,255,255,.70);}
-.btn{height:56px;border-radius:999px;padding:0 27px;}
-.btn-red{background:linear-gradient(135deg,#e52626,#ff4646);box-shadow:0 18px 46px rgba(229,38,38,.30);}
-.btn-dark{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);}
-.hero-icons{gap:14px;}
-.hero-icon{padding:16px 14px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);backdrop-filter:blur(10px);}
-.hero-icon .ico{font-size:22px;}
-.hero-icon span{color:rgba(255,255,255,.55);}
-.akm-live-screen{border-radius:36px;box-shadow:0 42px 120px rgba(0,0,0,.52),0 0 0 1px rgba(255,255,255,.10),0 0 70px rgba(229,38,38,.10);transform:rotate(1.2deg) translateX(4px);}
-.trust-strip{border-radius:28px;background:rgba(255,255,255,.065);}
-.trust-item{min-height:116px;padding:22px 24px;}
-.trust-title{font-size:21px;}
-.section{padding:88px 0;}
-.h2{font-size:clamp(30px,3.3vw,42px);}
-.why-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
-.why-card,.mode-card,.stats-box,.screen-box{border-color:rgba(17,19,24,.08);box-shadow:0 16px 48px rgba(17,19,24,.055);}
-.why-card:hover,.mode-card:hover{transform:translateY(-4px);box-shadow:0 26px 70px rgba(17,19,24,.10);}
-.mode-img{height:142px;}
-.cta-box{border-radius:34px;box-shadow:0 34px 110px rgba(17,19,24,.16);}
-.contact-item{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.055);}
-@media(max-width:620px){.container{width:min(100% - 32px,1180px)}.hero-actions .btn{width:100%;justify-content:center}.hero-icons{grid-template-columns:1fr 1fr}.section{padding:64px 0}}
-
 </style>
 </head>
 <body>

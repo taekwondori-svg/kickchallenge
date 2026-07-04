@@ -3337,7 +3337,10 @@ let poseLandmarker=null, drawingUtils=null, lastVideoTime=-1;
 let facingMode='user', stream=null;
 let threshPct=50;
 let kicking=false, peakPct=0, aboveFrames=0, belowFrames=0;
-const ABOVE_REQ=2, BELOW_REQ=3, RESET_PCT=16;
+// 시간(ms) 기반 판정: 기기 프레임레이트(30fps/60fps)에 상관없이 동일한 인식 감도 유지
+// ABOVE_MS: 발이 기준선 위에 이만큼 머물러야 발차기 시작으로 인정 (기존 30fps 2프레임 상당)
+// BELOW_MS: 발이 내려온 상태가 이만큼 유지되어야 발차기 종료로 인정 (기존 30fps 3프레임 상당)
+const ABOVE_MS=35, BELOW_MS=70, RESET_PCT=16;
 const MIN_FOOT_SPEED=0.0012; // 너무 천천히 드는 발은 발차기로 덜 잡음
 
 let currentMode='apcha_r';
@@ -4543,11 +4546,14 @@ function onKickComplete(peak){
   else if(currentMode==='sparring'){ handleSparringKick(peak); }
 }
 function runKick(pct,m=null){
+  // aboveFrames/belowFrames 변수는 이제 "조건이 시작된 시각(ms)"을 저장한다. (0 = 조건 미충족)
+  // 기존 코드 곳곳의 aboveFrames=0 / belowFrames=0 리셋은 그대로 유효하게 동작한다.
+  const now=performance.now();
   const fastEnough = !m || m.speed==null || m.speed>MIN_FOOT_SPEED || pct>threshPct+8;
   if(!kicking){
     if(pct>=threshPct && fastEnough){
-      aboveFrames++;
-      if(aboveFrames>=ABOVE_REQ){
+      if(!aboveFrames) aboveFrames=now;
+      if(now-aboveFrames>=ABOVE_MS){
         kicking=true; peakPct=pct; belowFrames=0; trajActive=true;
         if(m){
           drillSide=(m.footX < m.hipX)?-1:1;
@@ -4558,8 +4564,8 @@ function runKick(pct,m=null){
   } else {
     peakPct=Math.max(peakPct,pct);
     if(pct<RESET_PCT){
-      belowFrames++;
-      if(belowFrames>=BELOW_REQ){
+      if(!belowFrames) belowFrames=now;
+      if(now-belowFrames>=BELOW_MS){
         kicking=false; aboveFrames=0; belowFrames=0; trajActive=false; onKickComplete(peakPct);
       }
     }
@@ -4609,10 +4615,28 @@ function computeMetrics(lm){
 async function initModel(){
   statusEl.textContent='AI 모델 로딩 중…';
   const vision=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
-  poseLandmarker=await PoseLandmarker.createFromOptions(vision,{
-    baseOptions:{ modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task", delegate:"GPU" },
-    runningMode:"VIDEO", numPoses:1
-  });
+  const MODEL_URL="https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task";
+  try{
+    // 1차 시도: GPU 가속 (대부분의 기기)
+    poseLandmarker=await PoseLandmarker.createFromOptions(vision,{
+      baseOptions:{ modelAssetPath:MODEL_URL, delegate:"GPU" },
+      runningMode:"VIDEO", numPoses:1
+    });
+  }catch(gpuErr){
+    // 2차 시도: GPU 미지원 기기(구형 태블릿 등)는 CPU로 자동 전환
+    console.warn('GPU 가속 초기화 실패 → CPU 모드로 전환합니다.', gpuErr);
+    statusEl.textContent='AI 모델 로딩 중… (호환 모드)';
+    try{
+      poseLandmarker=await PoseLandmarker.createFromOptions(vision,{
+        baseOptions:{ modelAssetPath:MODEL_URL, delegate:"CPU" },
+        runningMode:"VIDEO", numPoses:1
+      });
+    }catch(cpuErr){
+      console.error('AI 모델 초기화 실패:', cpuErr);
+      statusEl.textContent='AI 모델을 불러오지 못했습니다. 인터넷 연결 확인 후 새로고침 해주세요.';
+      throw cpuErr;
+    }
+  }
   drawingUtils=new DrawingUtils(ctx);
   statusEl.textContent='카메라 준비 중…';
 }

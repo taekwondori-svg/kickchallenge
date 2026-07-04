@@ -1,4 +1,4 @@
-const CACHE_NAME = 'akm-v8-20260703-panel-graph';
+const CACHE_NAME = 'akm-v9-20260704-font-gpu-timing';
 const ASSETS = [
   './',
   'home.html',

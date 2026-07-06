@@ -450,8 +450,8 @@ body{
 
 
 /* ===== AKM bulk student/record manager ===== */
-.akm-bulk-tools{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 14px}
-.akm-bulk-tools .btn{height:40px;padding:0 13px;border-radius:13px;font-size:12px;font-weight:850}
+.akm-bulk-tools{display:flex;gap:8px;flex-wrap:nowrap;align-items:center;margin:12px 0 14px;overflow-x:auto;padding-bottom:2px}
+.akm-bulk-tools .btn{height:40px;padding:0 13px;border-radius:13px;font-size:12px;font-weight:850;white-space:nowrap;flex:0 0 auto}
 .akm-bulk-table-wrap{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:auto;max-height:520px;box-shadow:0 16px 42px rgba(0,0,0,.04)}
 .akm-bulk-table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px}
 .akm-bulk-table th{position:sticky;top:0;background:#111318;color:#fff;font-size:12px;font-weight:900;text-align:left;padding:11px 10px;z-index:1}
@@ -477,7 +477,7 @@ body{
 .akm-bulk-input{font-weight:500!important;color:#20242b!important;border-color:#dde2eb!important;background:#fff!important;}
 .akm-bulk-input[readonly]{font-weight:500!important;color:#596170!important;background:#f8f9fb!important;}
 .akm-bulk-tools .btn{font-weight:700!important;}
-.akm-bulk-search{width:min(360px,100%);height:40px;border-radius:13px;border:1px solid var(--line2);outline:none;padding:0 13px;background:#fafafa;font-size:13px;font-weight:500;}
+.akm-bulk-search{width:260px;max-width:28vw;height:40px;border-radius:13px;border:1px solid var(--line2);outline:none;padding:0 13px;background:#fafafa;font-size:13px;font-weight:500;flex:0 0 260px;}
 .akm-bulk-search:focus{background:#fff;border-color:#111318;box-shadow:0 0 0 4px rgba(0,0,0,.05);}
 
 </style>
@@ -1866,16 +1866,15 @@ function renderBulkStudentManager(){
   </tr>`).join('');
   box.innerHTML=`<div class="manage-top"><div><h3>학생명단 표 관리</h3><p>이름·반·띠·생년월일을 표에서 한 번에 수정합니다.</p></div></div>
     <div class="akm-bulk-tools">
-      <button class="btn btn-dark" onclick="saveBulkStudents()">표 내용 저장</button>
-      <button class="btn btn-light" onclick="addBulkRow()">+ 빈 줄 추가</button>
-      <input id="bulkStudentSearch" class="akm-bulk-search" type="search" placeholder="학생 이름·반·띠 검색" oninput="filterBulkRows()">
+      <button class="btn btn-dark" onclick="saveBulkStudents()">💾 저장</button>
+      <input id="bulkStudentSearch" class="akm-bulk-search" type="search" placeholder="이름·반·띠 검색" oninput="filterBulkRows()">
       <button class="btn btn-light" onclick="exportStudentsCsv()">학생 CSV 내보내기</button>
       <button class="btn btn-light" onclick="document.getElementById('bulkStudentCsvInput').click()">학생 CSV 불러오기</button>
       <button class="btn btn-light" onclick="exportRecordsCsv()">기록 CSV 내보내기</button>
       <input type="file" id="bulkStudentCsvInput" accept=".csv,text/csv" style="display:none" onchange="importStudentsCsv(event)">
     </div>
     <div class="akm-bulk-table-wrap"><table class="akm-bulk-table" id="bulkStudentTable"><thead><tr><th>순번</th><th>이름</th><th>반</th><th>띠</th><th>생년월일</th><th>ID</th><th>삭제</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="akm-bulk-mini">CSV는 엑셀에서 열어 수정할 수 있습니다. ID는 기록 연결용이라 가능하면 그대로 두는 게 좋습니다. 새 학생은 ID를 비워두면 자동 생성됩니다.</div>`;
+    <div class="akm-bulk-mini">CSV는 엑셀에서 열어 수정할 수 있습니다. ID는 기록 연결용이라 가능하면 그대로 두는 게 좋습니다.</div>`;
 }
 function filterBulkRows(){
   const q=(document.getElementById('bulkStudentSearch')?.value||'').trim().toLowerCase();

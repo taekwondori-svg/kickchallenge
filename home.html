@@ -429,7 +429,7 @@ body{
 #studentPanel .summary .stat b{font-size:22px!important;}
 #studentPanel .summary .stat span{margin-top:0!important;font-size:11px!important;font-weight:800!important;}
 #studentPanel .summary:before{content:'운영 정보';display:block;font-size:11px;font-weight:900;color:#8b9099;margin-bottom:1px;}
-.manage-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+.manage-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;}
 .manage-tab{min-width:0!important;}
 /* graph v36 premium polish */
 .record-dashboard-v3{gap:18px!important;}
@@ -447,6 +447,21 @@ body{
 .akm-achieve-v36 span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:750;}
 @media(max-width:1100px){.main-grid{grid-template-columns:1fr!important}.akm-achieve-strip-v36{grid-template-columns:repeat(2,1fr)}#studentPanel .summary{grid-template-columns:repeat(3,1fr)!important}.student-panel-form .form-grid{grid-template-columns:1fr 1fr!important}}
 @media(max-width:640px){.akm-achieve-strip-v36{grid-template-columns:1fr}.manage-tabs{grid-template-columns:1fr!important}}
+
+
+/* ===== AKM bulk student/record manager ===== */
+.akm-bulk-tools{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 14px}
+.akm-bulk-tools .btn{height:40px;padding:0 13px;border-radius:13px;font-size:12px;font-weight:850}
+.akm-bulk-table-wrap{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:auto;max-height:520px;box-shadow:0 16px 42px rgba(0,0,0,.04)}
+.akm-bulk-table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px}
+.akm-bulk-table th{position:sticky;top:0;background:#111318;color:#fff;font-size:12px;font-weight:900;text-align:left;padding:11px 10px;z-index:1}
+.akm-bulk-table td{border-bottom:1px solid #eef1f5;padding:8px 8px;background:#fff}
+.akm-bulk-table tr:nth-child(even) td{background:#fafafa}
+.akm-bulk-input{width:100%;height:34px;border:1px solid #d9dde6;border-radius:10px;padding:0 9px;font-size:13px;font-weight:650;background:#fff;outline:none}
+.akm-bulk-input:focus{border-color:#111318;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.akm-bulk-mini{font-size:12px;color:#707783;font-weight:650;line-height:1.6;margin-top:10px}
+.akm-bulk-danger{background:#fff1f2!important;color:#dc2626!important;border:1px solid #fecdd3!important}
+.akm-bulk-import-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 
 </style>
 </head>
@@ -513,6 +528,7 @@ body{
           <option value="all">전체 반</option>
         </select>
         <button id="studentPanelAddBtn" class="student-panel-add hidden" onclick="beginAddStudentInPanel()">+ 학생 등록</button>
+        <button id="studentBulkBtn" class="student-panel-add hidden" onclick="openStudentBulkManager()">📋 명단 표 관리</button>
       </div>
       <div id="selectedRosterBar" class="selected-roster-bar">
         <div class="selected-roster-head">
@@ -541,6 +557,7 @@ body{
       </div>
       <div class="manage-tabs" role="tablist" aria-label="운영 메뉴">
         <button id="tabRecords" class="manage-tab active" onclick="setManageTab('records')">기록 · 그래프</button>
+        <button id="tabBulkStudents" class="manage-tab" onclick="setManageTab('bulkStudents')">명단 관리</button>
         <button id="tabSettings" class="manage-tab" onclick="setManageTab('settings')">도장 설정</button>
         <button id="tabLicense" class="manage-tab" onclick="setManageTab('license')">내 라이선스</button>
       </div>
@@ -1493,6 +1510,7 @@ function renderStudents(){
   const list=document.getElementById('studentList');
   const formBox=document.getElementById('studentPanelForm');
   const addBtn=document.getElementById('studentPanelAddBtn');
+  const bulkBtn=document.getElementById('studentBulkBtn');
   const search=document.getElementById('studentSearch');
   const q=(search?.value||'').trim().toLowerCase();
   const cls=document.getElementById('classFilter').value || 'all';
@@ -1502,6 +1520,7 @@ function renderStudents(){
   document.getElementById('studentModeSelect')?.classList.toggle('active', !manageMode);
   document.getElementById('studentModeManage')?.classList.toggle('active', manageMode);
   if(addBtn) addBtn.classList.toggle('hidden', !manageMode);
+  if(bulkBtn) bulkBtn.classList.toggle('hidden', !manageMode);
   if(search) search.placeholder = manageMode ? '학생 이름, 반, 띠 검색' : '학생 이름 검색';
   renderSelectedRosterBar();
   if(formBox) formBox.innerHTML = manageMode && editingStudentId ? studentEditForm(editingStudentId) : '';
@@ -1573,11 +1592,11 @@ function toggleStudent(id){
 function setManageTab(tab){
   manageTab = tab;
   editingStudentId = null;
-  ['Records','Students','Settings','License'].forEach(name=>{
+  ['Records','BulkStudents','Students','Settings','License'].forEach(name=>{
     const el=document.getElementById('tab'+name);
     if(el) el.classList.remove('active');
   });
-  const activeMap={records:'tabRecords',students:'tabStudents',settings:'tabSettings',license:'tabLicense'};
+  const activeMap={records:'tabRecords',bulkStudents:'tabBulkStudents',students:'tabStudents',settings:'tabSettings',license:'tabLicense'};
   const active=document.getElementById(activeMap[tab]);
   if(active) active.classList.add('active');
   renderManageContent();
@@ -1589,6 +1608,7 @@ function renderManageContent(){
   if(manageTab==='records'){ renderRecordsTab(box); return; }
   if(manageTab==='settings'){ renderSettingsTab(box); return; }
   if(manageTab==='license'){ renderLicenseTab(box); return; }
+  if(manageTab==='bulkStudents'){ renderBulkStudentManager(); return; }
   manageTab='records'; renderRecordsTab(box);
 }
 
@@ -1830,6 +1850,132 @@ function deleteStudent(id){
   persist(); render(); showToast('학생을 삭제했습니다.');
 }
 
+
+function openStudentBulkManager(){
+  manageTab = 'bulkStudents';
+  ['Records','BulkStudents','Students','Settings','License'].forEach(name=>document.getElementById('tab'+name)?.classList.remove('active'));
+  renderBulkStudentManager();
+}
+function renderBulkStudentManager(){
+  const box=document.getElementById('manageContent');
+  if(!box) return;
+  const rows=(state.students||[]).map((s,i)=>`<tr data-id="${escapeHtml(s.id)}">
+    <td style="width:54px;"><input class="akm-bulk-input" data-field="order" value="${i+1}" readonly></td>
+    <td><input class="akm-bulk-input" data-field="name" value="${escapeHtml(s.name||'')}"></td>
+    <td><input class="akm-bulk-input" data-field="className" value="${escapeHtml(s.className||'')}"></td>
+    <td><input class="akm-bulk-input" data-field="belt" value="${escapeHtml(s.belt||'')}"></td>
+    <td><input class="akm-bulk-input" data-field="birth" value="${escapeHtml(s.birth||'')}" placeholder="YYYY-MM-DD"></td>
+    <td><input class="akm-bulk-input" data-field="id" value="${escapeHtml(s.id||'')}"></td>
+    <td style="width:70px;"><button class="icon-btn danger" onclick="removeBulkRow(this)">삭제</button></td>
+  </tr>`).join('');
+  box.innerHTML=`<div class="manage-top"><div><h3>학생명단 표 관리</h3><p>이름·반·띠·생년월일을 표에서 한 번에 수정합니다.</p></div></div>
+    <div class="akm-bulk-tools">
+      <button class="btn btn-dark" onclick="saveBulkStudents()">표 내용 저장</button>
+      <button class="btn btn-light" onclick="addBulkRow()">+ 빈 줄 추가</button>
+      <button class="btn btn-light" onclick="exportStudentsCsv()">학생 CSV 내보내기</button>
+      <button class="btn btn-light" onclick="document.getElementById('bulkStudentCsvInput').click()">학생 CSV 불러오기</button>
+      <button class="btn btn-light" onclick="exportRecordsCsv()">기록 CSV 내보내기</button>
+      <input type="file" id="bulkStudentCsvInput" accept=".csv,text/csv" style="display:none" onchange="importStudentsCsv(event)">
+    </div>
+    <div class="akm-bulk-table-wrap"><table class="akm-bulk-table" id="bulkStudentTable"><thead><tr><th>순번</th><th>이름</th><th>반</th><th>띠</th><th>생년월일</th><th>ID</th><th>삭제</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="akm-bulk-mini">CSV는 엑셀에서 열어 수정할 수 있습니다. ID는 기록 연결용이라 가능하면 그대로 두는 게 좋습니다. 새 학생은 ID를 비워두면 자동 생성됩니다.</div>`;
+}
+function addBulkRow(){
+  const tbody=document.querySelector('#bulkStudentTable tbody');
+  if(!tbody) return;
+  const n=tbody.querySelectorAll('tr').length+1;
+  const tr=document.createElement('tr');
+  tr.dataset.id='';
+  tr.innerHTML=`<td><input class="akm-bulk-input" data-field="order" value="${n}" readonly></td><td><input class="akm-bulk-input" data-field="name" value=""></td><td><input class="akm-bulk-input" data-field="className" value=""></td><td><input class="akm-bulk-input" data-field="belt" value=""></td><td><input class="akm-bulk-input" data-field="birth" value="" placeholder="YYYY-MM-DD"></td><td><input class="akm-bulk-input" data-field="id" value=""></td><td><button class="icon-btn danger" onclick="removeBulkRow(this)">삭제</button></td>`;
+  tbody.appendChild(tr);
+}
+function removeBulkRow(btn){ btn.closest('tr')?.remove(); }
+function saveBulkStudents(){
+  const rows=[...document.querySelectorAll('#bulkStudentTable tbody tr')];
+  const used=new Set();
+  const next=[];
+  for(const tr of rows){
+    const get=f=>tr.querySelector(`[data-field="${f}"]`)?.value.trim()||'';
+    const name=get('name');
+    if(!name) continue;
+    let id=get('id') || tr.dataset.id || ('s'+Date.now()+Math.random().toString(36).slice(2,6));
+    if(used.has(id)) id=id+'_'+Math.random().toString(36).slice(2,5);
+    used.add(id);
+    next.push({id,name,className:get('className'),belt:get('belt'),birth:get('birth')});
+  }
+  state.students=next;
+  state.classes=[...new Set([...(state.classes||[]), ...next.map(s=>s.className).filter(Boolean)])];
+  state.belts=[...new Set([...(state.belts||[]), ...next.map(s=>s.belt).filter(Boolean)])];
+  state.selectedStudentIds=(state.selectedStudentIds||[]).filter(id=>next.some(s=>s.id===id));
+  persist(); render(); showToast('학생명단 표를 저장했습니다.');
+}
+function csvEscape(v){
+  v=String(v??'');
+  if(/[",\n\r]/.test(v)) return '"'+v.replace(/"/g,'""')+'"';
+  return v;
+}
+function downloadTextFile(filename, text, mime){
+  const blob=new Blob(['\ufeff'+text],{type:mime||'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function getStamp(){ const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`; }
+function safeFileName(v){ return String(v||'도장').replace(/[\\/:*?"<>|]/g,'').trim()||'도장'; }
+function exportStudentsCsv(){
+  const header=['id','name','className','belt','birth'];
+  const lines=[header.join(',')].concat((state.students||[]).map(s=>header.map(k=>csvEscape(s[k]||'')).join(',')));
+  downloadTextFile(`AKM_학생명단_${safeFileName(state.dojangName)}_${getStamp()}.csv`, lines.join('\n'), 'text/csv;charset=utf-8');
+  showToast('학생명단 CSV를 다운로드했습니다.');
+}
+function exportRecordsCsv(){
+  const records=(state.records||[]).map(normalizeRecord);
+  const header=['studentId','studentName','className','belt','mode','score','combo','date','createdAt'];
+  const lines=[header.join(',')].concat(records.map(r=>header.map(k=>csvEscape(r[k] ?? r.kind ?? '')).join(',')));
+  downloadTextFile(`AKM_기록점수_${safeFileName(state.dojangName)}_${getStamp()}.csv`, lines.join('\n'), 'text/csv;charset=utf-8');
+  showToast('기록 CSV를 다운로드했습니다.');
+}
+function parseCsv(text){
+  text=String(text||'').replace(/^\ufeff/,'');
+  const rows=[]; let row=[], val='', q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i], n=text[i+1];
+    if(q){ if(c==='"'&&n==='"'){val+='"'; i++;} else if(c==='"'){q=false;} else val+=c; }
+    else { if(c==='"') q=true; else if(c===','){row.push(val); val='';} else if(c==='\n'){row.push(val); rows.push(row); row=[]; val='';} else if(c==='\r'){} else val+=c; }
+  }
+  row.push(val); rows.push(row);
+  return rows.filter(r=>r.some(x=>String(x).trim()!==''));
+}
+function importStudentsCsv(event){
+  const file=event.target.files && event.target.files[0]; event.target.value=''; if(!file) return;
+  if(!confirm('CSV 학생명단을 불러오면 현재 학생명단이 CSV 내용으로 교체됩니다.\n기록 데이터는 삭제하지 않습니다. 계속할까요?')) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const rows=parseCsv(e.target.result); if(rows.length<2){ showToast('CSV에 학생 데이터가 없습니다.'); return; }
+      const header=rows[0].map(h=>String(h).trim());
+      const idx=name=>header.indexOf(name);
+      const nameIdx=idx('name')>=0?idx('name'):idx('이름');
+      if(nameIdx<0){ showToast('CSV 첫 줄에 name 또는 이름 컬럼이 필요합니다.'); return; }
+      const get=(r,keys)=>{ for(const k of keys){ const i=idx(k); if(i>=0) return (r[i]||'').trim(); } return ''; };
+      const next=rows.slice(1).map((r,i)=>({
+        id:get(r,['id','ID']) || ('s'+Date.now()+'_'+i),
+        name:(r[nameIdx]||'').trim(),
+        className:get(r,['className','class','반']),
+        belt:get(r,['belt','띠']),
+        birth:get(r,['birth','생년월일','생일'])
+      })).filter(s=>s.name);
+      if(!next.length){ showToast('불러올 학생이 없습니다.'); return; }
+      state.students=next;
+      state.classes=[...new Set([...(state.classes||[]), ...next.map(s=>s.className).filter(Boolean)])];
+      state.belts=[...new Set([...(state.belts||[]), ...next.map(s=>s.belt).filter(Boolean)])];
+      state.selectedStudentIds=(state.selectedStudentIds||[]).filter(id=>next.some(s=>s.id===id));
+      persist(); render(); showToast(`${next.length}명 학생명단을 불러왔습니다.`);
+    }catch(err){ showToast('CSV 파일을 읽지 못했습니다.'); }
+  };
+  reader.readAsText(file,'utf-8');
+}
+
 function renderLicenseTab(box){
   const cache = _getLicenseCache() || {};
   const myId = _getOrCreateDeviceId();
@@ -1918,9 +2064,13 @@ function renderSettingsTab(box){
       <div class="setting-card">
         <div class="setting-card-title"><b>데이터 백업</b><span>학생 명단 · 훈련 기록을 파일로 저장/복원</span></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-          <button class="btn btn-dark" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="exportBackup()">⬇️ 내보내기 (백업 파일 저장)</button>
-          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="document.getElementById('importFileInput').click()">⬆️ 불러오기 (백업 파일 복원)</button>
+          <button class="btn btn-dark" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="exportBackup()">⬇️ 전체 JSON 백업</button>
+          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="document.getElementById('importFileInput').click()">⬆️ JSON 복원</button>
+          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="exportStudentsCsv()">학생 CSV 내보내기</button>
+          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="document.getElementById('studentCsvInput').click()">학생 CSV 불러오기</button>
+          <button class="btn btn-light" style="height:44px;padding:0 16px;border-radius:14px;font-size:13px;" onclick="exportRecordsCsv()">기록 CSV 내보내기</button>
           <input type="file" id="importFileInput" accept="application/json,.json" style="display:none" onchange="importBackup(event)" />
+          <input type="file" id="studentCsvInput" accept=".csv,text/csv" style="display:none" onchange="importStudentsCsv(event)" />
         </div>
         <div class="subtle-box">· 내보내기: 지금까지 등록된 학생 명단과 훈련 기록 전체를 JSON 파일로 만들어 태블릿의 다운로드 폴더에 저장합니다.<br>· 불러오기: 이전에 내보낸 백업 파일을 선택하면, 현재 이 태블릿에 저장된 데이터를 그 파일 내용으로 전부 대체합니다.</div>
       </div>

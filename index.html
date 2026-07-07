@@ -235,14 +235,32 @@ button{font-family:inherit}
 .mode-card p{font-size:14px;line-height:1.6;color:var(--gray600)}
 .arrow{margin-top:18px;width:32px;height:32px;border-radius:50%;background:var(--gray100);display:grid;place-items:center;margin-left:auto}
 
-/* PRODUCT */
-.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.stats-box,.screen-box{border-radius:24px;padding:38px;background:#fff;border:1px solid var(--gray200);box-shadow:0 20px 60px rgba(0,0,0,.07)}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px}
-.stat strong{font-size:42px;color:var(--red);font-weight:950}
-.stat span{display:block;margin-top:8px;color:var(--gray600);font-size:14px}
-.screen-box{background:#08080a;color:#fff;position:relative;overflow:hidden}
-.screen-placeholder{margin-top:24px;border-radius:18px;height:260px;background:linear-gradient(135deg,#222,#0f0f12);border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;color:#aaa;font-weight:900;text-align:center;line-height:1.5}
+/* CORE FEATURE SUMMARY */
+.product-grid{display:grid;grid-template-columns:1fr 1.18fr;gap:24px;align-items:stretch}
+.core-box,.core-mode-box{border-radius:28px;padding:44px;background:#fff;border:1px solid var(--gray200);box-shadow:0 22px 70px rgba(0,0,0,.07)}
+.core-box .h2,.core-mode-box .h2{margin-bottom:26px}
+.core-desc{margin:0 0 28px;color:var(--gray600);font-size:16px;line-height:1.75;font-weight:650}
+.core-list{display:flex;flex-direction:column;gap:0;margin-top:28px}
+.core-item{display:grid;grid-template-columns:64px 1fr;gap:18px;align-items:center;padding:20px 0;border-top:1px solid var(--gray200)}
+.core-item:first-child{border-top:0}
+.core-ico{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:#fff3f3;color:var(--red);font-size:24px;font-weight:950}
+.core-item h3{font-size:18px;font-weight:950;letter-spacing:-.5px;margin-bottom:6px}
+.core-item p{font-size:14px;line-height:1.55;color:var(--gray600);font-weight:650}
+.core-mode-box{background:linear-gradient(135deg,#09090b,#191a20 70%,#050506);color:#fff;position:relative;overflow:hidden}
+.core-mode-box:before{content:"";position:absolute;right:-90px;top:-90px;width:280px;height:280px;border-radius:50%;background:rgba(229,38,38,.15)}
+.core-mode-box > *{position:relative;z-index:1}
+.core-mode-box .label{color:#ff5b5b}
+.core-mode-box .h2{color:#fff}
+.core-mode-box .core-desc{color:#c9c9cc}
+.core-mode-list{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.core-mode-item{display:grid;grid-template-columns:76px 1fr 42px;gap:18px;align-items:center;padding:18px 18px 18px 22px;border-radius:22px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);transition:.22s}
+.core-mode-item:hover{transform:translateY(-2px);background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.20)}
+.core-mode-ico{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);color:#ff4d43;font-size:27px;background:rgba(0,0,0,.18)}
+.core-mode-text h3{font-size:21px;font-weight:950;letter-spacing:-.6px;margin-bottom:7px;color:#fff}
+.core-mode-text p{font-size:14px;line-height:1.6;color:#cfd1d7;font-weight:650}
+.core-mode-arrow{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:22px}
+@media(max-width:980px){.product-grid{grid-template-columns:1fr}.core-box,.core-mode-box{padding:34px}.core-mode-item{grid-template-columns:64px 1fr 34px}.core-mode-ico{width:52px;height:52px}}
+@media(max-width:620px){.core-box,.core-mode-box{padding:26px;border-radius:24px}.core-item{grid-template-columns:52px 1fr;gap:14px}.core-ico{width:44px;height:44px}.core-mode-item{grid-template-columns:1fr;padding:20px}.core-mode-arrow{display:none}}
 
 /* CTA */
 .cta{padding:76px 0;background:#fff}
@@ -304,8 +322,7 @@ button{font-family:inherit}
     <nav class="nav-links">
       <a href="#why">소개</a>
       <a href="#modes">모드</a>
-      <a href="#product">기능</a>
-      <a href="#effect">도입 효과</a>
+      <a href="#product">핵심 기능</a>
       <a href="#contact">문의</a>
     </nav>
     <a class="nav-cta" data-akm-href="program_url" href="home.html">내 도장 →</a>
@@ -413,21 +430,26 @@ button{font-family:inherit}
 
 <section class="section" id="product">
   <div class="container product-grid">
-    <div class="stats-box" id="effect">
-      <div class="label">RESULT</div>
-      <h2 class="h2">실제 도입 효과</h2>
-      <div class="stats-row">
-        <div class="stat"><strong>93%</strong><span>수련생 만족도 향상</span></div>
-        <div class="stat"><strong>45%</strong><span>집중도 향상</span></div>
-        <div class="stat"><strong>2.3배</strong><span>반복 연습량 증가</span></div>
-        <div class="stat"><strong>1.8배</strong><span>기술 습득 속도 향상</span></div>
+    <div class="core-box">
+      <div class="label" data-akm="core_left_label">WHY AKM</div>
+      <h2 class="h2" data-akm-html="core_left_title">AI가 만드는 새로운<br>태권도 훈련의 기준</h2>
+      <p class="core-desc" data-akm="core_left_desc">AI KICK MASTER는 정확한 분석과 재미있는 게임 요소로 아이들의 실력을 체계적으로 성장시킵니다.</p>
+      <div class="core-list">
+        <div class="core-item"><div class="core-ico" data-akm="core_feat1_icon">⌁</div><div><h3 data-akm="core_feat1_title">정확한 AI 분석</h3><p data-akm="core_feat1_desc">발차기 높이, 속도, 정확도를 실시간으로 측정합니다.</p></div></div>
+        <div class="core-item"><div class="core-ico" data-akm="core_feat2_icon">🎮</div><div><h3 data-akm="core_feat2_title">게임처럼 즐겁게</h3><p data-akm="core_feat2_desc">아이들이 몰입할 수 있는 다양한 게임 요소를 제공합니다.</p></div></div>
+        <div class="core-item"><div class="core-ico" data-akm="core_feat3_icon">▥</div><div><h3 data-akm="core_feat3_title">성장 데이터 관리</h3><p data-akm="core_feat3_desc">훈련 기록과 그래프로 실력 향상 과정을 확인합니다.</p></div></div>
+        <div class="core-item"><div class="core-ico" data-akm="core_feat4_icon">👥</div><div><h3 data-akm="core_feat4_title">도장 맞춤 관리</h3><p data-akm="core_feat4_desc">관원 관리부터 성적 분석까지 도장 운영에 맞게 활용합니다.</p></div></div>
       </div>
-      <p style="margin-top:34px;color:var(--gray400);font-size:13px">* 위 수치는 예시 데이터입니다. 실제 운영 데이터로 교체 가능합니다.</p>
     </div>
-    <div class="screen-box">
-      <div class="label">SCREEN</div>
-      <h2 class="h2" style="color:#fff">실제 프로그램 화면</h2>
-      <div class="screen-placeholder">프로그램 화면 이미지<br>/images/app-screen.png</div>
+    <div class="core-mode-box">
+      <div class="label" data-akm="core_right_label">MODE</div>
+      <h2 class="h2" data-akm-html="core_right_title">3가지 핵심 모드</h2>
+      <p class="core-desc" data-akm="core_right_desc">다양한 훈련 모드로 아이들의 흥미를 높이고 실전 감각과 실력을 함께 키워줍니다.</p>
+      <div class="core-mode-list">
+        <div class="core-mode-item"><div class="core-mode-ico" data-akm="core_mode1_icon">🥋</div><div class="core-mode-text"><h3 data-akm="core_mode1_title">발차기 모드</h3><p data-akm="core_mode1_desc">발차기 높이와 정확도를 실시간으로 분석하고 게임처럼 즐겁게 훈련합니다.</p></div><div class="core-mode-arrow">→</div></div>
+        <div class="core-mode-item"><div class="core-mode-ico" data-akm="core_mode2_icon">▣</div><div class="core-mode-text"><h3 data-akm="core_mode2_title">격파 모드</h3><p data-akm="core_mode2_desc">날아오는 판을 정확하게 격파하며 순발력과 집중력을 함께 훈련합니다.</p></div><div class="core-mode-arrow">→</div></div>
+        <div class="core-mode-item"><div class="core-mode-ico" data-akm="core_mode3_icon">⚔</div><div class="core-mode-text"><h3 data-akm="core_mode3_title">겨루기 모드</h3><p data-akm="core_mode3_desc">AI 상대와 실전처럼 겨루며 반응 속도와 타이밍을 자연스럽게 익힙니다.</p></div><div class="core-mode-arrow">→</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -488,6 +510,33 @@ const AKM_HOME_DEFAULT = {
   mode3_title: '겨루기 모드',
   mode3_desc: 'AI 상대와 실전처럼 겨루며 반응 속도와 타이밍을 자연스럽게 익힙니다.',
   mode3_img: 'images/mode-sparring.jpg',
+  core_left_label: 'WHY AKM',
+  core_left_title: 'AI가 만드는 새로운<br>태권도 훈련의 기준',
+  core_left_desc: 'AI KICK MASTER는 정확한 분석과 재미있는 게임 요소로 아이들의 실력을 체계적으로 성장시킵니다.',
+  core_feat1_icon: '⌁',
+  core_feat1_title: '정확한 AI 분석',
+  core_feat1_desc: '발차기 높이, 속도, 정확도를 실시간으로 측정합니다.',
+  core_feat2_icon: '🎮',
+  core_feat2_title: '게임처럼 즐겁게',
+  core_feat2_desc: '아이들이 몰입할 수 있는 다양한 게임 요소를 제공합니다.',
+  core_feat3_icon: '▥',
+  core_feat3_title: '성장 데이터 관리',
+  core_feat3_desc: '훈련 기록과 그래프로 실력 향상 과정을 확인합니다.',
+  core_feat4_icon: '👥',
+  core_feat4_title: '도장 맞춤 관리',
+  core_feat4_desc: '관원 관리부터 성적 분석까지 도장 운영에 맞게 활용합니다.',
+  core_right_label: 'MODE',
+  core_right_title: '3가지 핵심 모드',
+  core_right_desc: '다양한 훈련 모드로 아이들의 흥미를 높이고 실전 감각과 실력을 함께 키워줍니다.',
+  core_mode1_icon: '🥋',
+  core_mode1_title: '발차기 모드',
+  core_mode1_desc: '발차기 높이와 정확도를 실시간으로 분석하고 게임처럼 즐겁게 훈련합니다.',
+  core_mode2_icon: '▣',
+  core_mode2_title: '격파 모드',
+  core_mode2_desc: '날아오는 판을 정확하게 격파하며 순발력과 집중력을 함께 훈련합니다.',
+  core_mode3_icon: '⚔',
+  core_mode3_title: '겨루기 모드',
+  core_mode3_desc: 'AI 상대와 실전처럼 겨루며 반응 속도와 타이밍을 자연스럽게 익힙니다.',
   contact_title: '지금 바로 도장 수업에<br>AI 훈련을 더하세요.',
   contact_desc: 'AI KICK MASTER 도입 문의 및 무료 체험 상담을 신청하시면 도장 환경에 맞춰 안내해드립니다.',
   kakao_label: '바로 상담하기 →'

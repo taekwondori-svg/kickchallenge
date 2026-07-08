@@ -2875,6 +2875,42 @@ body.hud-v21 .roster-chip .rc-save-count{
    - 안정성 확인 후 CSS를 base / mode / responsive / final-overrides 4개 그룹으로 분리.
    ========================================================= */
 
+
+/* =========================================================
+   CSS SECTION 99: camera-brightness-v3
+   - 중앙 카메라 영역을 더 밝게 보이도록 최종 오버레이를 다시 덮어씀
+   - 기능 JS 변경 없음
+   ========================================================= */
+body.hud-v21 .cam-wrap::before,
+body.hud-v21.akm-ui .cam-wrap::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:4 !important;
+  pointer-events:none !important;
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(2,8,18,0.00) 0%,
+      rgba(2,8,18,0.00) 68%,
+      rgba(2,8,18,0.04) 82%,
+      rgba(2,8,18,0.12) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2,8,18,0.16) 0%,
+      rgba(2,8,18,0.04) 12%,
+      rgba(2,8,18,0.00) 26%,
+      rgba(2,8,18,0.00) 76%,
+      rgba(2,8,18,0.06) 88%,
+      rgba(2,8,18,0.24) 100%
+    ) !important;
+}
+
+body.hud-v21.akm-ui .cam-wrap::after{
+  opacity:.10 !important;
+}
+
 </style>
 
 

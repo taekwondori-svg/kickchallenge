@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI JUMP MASTER | NAREUN LABS</title>
+<meta name="description" content="줄넘기 훈련을 리듬감 있고 직관적인 AI 측정 경험으로 바꾸는 AI JUMP MASTER." />
+<meta name="theme-color" content="#14B8A6">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<style>
+:root{
+  --teal:#14B8A6; --teal2:#0d9488; --teal-bright:#2DD4BF; --lime:#A3E635; --lime-bright:#BEF264;
+  --bg:#05070b; --line:rgba(255,255,255,.11); --muted:#9aa7bd; --text:#f5f7fb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;background:var(--bg);color:var(--text);letter-spacing:-.25px;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);background:rgba(5,7,11,.75);border-bottom:1px solid var(--line)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900}
+.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--lime));display:grid;place-items:center;font-size:16px;font-weight:1000;color:#041018}
+.back{font-size:13px;color:var(--muted);font-weight:700}
+.hero{padding:78px 0 56px;position:relative}
+.hero:before{content:"";position:absolute;right:-160px;top:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,.30),transparent 65%);filter:blur(10px);z-index:0}
+.hero-inner{position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:12px;font-weight:800;color:#9df2c9}
+h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:22px 0 18px;letter-spacing:-.05em}
+h1 span{background:linear-gradient(120deg,var(--lime),var(--teal-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(16px,1.6vw,19px);line-height:1.7;color:#c3ccdc;max-width:640px;margin-bottom:30px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 24px;border-radius:16px;font-weight:900;font-size:15px;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(135deg,var(--teal),var(--lime));color:#041018;box-shadow:0 18px 40px rgba(20,184,166,.32)}
+.btn.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff}
+section{padding:56px 0}
+.section-head{margin-bottom:30px}
+.eyebrow{color:var(--lime);font-size:12px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase}
+h2{font-size:clamp(26px,3.6vw,40px);margin:8px 0 0;letter-spacing:-.04em}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.feature{padding:24px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.feature b{display:block;font-size:16px;margin-bottom:8px}
+.feature p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{padding:24px;border-radius:22px;background:#0b1220;border:1px solid var(--line)}
+.step b{color:var(--lime);font-size:13px}
+.step h3{margin:10px 0 8px;font-size:18px}
+.step p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.cta{padding:44px;border-radius:32px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(20,184,166,.18),rgba(163,230,53,.10));display:flex;justify-content:space-between;gap:24px;align-items:center;flex-wrap:wrap}
+.cta p{color:#dfe4ee;margin-top:8px;line-height:1.6}
+footer{padding:34px 0 46px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+@media(max-width:820px){.features{grid-template-columns:repeat(2,1fr)}.how{grid-template-columns:1fr}}
+@media(max-width:520px){.features{grid-template-columns:1fr}.cta{padding:26px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><div class="brand-mark">N</div><span>NAREUN LABS</span></a>
+    <a class="back" href="index.html">← 전체 제품 보기</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="badge">🪢 AI 자세 인식 · 줄넘기 훈련</div>
+      <h1>줄넘기가<br><span>리듬이 되는 순간.</span></h1>
+      <p class="lead">웹캠 하나로 점프 횟수와 리듬을 측정합니다. 수련생은 스스로 기록에 도전하며 훈련하고, 관장님은 도장 전체의 성장 데이터를 손쉽게 관리할 수 있습니다.</p>
+      <div class="actions">
+        <a class="btn primary" href="jumphome.html">AI JUMP MASTER 시작하기</a>
+        <a class="btn ghost" href="index.html#contact">도입 문의</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Features</div>
+        <h2>도장에 바로 적용되는 4가지 기능</h2>
+      </div>
+      <div class="features">
+        <div class="feature"><b>🪢 줄넘기 측정</b><p>AI 자세 인식으로 점프 횟수와 착지를 실시간으로 카운트합니다.</p></div>
+        <div class="feature"><b>⚡ 스피드</b><p>일정 시간 안에 얼마나 빠르게 뛰는지 스피드 모드로 측정합니다.</p></div>
+        <div class="feature"><b>🎯 챌린지</b><p>자유/시간제/연속(스트릭) 모드로 다양한 방식의 도전이 가능합니다.</p></div>
+        <div class="feature"><b>📈 성장 기록</b><p>회차별 기록을 누적해 꾸준한 성장을 눈으로 확인할 수 있습니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">How it works</div>
+        <h2>시작은 3단계면 충분합니다</h2>
+      </div>
+      <div class="how">
+        <div class="step"><b>STEP 01</b><h3>라이선스 인증</h3><p>발급받은 JMP 라이선스 키로 태블릿 또는 PC를 인증합니다.</p></div>
+        <div class="step"><b>STEP 02</b><h3>모드 선택</h3><p>자유/시간제/연속 스트릭 중 원하는 훈련 모드를 선택합니다.</p></div>
+        <div class="step"><b>STEP 03</b><h3>측정 & 기록</h3><p>웹캠 앞에서 줄넘기를 하면 자동으로 카운트되고 기록이 누적됩니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h2>지금 바로 도장에서 사용해보세요</h2>
+          <p>라이선스 키가 있다면 바로 시작할 수 있습니다.</p>
+        </div>
+        <a class="btn primary" href="jumphome.html">AI JUMP MASTER 시작하기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 NAREUN LABS · AI JUMP MASTER · naruunlabs.kr</div>
+</footer>
+</body>
+</html>

@@ -106,9 +106,9 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <div class="badge">AI SPORTS EDUCATION PLATFORM</div>
-          <h1>Learn with Joy.<br><em>Grow with AI.</em></h1>
-          <p class="lead">NAREUN LABS는 AI 기술로 스포츠 교육을 더 즐겁고, 더 정확하고, 더 성장하는 경험으로 만듭니다. 아이들이 스스로 도전하고, 기록을 확인하고, 재미있게 훈련할 수 있는 AI 교육 플랫폼을 만듭니다.</p>
+          <div class="badge" id="heroEyebrow">AI SPORTS EDUCATION PLATFORM</div>
+          <h1 id="heroTitle">Learn with Joy.<br><em>Grow with AI.</em></h1>
+          <p class="lead" id="heroLead">NAREUN LABS는 AI 기술로 스포츠 교육을 더 즐겁고, 더 정확하고, 더 성장하는 경험으로 만듭니다. 아이들이 스스로 도전하고, 기록을 확인하고, 재미있게 훈련할 수 있는 AI 교육 플랫폼을 만듭니다.</p>
           <div class="actions">
             <a class="btn primary" href="#products">제품 둘러보기</a>
             <a class="btn" href="#about">브랜드 철학</a>
@@ -189,7 +189,7 @@
         <div class="cta">
           <div>
             <h2>AI 스포츠 교육의 시작,<br>NAREUN LABS</h2>
-            <p>AI KICK MASTER 도입 문의와 NAREUN LABS 제품 상담을 준비 중입니다.</p>
+            <p id="contactDesc">AI KICK MASTER 도입 문의와 NAREUN LABS 제품 상담을 준비 중입니다.</p>
           </div>
           <div class="actions"><a class="btn primary" href="mailto:naruunlabs@gmail.com">문의하기</a></div>
         </div>
@@ -200,48 +200,60 @@
   <footer>
     <div class="wrap foot">
       <div><b>NAREUN LABS</b> · Learn with Joy. Grow with AI.</div>
-      <div>© 2026 NAREUN LABS. All rights reserved.</div>
+      <div id="copyrightText">© 2026 NAREUN LABS. All rights reserved.</div>
     </div>
   </footer>
 
   <script>
   (function(){
     const ADMIN_EDGE_URL = 'https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker';
+
+    // ── 1단계: 쉬운 코드 게이트 (진짜 보안 아님, 그냥 실수로 admin 열리는 것 방지용) ──
+    // 진짜 비밀번호는 admin.html 로그인 화면에서 별도로 검증합니다.
+    // 이 코드를 바꾸고 싶으면 아래 EASY_CODE 값만 수정하면 됩니다.
+    const EASY_CODE = '0000';
+
     const logo = document.querySelector('header .brand .mark');
-    if(!logo) return;
-    let clickCount = 0;
-    let clickTimer = null;
-
-    logo.addEventListener('click', function(e){
-      e.preventDefault();
-      clickCount++;
-      clearTimeout(clickTimer);
-      clickTimer = setTimeout(()=>{ clickCount = 0; }, 1500);
-      if(clickCount >= 5){
-        clickCount = 0;
+    if(logo){
+      let clickCount = 0;
+      let clickTimer = null;
+      logo.addEventListener('click', function(e){
+        e.preventDefault();
+        clickCount++;
         clearTimeout(clickTimer);
-        askAdminPassword();
-      }
-    });
-
-    async function askAdminPassword(){
-      const pw = prompt('관리자 비밀번호를 입력하세요');
-      if(!pw) return;
-      try{
-        const res = await fetch(ADMIN_EDGE_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ action:'LOGIN', payload:{ password: pw } })
-        });
-        if(res.ok){
-          window.location.href = 'admin.html';
-        } else {
-          alert('비밀번호가 올바르지 않습니다.');
+        clickTimer = setTimeout(()=>{ clickCount = 0; }, 1500);
+        if(clickCount >= 5){
+          clickCount = 0;
+          clearTimeout(clickTimer);
+          const code = prompt('코드를 입력하세요');
+          if(code === null) return;
+          if(code === EASY_CODE){
+            window.location.href = ADMIN_URL_OVERRIDE || 'admin.html';
+          } else {
+            alert('코드가 올바르지 않습니다.');
+          }
         }
-      }catch(err){
-        alert('인증 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
+      });
     }
+
+    // ── 관리자에서 저장한 인덱스 문구를 불러와 반영 (실패해도 기본 문구 그대로 유지) ──
+    let ADMIN_URL_OVERRIDE = '';
+    fetch(ADMIN_EDGE_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'GET_HOME_DATA', payload:{ target:'index' } })
+    }).then(r => r.json()).then(res => {
+      const d = res && res.data;
+      if(!d) return;
+      if(d.admin_url) ADMIN_URL_OVERRIDE = d.admin_url;
+      const setText = (id, val) => { const el = document.getElementById(id); if(el && val) el.textContent = val; };
+      const setHtml = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerHTML = val; };
+      setText('heroEyebrow', d.hero_eyebrow);
+      setHtml('heroTitle', d.hero_title);
+      setText('heroLead', d.hero_desc);
+      setText('contactDesc', d.contact_desc);
+      setText('copyrightText', d.copyright);
+    }).catch(()=>{ /* 실패 시 기본 정적 문구 그대로 사용 */ });
   })();
   </script>
 </body>

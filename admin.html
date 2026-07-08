@@ -151,7 +151,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
     box-shadow:24px 0 60px rgba(0,0,0,.12);
   }
   .tab-bar:before{
-    content:"AI KICK MASTER";
+    content:"NAREUN LABS";
     white-space:pre;
     display:block;
     color:#fff;
@@ -452,7 +452,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
       linear-gradient(180deg,#050505 0%,#09090b 62%,#030303 100%) !important;
   }
   .tab-bar:before{
-    content:"AI KICK MASTER\A Admin Console" !important;
+    content:"NAREUN LABS\A Admin Console" !important;
     line-height:1.12 !important;
     font-size:18px !important;
     padding:8px 6px 28px 50px !important;
@@ -695,7 +695,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
       linear-gradient(180deg,#050506 0%,#090a0c 58%,#020203 100%) !important;
   }
   .tab-bar:before{
-    content:"AI KICK MASTER\AAdministrator" !important;
+    content:"NAREUN LABS\AAdministrator" !important;
     white-space:pre !important;
     overflow:visible !important;
     text-overflow:clip !important;
@@ -875,7 +875,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
     padding:28px 16px 22px !important;
   }
   .tab-bar:before{
-    content:"AI KICK MASTER" !important;
+    content:"NAREUN LABS" !important;
     white-space:nowrap !important;
     overflow:visible !important;
     text-overflow:clip !important;
@@ -967,7 +967,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 <!-- 로그인 -->
 <div id="loginWrap">
   <div class="login-box">
-    <img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER">
+    <div class="akm-admin-logo" style="font-weight:900;font-size:26px;letter-spacing:-1px;background:linear-gradient(135deg,#35a7ff,#00d6c9);-webkit-background-clip:text;background-clip:text;color:transparent;">NAREUN LABS</div>
     <p>NAREUN LABS 통합 관리자</p>
     <div class="login-brand-meta">
       <div class="akm-powered">Powered by Google MediaPipe</div>
@@ -984,7 +984,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
   <!-- 탑바 -->
   <div class="top-bar">
     <div class="top-logo">
-      <div class="top-logo-row"><img class="akm-admin-logo" src="logo.svg" alt="AI KICK MASTER"><span class="admin-label">관리자</span></div>
+      <div class="top-logo-row"><div class="akm-admin-logo" style="font-weight:900;font-size:22px;letter-spacing:-1px;background:linear-gradient(135deg,#35a7ff,#00d6c9);-webkit-background-clip:text;background-clip:text;color:transparent;">NAREUN LABS</div><span class="admin-label">관리자</span></div>
       <div class="akm-powered">Powered by Google MediaPipe</div>
     </div>
     <div class="top-actions">
@@ -996,7 +996,7 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 
   <!-- 탭 -->
   <div class="tab-bar">
-    <div class="sidebar-brand"><img src="logo-white.svg" alt="AI KICK MASTER"><span>Powered by Google MediaPipe</span></div>
+    <div class="sidebar-brand"><div style="font-weight:900;font-size:18px;letter-spacing:-.5px;color:#fff;">NAREUN LABS</div><span>Powered by Google MediaPipe</span></div>
     <button class="tab-btn active" onclick="switchTab('license')">📋 라이선스 관리</button>
     <button class="tab-btn" onclick="switchTab('home')">🏠 메인 홈페이지 편집</button>
   </div>
@@ -1043,137 +1043,84 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
 
   <!-- ===== 홈페이지 편집 탭 ===== -->
   <div class="tab-content" id="tab-home">
-    <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px">
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+      <button class="home-subtab-btn active" id="subtab-index-btn" onclick="switchHomeSubtab('index')">🏠 인덱스</button>
+      <button class="home-subtab-btn" id="subtab-kick-btn" onclick="switchHomeSubtab('kick')">🥋 킥마스터 소개</button>
+      <button class="home-subtab-btn" id="subtab-jump-btn" onclick="switchHomeSubtab('jump')">🪢 점프마스터 소개</button>
+      <div style="flex:1"></div>
       <button class="btn-add btn-ghost" onclick="loadHomeFields()">↻ 불러오기</button>
-      <button class="btn-add btn-ghost" onclick="window.open('index.html','_blank')">👁 NAREUN LABS 미리보기</button>
-      <button class="btn-add btn-gold" onclick="saveHomeData()">💾 홈페이지 저장</button>
+      <button class="btn-add btn-gold" onclick="saveHomeData()">💾 저장</button>
+    </div>
+    <style>
+      .home-subtab-btn{height:40px;padding:0 16px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#c8cbd2;font-size:13px;font-weight:700;cursor:pointer;transition:.15s ease}
+      .home-subtab-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}
+      .home-subtab-btn.active{background:#fff;color:#111318;border-color:#fff}
+    </style>
+
+    <!-- ===== 인덱스(index.html) ===== -->
+    <div class="home-subtab-content" id="home-subtab-index">
+      <div class="field-hint" style="margin-bottom:14px">index.html은 미니멀하게 유지되는 메인 허브 화면입니다. Hero 문구와 문의/링크 정보만 관리합니다. 각 제품의 자세한 설명은 아래 "킥마스터 소개" / "점프마스터 소개" 탭에서 관리하세요.</div>
+      <div class="edit-section">
+        <h3>핵심 링크</h3>
+        <div class="field-row">
+          <div class="field-group"><div class="field-label">내 도장 링크(킥 시작 링크)</div><input id="f_index_program_url" class="f-input" type="text" placeholder="kickhome.html" /></div>
+          <div class="field-group"><div class="field-label">숨김 관리자 링크</div><input id="f_index_admin_url" class="f-input" type="text" placeholder="admin.html" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><div class="field-label">카카오톡 문의 링크</div><input id="f_index_kakao_url" class="f-input" type="url" placeholder="https://open.kakao.com/o/..." /></div>
+          <div class="field-group"><div class="field-label">전화 링크</div><input id="f_index_tel_url" class="f-input" type="text" placeholder="tel:01000000000" /></div>
+        </div>
+      </div>
+      <div class="edit-section">
+        <h3>첫 화면 Hero</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">상단 작은 배지 문구</div><input id="f_index_hero_eyebrow" class="f-input" type="text" /></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 타이틀 HTML</div><textarea id="f_index_hero_title" class="f-textarea"></textarea><div class="field-hint">강조할 단어는 &lt;em&gt;단어&lt;/em&gt;, 줄바꿈은 &lt;br&gt; 사용</div></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 설명</div><textarea id="f_index_hero_desc" class="f-textarea"></textarea></div></div>
+      </div>
+      <div class="edit-section">
+        <h3>문의 / 푸터</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">문의 섹션 설명</div><textarea id="f_index_contact_desc" class="f-textarea"></textarea></div></div>
+        <div class="field-row">
+          <div class="field-group"><div class="field-label">전화번호 표시</div><input id="f_index_phone" class="f-input" type="text" /></div>
+          <div class="field-group"><div class="field-label">운영시간</div><input id="f_index_hours" class="f-input" type="text" /></div>
+        </div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">저작권 문구</div><input id="f_index_copyright" class="f-input" type="text" /></div></div>
+      </div>
     </div>
 
-    <div class="edit-section">
-      <h3>핵심 링크</h3>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">내 도장 링크</div><input id="f_program_url" class="f-input" type="text" placeholder="kickhome.html" /></div>
-        <div class="field-group"><div class="field-label">숨김 관리자 링크</div><input id="f_admin_url" class="f-input" type="text" placeholder="admin.html" /><div class="field-hint">푸터 오른쪽의 작은 '관리' 링크로 연결됩니다.</div></div>
+    <!-- ===== 킥마스터 소개(kickmaster.html) ===== -->
+    <div class="home-subtab-content" id="home-subtab-kick" style="display:none">
+      <div class="field-hint" style="margin-bottom:14px">kickmaster.html의 히어로 문구와 문의 섹션 설명을 관리합니다.</div>
+      <div class="edit-section">
+        <h3>첫 화면 Hero</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">상단 작은 배지 문구</div><input id="f_kick_badge" class="f-input" type="text" /></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 타이틀 HTML</div><textarea id="f_kick_title" class="f-textarea"></textarea><div class="field-hint">강조할 부분은 &lt;span&gt;단어&lt;/span&gt;, 줄바꿈은 &lt;br&gt; 사용</div></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 설명</div><textarea id="f_kick_lead" class="f-textarea"></textarea></div></div>
       </div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">카카오톡 문의 링크</div><input id="f_kakao_url" class="f-input" type="url" placeholder="https://open.kakao.com/o/..." /></div>
-        <div class="field-group"><div class="field-label">전화 링크</div><input id="f_tel_url" class="f-input" type="text" placeholder="tel:01000000000" /></div>
-      </div>
-    </div>
-
-    <div class="edit-section">
-      <h3>첫 화면 Hero</h3>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">상단 작은 문구</div><input id="f_hero_eyebrow" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">메인 이미지 URL</div><input id="f_hero_img" class="f-input" type="text" placeholder="images/hero-kick.png" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">메인 타이틀 HTML</div><textarea id="f_hero_title" class="f-textarea" placeholder="발차기를 <strong>데이터</strong>로.<br>훈련을 <strong>게임</strong>으로."></textarea><div class="field-hint">강조할 단어는 &lt;strong&gt;단어&lt;/strong&gt;, 줄바꿈은 &lt;br&gt; 사용</div></div></div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">메인 설명</div><textarea id="f_hero_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">빨간 버튼 문구</div><input id="f_hero_btn1" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">검정 버튼 문구</div><input id="f_hero_btn2" class="f-input" type="text" /></div>
+      <div class="edit-section">
+        <h3>문의 CTA</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">CTA 설명</div><textarea id="f_kick_cta_desc" class="f-textarea"></textarea></div></div>
       </div>
     </div>
 
-    <div class="edit-section">
-      <h3>섹션 문구</h3>
-      <div class="field-row single"><div class="field-group"><div class="field-label">WHY 섹션 제목</div><input id="f_why_title" class="f-input" type="text" /></div></div>
-      <div class="field-row"><div class="field-group"><div class="field-label">모드 섹션 제목 HTML</div><textarea id="f_modes_title" class="f-textarea"></textarea></div><div class="field-group"><div class="field-label">모드 섹션 설명</div><textarea id="f_modes_desc" class="f-textarea"></textarea></div></div>
-    </div>
-
-    <div class="edit-section">
-      <h3>프로그램 모드 카드</h3>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">1번 모드 제목</div><input id="f_mode1_title" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">1번 모드 이미지 URL</div><input id="f_mode1_img" class="f-input" type="text" placeholder="images/mode-kick.jpg" /></div>
+    <!-- ===== 점프마스터 소개(jumpmaster.html) ===== -->
+    <div class="home-subtab-content" id="home-subtab-jump" style="display:none">
+      <div class="field-hint" style="margin-bottom:14px">jumpmaster.html의 히어로 문구와 문의 섹션 설명을 관리합니다.</div>
+      <div class="edit-section">
+        <h3>첫 화면 Hero</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">상단 작은 배지 문구</div><input id="f_jump_badge" class="f-input" type="text" /></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 타이틀 HTML</div><textarea id="f_jump_title" class="f-textarea"></textarea><div class="field-hint">강조할 부분은 &lt;span&gt;단어&lt;/span&gt;, 줄바꿈은 &lt;br&gt; 사용</div></div></div>
+        <div class="field-row single"><div class="field-group"><div class="field-label">메인 설명</div><textarea id="f_jump_lead" class="f-textarea"></textarea></div></div>
       </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">1번 모드 설명</div><textarea id="f_mode1_desc" class="f-textarea"></textarea></div></div>
-
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">2번 모드 제목</div><input id="f_mode2_title" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">2번 모드 이미지 URL</div><input id="f_mode2_img" class="f-input" type="text" placeholder="images/mode-break.jpg" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">2번 모드 설명</div><textarea id="f_mode2_desc" class="f-textarea"></textarea></div></div>
-
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">3번 모드 제목</div><input id="f_mode3_title" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">3번 모드 이미지 URL</div><input id="f_mode3_img" class="f-input" type="text" placeholder="images/mode-sparring.jpg" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">3번 모드 설명</div><textarea id="f_mode3_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-hint">이미지는 GitHub에 올린 파일 경로를 넣으면 됩니다. 예: images/mode-kick.jpg</div>
-    </div>
-
-    <div class="edit-section">
-      <h3>핵심 기능 요약 섹션</h3>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">왼쪽 작은 문구</div><input id="f_core_left_label" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">오른쪽 작은 문구</div><input id="f_core_right_label" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">왼쪽 제목 HTML</div><textarea id="f_core_left_title" class="f-textarea"></textarea></div>
-        <div class="field-group"><div class="field-label">오른쪽 제목 HTML</div><textarea id="f_core_right_title" class="f-textarea"></textarea></div>
-      </div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">왼쪽 설명</div><textarea id="f_core_left_desc" class="f-textarea"></textarea></div>
-        <div class="field-group"><div class="field-label">오른쪽 설명</div><textarea id="f_core_right_desc" class="f-textarea"></textarea></div>
-      </div>
-
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">기능 1 아이콘</div><input id="f_core_feat1_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">기능 1 제목</div><input id="f_core_feat1_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">기능 1 설명</div><textarea id="f_core_feat1_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">기능 2 아이콘</div><input id="f_core_feat2_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">기능 2 제목</div><input id="f_core_feat2_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">기능 2 설명</div><textarea id="f_core_feat2_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">기능 3 아이콘</div><input id="f_core_feat3_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">기능 3 제목</div><input id="f_core_feat3_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">기능 3 설명</div><textarea id="f_core_feat3_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">기능 4 아이콘</div><input id="f_core_feat4_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">기능 4 제목</div><input id="f_core_feat4_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">기능 4 설명</div><textarea id="f_core_feat4_desc" class="f-textarea"></textarea></div></div>
-
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">오른쪽 모드 1 아이콘</div><input id="f_core_mode1_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">오른쪽 모드 1 제목</div><input id="f_core_mode1_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">오른쪽 모드 1 설명</div><textarea id="f_core_mode1_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">오른쪽 모드 2 아이콘</div><input id="f_core_mode2_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">오른쪽 모드 2 제목</div><input id="f_core_mode2_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">오른쪽 모드 2 설명</div><textarea id="f_core_mode2_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">오른쪽 모드 3 아이콘</div><input id="f_core_mode3_icon" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">오른쪽 모드 3 제목</div><input id="f_core_mode3_title" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">오른쪽 모드 3 설명</div><textarea id="f_core_mode3_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-hint">이 섹션은 기존 '실제 도입 효과' 대신 들어가는 실제 판매용 요약 섹션입니다. 줄바꿈은 제목에 &lt;br&gt; 사용 가능.</div>
-    </div>
-
-    <div class="edit-section">
-      <h3>문의 / 푸터</h3>
-      <div class="field-row single"><div class="field-group"><div class="field-label">문의 제목 HTML</div><textarea id="f_contact_title" class="f-textarea"></textarea></div></div>
-      <div class="field-row single"><div class="field-group"><div class="field-label">문의 설명</div><textarea id="f_contact_desc" class="f-textarea"></textarea></div></div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">카카오톡 버튼 문구</div><input id="f_kakao_label" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">전화번호 표시</div><input id="f_phone" class="f-input" type="text" /></div>
-      </div>
-      <div class="field-row">
-        <div class="field-group"><div class="field-label">운영시간</div><input id="f_hours" class="f-input" type="text" /></div>
-        <div class="field-group"><div class="field-label">저작권 문구</div><input id="f_copyright" class="f-input" type="text" /></div>
+      <div class="edit-section">
+        <h3>문의 CTA</h3>
+        <div class="field-row single"><div class="field-group"><div class="field-label">CTA 설명</div><textarea id="f_jump_cta_desc" class="f-textarea"></textarea></div></div>
       </div>
     </div>
 
     <div class="edit-section">
       <h3>연결 상태</h3>
-      <div class="field-hint" id="homeSaveStatus">현재는 Edge Function의 GET_HOME_DATA / UPDATE_HOME_DATA가 연결되면 전 방문자에게 적용됩니다. 실패 시 임시로 이 브라우저 localStorage에 저장됩니다.</div>
+      <div class="field-hint" id="homeSaveStatus">Edge Function의 GET_HOME_DATA / UPDATE_HOME_DATA(target별)로 index.html / kickmaster.html / jumpmaster.html에 각각 반영됩니다.</div>
     </div>
   </div>
 
@@ -1684,65 +1631,43 @@ async function copyLicenseMsg(encoded) {
 /* ==============================
    홈페이지 편집
    ============================== */
-const HOME_DEFAULT = {
-  program_url: 'kickhome.html',
-  admin_url: 'admin.html',
-  kakao_url: '#',
-  tel_url: 'tel:01000000000',
-  phone: '010-0000-0000',
-  hours: '평일 10:00 - 19:00',
-  copyright: '© 2026 NAREUN LABS. All rights reserved.',
-  hero_eyebrow: 'AI SPORTS EDUCATION PLATFORM',
-  hero_title: 'Learn with Joy.<br><strong>Grow with AI.</strong>',
-  hero_desc: 'NAREUN LABS는 AI 기술로 스포츠 교육을 더 즐겁고, 더 정확하고, 더 성장하는 경험으로 만듭니다.',
-  hero_btn1: 'AI KICK MASTER 보기',
-  hero_btn2: '문의하기',
-  hero_img: 'images/hero-kick.png',
-  why_title: '즐거움에서 시작해 성장으로 이어집니다',
-  modes_title: 'NAREUN LABS 제품군',
-  modes_desc: '현재는 AI KICK MASTER를 공개 제품으로 운영하고, AI JUMP MASTER는 Coming Soon 상태로 준비합니다.',
-  mode1_title: 'AI KICK MASTER',
-  mode1_desc: '웹캠 기반 AI 자세 인식으로 발차기 훈련을 게임처럼 즐기는 태권도장 전용 프로그램입니다.',
-  mode1_img: 'images/mode-kick.jpg',
-  mode2_title: 'AI JUMP MASTER',
-  mode2_desc: '줄넘기 훈련을 AI 측정 경험으로 바꾸는 다음 제품입니다. 현재는 Coming Soon 상태입니다.',
-  mode2_img: 'images/mode-jump.jpg',
-  mode3_title: 'Coming Soon',
-  mode3_desc: '품새, 겨루기 등 추가 제품은 아직 메인 페이지에 공개하지 않습니다.',
-  mode3_img: '',
-  core_left_label: 'WHY AKM',
-  core_left_title: 'AI가 만드는 새로운<br>태권도 훈련의 기준',
-  core_left_desc: 'AI KICK MASTER는 정확한 분석과 재미있는 게임 요소로 아이들의 실력을 체계적으로 성장시킵니다.',
-  core_feat1_icon: '⌁',
-  core_feat1_title: '정확한 AI 분석',
-  core_feat1_desc: '발차기 높이, 속도, 정확도를 실시간으로 측정합니다.',
-  core_feat2_icon: '🎮',
-  core_feat2_title: '게임처럼 즐겁게',
-  core_feat2_desc: '아이들이 몰입할 수 있는 다양한 게임 요소를 제공합니다.',
-  core_feat3_icon: '▥',
-  core_feat3_title: '성장 데이터 관리',
-  core_feat3_desc: '훈련 기록과 그래프로 실력 향상 과정을 확인합니다.',
-  core_feat4_icon: '👥',
-  core_feat4_title: '도장 맞춤 관리',
-  core_feat4_desc: '관원 관리부터 성적 분석까지 도장 운영에 맞게 활용합니다.',
-  core_right_label: 'MODE',
-  core_right_title: '3가지 핵심 모드',
-  core_right_desc: '다양한 훈련 모드로 아이들의 흥미를 높이고 실전 감각과 실력을 함께 키워줍니다.',
-  core_mode1_icon: '🥋',
-  core_mode1_title: 'AI KICK MASTER',
-  core_mode1_desc: '발차기 높이와 정확도를 실시간으로 분석하고 게임처럼 즐겁게 훈련합니다.',
-  core_mode2_icon: '▣',
-  core_mode2_title: 'AI JUMP MASTER',
-  core_mode2_desc: '줄넘기 훈련을 AI 측정 경험으로 바꾸는 다음 제품입니다. 현재는 Coming Soon 상태입니다.',
-  core_mode3_icon: '⚔',
-  core_mode3_title: 'Coming Soon',
-  core_mode3_desc: '품새, 겨루기 등 추가 제품은 아직 메인 페이지에 공개하지 않습니다.',
-  contact_title: 'AI 스포츠 교육의 시작,<br>NAREUN LABS',
-  contact_desc: 'AI KICK MASTER 도입 문의와 NAREUN LABS 제품 상담을 준비 중입니다.',
-  kakao_label: '바로 상담하기 →'
+const HOME_TARGET_DEFAULTS = {
+  index: {
+    program_url: 'kickhome.html',
+    admin_url: 'admin.html',
+    kakao_url: '#',
+    tel_url: 'tel:01000000000',
+    phone: '010-0000-0000',
+    hours: '평일 10:00 - 19:00',
+    copyright: '© 2026 NAREUN LABS. All rights reserved.',
+    hero_eyebrow: 'AI SPORTS EDUCATION PLATFORM',
+    hero_title: 'Learn with Joy.<br><em>Grow with AI.</em>',
+    hero_desc: 'NAREUN LABS는 AI 기술로 스포츠 교육을 더 즐겁고, 더 정확하고, 더 성장하는 경험으로 만듭니다. 아이들이 스스로 도전하고, 기록을 확인하고, 재미있게 훈련할 수 있는 AI 교육 플랫폼을 만듭니다.',
+    contact_desc: 'AI KICK MASTER 도입 문의와 NAREUN LABS 제품 상담을 준비 중입니다.'
+  },
+  kick: {
+    badge: '🥋 AI 자세 인식 · 태권도장 전용',
+    title: '발차기가<br><span>게임이 되는 순간.</span>',
+    lead: '웹캠 하나로 발차기 속도와 정확도를 측정합니다. 수련생은 화면 속 기록에 도전하며 재미있게 훈련하고, 관장님은 도장 전체의 성장 데이터를 손쉽게 관리할 수 있습니다.',
+    cta_desc: '라이선스 키가 있다면 바로 시작할 수 있습니다.'
+  },
+  jump: {
+    badge: '🪢 AI 자세 인식 · 줄넘기 훈련',
+    title: '줄넘기가<br><span>리듬이 되는 순간.</span>',
+    lead: '웹캠 하나로 점프 횟수와 리듬을 측정합니다. 수련생은 스스로 기록에 도전하며 훈련하고, 관장님은 도장 전체의 성장 데이터를 손쉽게 관리할 수 있습니다.',
+    cta_desc: '라이선스 키가 있다면 바로 시작할 수 있습니다.'
+  }
 };
-const HOME_FIELDS = Object.keys(HOME_DEFAULT);
-let HOME_DATA = {};
+let HOME_DATA_BY_TARGET = { index:{}, kick:{}, jump:{} };
+let currentHomeSubtab = 'index';
+
+function switchHomeSubtab(t){
+  currentHomeSubtab = t;
+  ['index','kick','jump'].forEach(k=>{
+    document.getElementById('home-subtab-'+k).style.display = (k===t ? '' : 'none');
+    document.getElementById('subtab-'+k+'-btn').classList.toggle('active', k===t);
+  });
+}
 
 function setHomeStatus(msg, ok=true){
   const el = document.getElementById('homeSaveStatus');
@@ -1752,30 +1677,38 @@ function setHomeStatus(msg, ok=true){
 }
 
 async function loadHomeFields() {
-  HOME_DATA = {};
-  try {
-    const data = await edgeCall('GET_HOME_DATA', {});
-    HOME_DATA = data?.data || data || {};
-    setHomeStatus('✅ Supabase에서 홈페이지 데이터를 불러왔습니다.');
-  } catch(e) {
-    try { HOME_DATA = JSON.parse(localStorage.getItem(HOME_DATA_KEY)) || {}; } catch(_) { HOME_DATA = {}; }
-    setHomeStatus('⚠ Supabase 불러오기 실패. 임시 localStorage 데이터를 표시합니다: ' + e.message, false);
+  for (const t of Object.keys(HOME_TARGET_DEFAULTS)) {
+    let fetched = {};
+    try {
+      const res = await edgeCall('GET_HOME_DATA', { target: t });
+      fetched = res?.data || {};
+    } catch(e) {
+      try { fetched = JSON.parse(localStorage.getItem(HOME_DATA_KEY + '_' + t)) || {}; } catch(_) { fetched = {}; }
+    }
+    HOME_DATA_BY_TARGET[t] = { ...HOME_TARGET_DEFAULTS[t], ...fetched };
+    Object.keys(HOME_TARGET_DEFAULTS[t]).forEach(k => {
+      const el = document.getElementById('f_' + t + '_' + k);
+      if (el) el.value = HOME_DATA_BY_TARGET[t][k] || '';
+    });
   }
-  HOME_DATA = { ...HOME_DEFAULT, ...HOME_DATA };
-  HOME_FIELDS.forEach(k => { const el = document.getElementById('f_'+k); if (el) el.value = HOME_DATA[k] || ''; });
+  setHomeStatus('✅ 인덱스 / 킥마스터 / 점프마스터 데이터를 모두 불러왔습니다.');
 }
 
 async function saveHomeData() {
-  HOME_FIELDS.forEach(k => { const el = document.getElementById('f_'+k); if (el) HOME_DATA[k] = el.value; });
+  const t = currentHomeSubtab;
+  Object.keys(HOME_TARGET_DEFAULTS[t]).forEach(k => {
+    const el = document.getElementById('f_' + t + '_' + k);
+    if (el) HOME_DATA_BY_TARGET[t][k] = el.value;
+  });
   try {
-    await edgeCall('UPDATE_HOME_DATA', { data: HOME_DATA });
-    localStorage.setItem(HOME_DATA_KEY, JSON.stringify(HOME_DATA));
-    showToast('✅ 홈페이지 내용이 Supabase에 저장되었습니다!');
-    setHomeStatus('✅ 저장 완료. 방문자 홈페이지에도 반영됩니다.');
+    await edgeCall('UPDATE_HOME_DATA', { target: t, data: HOME_DATA_BY_TARGET[t] });
+    localStorage.setItem(HOME_DATA_KEY + '_' + t, JSON.stringify(HOME_DATA_BY_TARGET[t]));
+    showToast('✅ 저장되었습니다!');
+    setHomeStatus('✅ 저장 완료. 방문자 페이지에도 반영됩니다.');
   } catch(e) {
-    localStorage.setItem(HOME_DATA_KEY, JSON.stringify(HOME_DATA));
-    showToast('⚠ Supabase 저장 실패 · 임시 저장됨');
-    setHomeStatus('⚠ Supabase 저장 실패. 이 브라우저에만 임시 저장했습니다: ' + e.message, false);
+    localStorage.setItem(HOME_DATA_KEY + '_' + t, JSON.stringify(HOME_DATA_BY_TARGET[t]));
+    showToast('⚠ 저장 실패 · 임시 저장됨');
+    setHomeStatus('⚠ 저장 실패. 이 브라우저에만 임시 저장했습니다: ' + e.message, false);
   }
 }
 

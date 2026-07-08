@@ -68,9 +68,9 @@ footer{padding:34px 0 46px;border-top:1px solid var(--line);color:var(--muted);f
 <main>
   <section class="hero">
     <div class="wrap hero-inner">
-      <div class="badge">🥋 AI 자세 인식 · 태권도장 전용</div>
-      <h1>발차기가<br><span>게임이 되는 순간.</span></h1>
-      <p class="lead">웹캠 하나로 발차기 속도와 정확도를 측정합니다. 수련생은 화면 속 기록에 도전하며 재미있게 훈련하고, 관장님은 도장 전체의 성장 데이터를 손쉽게 관리할 수 있습니다.</p>
+      <div class="badge" id="kickBadge">🥋 AI 자세 인식 · 태권도장 전용</div>
+      <h1 id="kickTitle">발차기가<br><span>게임이 되는 순간.</span></h1>
+      <p class="lead" id="kickLead">웹캠 하나로 발차기 속도와 정확도를 측정합니다. 수련생은 화면 속 기록에 도전하며 재미있게 훈련하고, 관장님은 도장 전체의 성장 데이터를 손쉽게 관리할 수 있습니다.</p>
       <div class="actions">
         <a class="btn primary" href="kickhome.html">AI KICK MASTER 시작하기</a>
         <a class="btn ghost" href="index.html#contact">도입 문의</a>
@@ -112,7 +112,7 @@ footer{padding:34px 0 46px;border-top:1px solid var(--line);color:var(--muted);f
       <div class="cta">
         <div>
           <h2>지금 바로 도장에서 사용해보세요</h2>
-          <p>라이선스 키가 있다면 바로 시작할 수 있습니다.</p>
+          <p id="kickCtaDesc">라이선스 키가 있다면 바로 시작할 수 있습니다.</p>
         </div>
         <a class="btn primary" href="kickhome.html">AI KICK MASTER 시작하기</a>
       </div>
@@ -123,5 +123,24 @@ footer{padding:34px 0 46px;border-top:1px solid var(--line);color:var(--muted);f
 <footer>
   <div class="wrap">© 2026 NAREUN LABS · AI KICK MASTER · naruunlabs.kr</div>
 </footer>
+
+<script>
+(function(){
+  fetch('https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'GET_HOME_DATA', payload:{ target:'kick' } })
+  }).then(r => r.json()).then(res => {
+    const d = res && res.data;
+    if(!d) return;
+    const setText = (id, val) => { const el = document.getElementById(id); if(el && val) el.textContent = val; };
+    const setHtml = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerHTML = val; };
+    setText('kickBadge', d.badge);
+    setHtml('kickTitle', d.title);
+    setText('kickLead', d.lead);
+    setText('kickCtaDesc', d.cta_desc);
+  }).catch(()=>{ /* 실패 시 기본 정적 문구 그대로 사용 */ });
+})();
+</script>
 </body>
 </html>

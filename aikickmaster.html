@@ -186,8 +186,22 @@ body.hud-v21 .cam-wrap{position:absolute; inset:0; width:100%; height:100%; flex
 body.hud-v21 #video, body.hud-v21 #overlay{width:100%; height:100%; object-fit:cover;}
 body.hud-v21 .cam-wrap::before{
   content:""; position:absolute; inset:0; z-index:4; pointer-events:none;
-  background:radial-gradient(circle at center, rgba(0,0,0,0) 54%, rgba(2,8,18,.20) 100%),
-             linear-gradient(180deg,rgba(2,8,18,.28),rgba(2,8,18,0) 18%,rgba(2,8,18,0) 72%,rgba(2,8,18,.48));
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(2,8,18,0.00) 0%,
+      rgba(2,8,18,0.02) 42%,
+      rgba(2,8,18,0.08) 63%,
+      rgba(2,8,18,0.20) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2,8,18,.28) 0%,
+      rgba(2,8,18,.10) 18%,
+      rgba(2,8,18,0.00) 45%,
+      rgba(2,8,18,.08) 72%,
+      rgba(2,8,18,.48) 100%
+    );
 }
 body.hud-v21 .panel{position:absolute; inset:0; z-index:6; display:block; overflow:visible; padding:0; background:transparent; border:0; pointer-events:none;}
 body.hud-v21 .panel *, body.hud-v21 .panel button, body.hud-v21 .panel select, body.hud-v21 .panel input{pointer-events:auto;}

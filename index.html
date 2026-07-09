@@ -119,6 +119,11 @@ section{padding:82px 0}.eyebrow{color:var(--gold-soft)}.section-head{align-items
 @media(max-width:900px){.hero{padding:70px 0 58px}.section-head{gap:12px}.values{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.hero{padding:56px 0 46px}.actions .btn{width:100%}.values{grid-template-columns:1fr}}
 
+
+    .product.jump{border-color:rgba(163,230,53,.28)}
+    .product.jump:after{content:"COMING SOON";position:absolute;right:24px;top:24px;padding:9px 13px;border-radius:999px;background:rgba(163,230,53,.14);border:1px solid rgba(163,230,53,.30);color:var(--lime);font-size:12px;font-weight:1000;letter-spacing:.08em;z-index:2;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+    .coming-soon-btn{background:rgba(163,230,53,.10)!important;color:var(--lime)!important;border:1px solid rgba(163,230,53,.24)!important;opacity:1!important;pointer-events:none!important}
+
   </style>
 </head>
 <body>
@@ -178,7 +183,7 @@ section{padding:82px 0}.eyebrow{color:var(--gold-soft)}.section-head{align-items
       <div class="wrap">
         <div class="section-head">
           <div><div class="eyebrow">Products</div><h2>NAREUN LABS의 AI 스포츠 교육 제품군</h2></div>
-          <p class="sub">AI KICK MASTER와 AI JUMP MASTER 모두 도장에서 바로 사용할 수 있습니다.</p>
+          <p class="sub">AI KICK MASTER는 사용 가능하며, AI JUMP MASTER는 완성도를 더 높인 뒤 오픈할 예정입니다.</p>
         </div>
         <div class="products">
           <article class="product kick">
@@ -189,11 +194,11 @@ section{padding:82px 0}.eyebrow{color:var(--gold-soft)}.section-head{align-items
             <div class="actions"><a class="btn red" href="kickmaster.html">Kick Master 보기</a></div>
           </article>
           <article class="product jump">
-            <span class="tag available">AVAILABLE NOW · LIME · TEAL</span>
+            <span class="tag soon">COMING SOON · LIME · TEAL</span>
             <h3>AI JUMP<br><span class="accent">MASTER</span></h3>
-            <p>줄넘기 훈련을 리듬감 있고 직관적인 AI 측정 경험으로 바꾸는 프로그램입니다. 속도, 횟수, 도전 요소를 중심으로 구성됩니다.</p>
+            <p>줄넘기 훈련을 리듬감 있고 직관적인 AI 측정 경험으로 바꾸는 프로그램입니다. 현재는 내부 테스트와 UI 보완을 진행 중이며, 완성 후 정식 공개됩니다.</p>
             <div class="chips"><span class="chip">줄넘기 측정</span><span class="chip">스피드</span><span class="chip">챌린지</span><span class="chip">성장 기록</span></div>
-            <div class="actions"><a class="btn" style="background:linear-gradient(135deg,#14B8A6,#A3E635);border:0;color:#041018" href="jumpmaster.html">Jump Master 보기</a></div>
+            <div class="actions"><span class="btn disabled coming-soon-btn" aria-disabled="true">Coming Soon</span></div>
           </article>
         </div>
       </div>

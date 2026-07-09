@@ -1158,8 +1158,11 @@ table{width:100%;border-collapse:collapse}th{background:#fafafa;padding:15px 14p
     </select>
     <label>버전</label>
     <input id="mVersion" class="f-input" type="text" placeholder="예) 1.0.0" value="1.0.0" />
-    <label>라이선스 키 <span style="color:var(--muted);font-weight:400">(자동 생성)</span></label>
-    <input id="mKey" class="f-input" type="text" readonly style="letter-spacing:1px" />
+    <label>라이선스 키 <span style="color:var(--muted);font-weight:400">(직접 수정 가능)</span></label>
+    <div style="display:flex;gap:8px">
+      <input id="mKey" class="f-input" type="text" style="letter-spacing:1px;flex:1" />
+      <button type="button" class="btn-sm btn-toggle" onclick="regenerateKey()">🔁 재생성</button>
+    </div>
     <input id="mMaxDevices" type="hidden" value="2" />
     <div class="modal-section" id="deviceSlotSection" style="display:none;">
       <div class="modal-section-title">🖥 기기 슬롯</div>
@@ -1616,14 +1619,21 @@ async function saveLicense() {
   const memo = document.getElementById('mMemo').value.trim() || null;
   const max_devices = Number(document.getElementById('mMaxDevices').value) || 2;
   if (!dojang_name) { errEl.textContent = '도장명은 필수입니다.'; return; }
+  if (!license_key) { errEl.textContent = '라이선스 키는 필수입니다.'; return; }
   saveBtn.disabled = true; errEl.textContent = '';
   try {
-    const payload = { dojang_name, license_type, version, expire_date, pay_amount, pay_date, pay_memo, phone, memo, max_devices };
+    const payload = { dojang_name, license_key, license_type, version, expire_date, pay_amount, pay_date, pay_memo, phone, memo, max_devices };
     if (id) { await edgeCall('UPDATE_LICENSE', { id, ...payload }); }
-    else { await edgeCall('INSERT_LICENSE', { ...payload, license_key, is_active: true }); }
+    else { await edgeCall('INSERT_LICENSE', { ...payload, is_active: true }); }
     closeModal(); await loadLicenses();
   } catch(err) { errEl.textContent = '저장 실패: ' + err.message; }
   finally { saveBtn.disabled = false; }
+}
+
+function regenerateKey(){
+  const cur = document.getElementById('mKey').value || '';
+  const prefix = cur.startsWith('JMP-') ? 'JMP' : (cur.startsWith('AKM-') ? 'AKM' : (currentLicenseProduct === 'jump' ? 'JMP' : 'AKM'));
+  document.getElementById('mKey').value = generateKey(prefix);
 }
 
 async function toggleActive(id, current) {

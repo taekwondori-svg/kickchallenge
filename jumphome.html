@@ -1540,13 +1540,13 @@ function renderStudents(){
   const links=[document.getElementById('startKickLink'), document.getElementById('bottomStartKickLink')].filter(Boolean);
   const bottomLink=document.getElementById('bottomStartKickLink');
   if(selectedIds.length){
-    localStorage.setItem('akm_active_roster_v1', JSON.stringify(selectedIds));
-    const href = `aikickmaster.html?roster=${encodeURIComponent(selectedIds.join(','))}`;
+    localStorage.setItem('jmp_active_roster_v1', JSON.stringify(selectedIds));
+    const href = `aijumpmaster.html?roster=${encodeURIComponent(selectedIds.join(','))}`;
     links.forEach(link=>link.href=href);
     if(bottomLink){ bottomLink.classList.remove('is-disabled'); bottomLink.textContent = `선택한 ${selectedIds.length}명으로 실행`; }
   }else{
-    localStorage.removeItem('akm_active_roster_v1');
-    links.forEach(link=>link.href='aikickmaster.html');
+    localStorage.removeItem('jmp_active_roster_v1');
+    links.forEach(link=>link.href='aijumpmaster.html');
     if(bottomLink){ bottomLink.classList.add('is-disabled'); bottomLink.textContent = '수련생 선택 후 실행'; }
   }
 }

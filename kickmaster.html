@@ -61,6 +61,195 @@ footer{padding:34px 0 46px;border-top:1px solid var(--line);color:var(--muted);f
 :root{--paper:#F5F3EE;--ink:#0B0F1A;--gold:#E8A020;--gold-soft:#F5C560;}
 body{background:radial-gradient(circle at 18% 8%,rgba(232,160,32,.13),transparent 28%),radial-gradient(circle at 82% 15%,rgba(20,184,166,.14),transparent 32%),#0B0F1A!important;color:var(--paper)!important}header{background:rgba(11,15,26,.78)!important;border-bottom:1px solid rgba(245,243,238,.10)!important}.brand-mark{box-shadow:0 0 26px rgba(232,160,32,.18)}.hero{padding-top:92px!important}.badge{border-color:rgba(232,160,32,.24)!important;background:rgba(232,160,32,.08)!important}.lead{color:#C8CEDA!important}.btn{border-radius:999px!important}.card,.feature,.step,.cta,.demo-card{border-color:rgba(245,243,238,.11)!important;background:rgba(18,23,41,.70)!important;box-shadow:0 24px 70px rgba(0,0,0,.25)!important;backdrop-filter:blur(14px)}
 
+
+
+/* =========================================================
+   NAREUN LABS PRODUCT UI FINAL — KICK MASTER
+   index_blue_brand_v2의 밝은 브랜드 언어 + KICK red tone
+   기능 스크립트/ID는 변경하지 않음
+   ========================================================= */
+:root{
+  --brand-blue:#0757D8;
+  --brand-blue2:#1288F8;
+  --brand-soft:#F5FAFF;
+  --page-bg:#FFFFFF;
+  --page-soft:#F7FAFE;
+  --page-line:#E6EEF8;
+  --page-text:#1D2939;
+  --page-muted:#667085;
+  --page-deep:#071C49;
+  --kick-red:#E3172E;
+  --kick-orange:#FF6A1A;
+}
+html{background:#fff!important;}
+body{
+  background:
+    radial-gradient(circle at 88% 8%,rgba(227,23,46,.105),transparent 32%),
+    radial-gradient(circle at 14% 16%,rgba(7,87,216,.07),transparent 30%),
+    linear-gradient(180deg,#fff 0%,#F7FBFF 52%,#fff 100%)!important;
+  color:var(--page-text)!important;
+  font-family:'Pretendard','Noto Sans KR',system-ui,-apple-system,sans-serif!important;
+}
+.wrap{width:min(1180px,calc(100% - 48px))!important;}
+header{
+  background:rgba(255,255,255,.84)!important;
+  border-bottom:1px solid rgba(230,238,248,.92)!important;
+  box-shadow:0 10px 30px rgba(7,28,73,.035)!important;
+}
+.nav{height:76px!important;}
+.brand{font-family:'Space Grotesk','Pretendard',system-ui,sans-serif!important;color:var(--page-deep)!important;font-weight:700!important;letter-spacing:.04em!important;}
+.brand-mark{
+  width:36px!important;height:36px!important;border-radius:12px!important;
+  background:linear-gradient(135deg,var(--kick-red),var(--kick-orange))!important;
+  color:#fff!important;box-shadow:0 14px 32px rgba(227,23,46,.20)!important;
+}
+.back{
+  color:var(--brand-blue)!important;
+  font-weight:800!important;
+  position:relative!important;
+  padding-bottom:7px!important;
+}
+.back:after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:currentColor;border-radius:99px;transform:scaleX(.16);
+  transform-origin:left;opacity:.38;transition:.18s ease;
+}
+.back:hover:after{transform:scaleX(1);opacity:1;}
+
+.hero{
+  min-height:calc(100vh - 76px)!important;
+  display:grid!important;align-items:center!important;
+  padding:106px 0 92px!important;
+  border-bottom:1px solid var(--page-line)!important;
+  overflow:hidden!important;
+}
+.hero:before{
+  right:-7vw!important;top:6vh!important;width:auto!important;height:auto!important;
+  content:"K"!important;
+  font-family:'Space Grotesk',system-ui,sans-serif!important;
+  font-size:clamp(260px,42vw,620px)!important;
+  line-height:.75!important;font-weight:700!important;letter-spacing:-.14em!important;
+  background:linear-gradient(135deg,var(--kick-red),var(--kick-orange))!important;
+  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
+  opacity:.065!important;filter:none!important;border-radius:0!important;z-index:0!important;
+}
+.hero-inner{max-width:880px!important;}
+.badge{
+  padding:0!important;border:0!important;background:transparent!important;
+  color:var(--kick-red)!important;
+  font-family:'Space Grotesk','Pretendard',system-ui,sans-serif!important;
+  font-size:12px!important;letter-spacing:.16em!important;text-transform:uppercase!important;
+  font-weight:700!important;margin-bottom:24px!important;
+}
+h1{
+  color:var(--page-deep)!important;
+  font-size:clamp(56px,8.6vw,112px)!important;
+  line-height:.92!important;letter-spacing:-.078em!important;
+  margin:0 0 32px!important;font-weight:900!important;
+}
+h1 span{
+  background:linear-gradient(100deg,var(--kick-red),var(--kick-orange) 86%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
+}
+.lead{
+  color:#536174!important;
+  font-size:clamp(16px,1.65vw,20px)!important;
+  line-height:1.85!important;
+  max-width:690px!important;
+  word-break:keep-all!important;
+}
+.actions{gap:34px!important;margin-top:42px!important;}
+.btn{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  padding:4px 0 9px!important;
+  color:var(--page-deep)!important;
+  font-weight:850!important;
+  position:relative!important;
+}
+.btn:after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:currentColor;border-radius:99px;transform:scaleX(.18);
+  transform-origin:left;opacity:.35;transition:.2s ease;
+}
+.btn:hover{transform:none!important;color:var(--kick-red)!important;}
+.btn:hover:after{transform:scaleX(1);opacity:1;}
+.btn.primary{color:var(--kick-red)!important;}
+.btn.ghost{color:var(--brand-blue)!important;}
+
+section{padding:100px 0!important;border-bottom:1px solid var(--page-line)!important;}
+.section-head{margin-bottom:42px!important;}
+.eyebrow{
+  color:var(--kick-red)!important;
+  font-family:'Space Grotesk','Pretendard',system-ui,sans-serif!important;
+  letter-spacing:.18em!important;font-size:12px!important;
+}
+h2{
+  color:var(--page-deep)!important;
+  font-size:clamp(36px,4.8vw,66px)!important;
+  line-height:1.03!important;
+  letter-spacing:-.065em!important;
+}
+.features{
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:1px!important;
+  background:var(--page-line)!important;
+  border-top:1px solid var(--page-line)!important;
+  border-bottom:1px solid var(--page-line)!important;
+}
+.feature{
+  border:0!important;border-radius:0!important;
+  background:rgba(255,255,255,.92)!important;
+  box-shadow:none!important;backdrop-filter:none!important;
+  padding:32px 28px!important;min-height:210px!important;
+}
+.feature b{color:var(--page-deep)!important;font-size:17px!important;letter-spacing:-.03em!important;}
+.feature p{color:var(--page-muted)!important;font-size:14px!important;line-height:1.75!important;word-break:keep-all!important;}
+.how{
+  gap:1px!important;
+  background:var(--page-line)!important;
+  border-top:1px solid var(--page-line)!important;
+  border-bottom:1px solid var(--page-line)!important;
+}
+.step{
+  border:0!important;border-radius:0!important;
+  background:#fff!important;box-shadow:none!important;
+  padding:34px 30px!important;min-height:230px!important;
+}
+.step b{color:var(--kick-red)!important;font-family:'Space Grotesk',system-ui,sans-serif!important;letter-spacing:.13em!important;}
+.step h3{color:var(--page-deep)!important;font-size:23px!important;letter-spacing:-.04em!important;margin:36px 0 10px!important;}
+.step p{color:var(--page-muted)!important;font-size:14px!important;line-height:1.75!important;word-break:keep-all!important;}
+.cta{
+  border:0!important;border-top:1px solid var(--page-line)!important;border-bottom:1px solid var(--page-line)!important;
+  border-radius:0!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(227,23,46,.12),transparent 32%),
+    linear-gradient(180deg,#fff,#F7FBFF)!important;
+  box-shadow:none!important;
+  padding:72px 0!important;
+}
+.cta h2{color:var(--page-deep)!important;}
+.cta p{color:var(--page-muted)!important;}
+footer{
+  background:#fff!important;
+  border-top:1px solid var(--page-line)!important;
+  color:#7C8CA2!important;
+}
+@media(max-width:900px){
+  .wrap{width:min(100% - 32px,1180px)!important}
+  .hero{min-height:auto!important;padding:82px 0 72px!important}
+  h1{font-size:clamp(48px,13vw,84px)!important}
+  section{padding:76px 0!important}
+  .features,.how{display:block!important;background:transparent!important;border:0!important}
+  .feature,.step{border-bottom:1px solid var(--page-line)!important;padding:28px 0!important}
+}
+@media(max-width:520px){
+  .actions{gap:22px!important}
+  .btn{font-size:14px!important}
+}
+
 </style>
 </head>
 <body>

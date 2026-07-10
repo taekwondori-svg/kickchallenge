@@ -15,7 +15,7 @@
 /* =========================================================
    CSS SECTION 01: base-layout-hud
    ========================================================= */
-:root{ --red:#D92B3A; --navy:#0A1628; --gold:#E8A020; --green:#2ecc71; --blue:#4ca3ff;}
+:root{ --red:#E3172E; --red-dark:#B91426; --orange:#FF6A1A; --orange-soft:#FF8C42; --navy:#0B0B0D; --gold:#FF6A1A; --green:#2ecc71; --blue:#1288F8;}
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;background:var(--navy);color:#fff;
     font-family:'Gothic A1','Noto Sans KR',system-ui,sans-serif;}
@@ -50,7 +50,7 @@
 
   /* 카메라 왼쪽 랭킹 오버레이 */
   #camRank{display:none;position:absolute;top:16px;left:16px;
-    background:rgba(9,22,40,.82);border:2px solid rgba(232,160,32,.6);
+    background:rgba(9,22,40,.82);border:2px solid rgba(255,106,26,.6);
     border-radius:14px;padding:10px 14px;z-index:8;min-width:130px;}
   #camRank.show{display:none !important;}
   #camRankTitle{font-size:11px;color:var(--gold);font-weight:800;margin-bottom:6px;}
@@ -86,7 +86,7 @@
     align-items:center;justify-content:center;flex-direction:column;gap:10px;z-index:10;}
   #readyOverlay.show{display:flex;}
   #readyNum{font-size:160px;font-weight:900;color:var(--gold);line-height:1;
-    text-shadow:0 0 40px rgba(232,160,32,.7);}
+    text-shadow:0 0 40px rgba(255,106,26,.7);}
   #readySub{font-size:20px;color:#cdd8e8;font-weight:700;}
 
   /* 점수 팝업 */
@@ -96,7 +96,7 @@
   @keyframes popIn{0%{transform:scale(0.2);opacity:0;}60%{transform:scale(1.18);}100%{transform:scale(1);opacity:1;}}
 
   /* 패널 */
-  .panel{flex:1 1 0;background:linear-gradient(180deg,#0A1628,#12233d);
+  .panel{flex:1 1 0;background:linear-gradient(180deg,#0B0B0D,#12233d);
     border-left:4px solid var(--gold);display:flex;flex-direction:column;
     overflow-y:auto;padding:12px 14px;gap:9px;}
 
@@ -125,8 +125,8 @@
   /* 스탯 */
   .stats-row{display:flex;gap:6px;}
   .stat-box{flex:1;text-align:center;border-radius:12px;padding:8px 4px;}
-  .stat-box.count-box{background:rgba(217,43,58,.12);border:2px solid var(--red);}
-  .stat-box.score-box{background:rgba(232,160,32,.1);border:2px solid var(--gold);}
+  .stat-box.count-box{background:rgba(227,23,46,.12);border:2px solid var(--red);}
+  .stat-box.score-box{background:rgba(255,106,26,.1);border:2px solid var(--gold);}
   .stat-box.avg-box{background:rgba(46,204,113,.1);border:2px solid var(--green);}
   .stat-label{font-size:10px;color:#cdd8e8;font-weight:600;margin-bottom:2px;}
   .stat-num{font-size:40px;font-weight:900;line-height:1;}
@@ -138,7 +138,7 @@
   /* 게임/연습 시작 */
   .game-area{display:none;flex-direction:column;gap:6px;}
   #startBtn{width:100%;padding:12px;font-size:16px;font-weight:700;
-    background:var(--green);color:#0A1628;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
+    background:var(--green);color:#0B0B0D;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
   #startBtn:disabled{background:#1d3050;color:#7d8ca5;cursor:default;}
   #startBtn:active{transform:scale(.97);}
   #gameResult{text-align:center;font-size:13px;font-weight:700;color:var(--green);min-height:18px;}
@@ -312,14 +312,14 @@ body.hud-v21 .stats-row{position:absolute; top:112px; right:14px; width:148px; d
 body.hud-v21 .stat-box{min-height:84px; padding:8px 4px; border-radius:15px; text-align:center;}
 body.hud-v21 .stat-label{font-size:11px; color:#dcecff; font-weight:800;}
 body.hud-v21 .stat-num{font-size:36px; line-height:1.05; font-weight:900; color:#fff; text-shadow:0 0 18px rgba(76,163,255,.32);}
-body.hud-v21 .score-box .stat-num{color:#ffe36b; text-shadow:0 0 20px rgba(232,160,32,.55);}
+body.hud-v21 .score-box .stat-num{color:#ffe36b; text-shadow:0 0 20px rgba(255,106,26,.55);}
 body.hud-v21 .avg-box .stat-num{color:#54ffad; text-shadow:0 0 20px rgba(46,204,113,.45);}
 body.hud-v21 #scoreGrade{font-size:11px; line-height:1.2; min-height:14px; font-weight:900;}
 body.hud-v21.balloon-mode .stats-row{top:220px;}
 body.hud-v21.sparring-mode .stats-row{top:238px;}
 
 /* 랭킹/타이머 */
-body.hud-v21 #camRank{display:none; position:absolute; top:318px !important; left:14px !important; min-width:145px; padding:9px 12px; border-radius:14px; z-index:8; background:rgba(7,18,34,.76); border:1px solid rgba(232,160,32,.52); box-shadow:0 0 20px rgba(232,160,32,.12); backdrop-filter:blur(8px);}
+body.hud-v21 #camRank{display:none; position:absolute; top:318px !important; left:14px !important; min-width:145px; padding:9px 12px; border-radius:14px; z-index:8; background:rgba(7,18,34,.76); border:1px solid rgba(255,106,26,.52); box-shadow:0 0 20px rgba(255,106,26,.12); backdrop-filter:blur(8px);}
 body.hud-v21 #camRank.show{display:none !important;}
 body.hud-v21.sparring-mode #camRank{display:none !important;}
 body.hud-v21 #camRankTitle{font-size:12px; color:#ffd76b; font-weight:900; margin-bottom:6px;}
@@ -382,11 +382,11 @@ body.hud-v21 .btn-new{background:linear-gradient(180deg,rgba(255,85,105,.88),rgb
 body.hud-v21 #enemyHpWrap{position:absolute; top:84px; left:50%; transform:translateX(-50%); width:min(460px,42vw); padding:8px 14px; border-radius:14px; color:#fff; z-index:7;}
 #enemyName{display:inline-block; color:#dcecff; font-weight:900; font-size:15px; margin-right:10px;}
 #enemyHpTrack{display:inline-block; vertical-align:middle; width:65%; height:18px; border-radius:999px; overflow:hidden; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.20);}
-#enemyHpFill{width:100%; height:100%; background:linear-gradient(90deg,#2ecc71,#E8A020,#D92B3A); transition:width .25s ease;}
+#enemyHpFill{width:100%; height:100%; background:linear-gradient(90deg,#2ecc71,#FF6A1A,#E3172E); transition:width .25s ease;}
 #enemyHpText{float:right; min-width:56px; text-align:right; color:#fff; font-weight:900; font-size:14px;}
 #comboBadge{position:absolute; top:166px; right:16px; min-width:150px; padding:9px 12px; border-radius:14px; text-align:center; font-size:20px; font-weight:900; color:#4ca3ff; z-index:7;}
 body.hud-v21.sparring-mode #comboBadge{top:164px; right:14px;}
-#comboBadge.hot{color:#ffe36b !important; border-color:rgba(232,160,32,.70) !important; box-shadow:0 0 26px rgba(232,160,32,.34) !important;}
+#comboBadge.hot{color:#ffe36b !important; border-color:rgba(255,106,26,.70) !important; box-shadow:0 0 26px rgba(255,106,26,.34) !important;}
 #damagePopup{display:none; position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); padding:12px 24px; border-radius:20px; font-size:34px; font-weight:900; color:#fff; background:rgba(7,18,34,.78); border:2px solid rgba(76,163,255,.68); text-shadow:0 0 18px rgba(76,163,255,.8); box-shadow:0 0 30px rgba(76,163,255,.26); z-index:9;}
 #damagePopup.show{display:block; animation:damagePop .65s ease forwards;}
 #damagePopup.head{border-color:#ff4d6d; text-shadow:0 0 18px rgba(255,77,109,.8);}
@@ -408,7 +408,7 @@ body.hud-v21.sparring-mode #comboBadge{top:164px; right:14px;}
 body.hud-v21 #readyOverlay{z-index:10; background:rgba(2,8,18,.54); backdrop-filter:blur(3px);}
 body.hud-v21 #popOverlay{z-index:12;}
 body.hud-v21 #drillResult{z-index:13; background:rgba(2,8,18,.62); backdrop-filter:blur(4px);}
-body.hud-v21 #popScore{font-size:132px; font-weight:900; line-height:.88; text-align:center; color:#ffe36b; text-shadow:0 0 34px rgba(232,160,32,.70),0 5px 36px rgba(0,0,0,.78);}
+body.hud-v21 #popScore{font-size:132px; font-weight:900; line-height:.88; text-align:center; color:#ffe36b; text-shadow:0 0 34px rgba(255,106,26,.70),0 5px 36px rgba(0,0,0,.78);}
 body.hud-v21 .popGrade{margin-top:18px; font-size:48px; color:#4ca3ff; letter-spacing:1px; text-shadow:0 0 28px rgba(76,163,255,.75),0 4px 24px rgba(0,0,0,.65);}
 body.hud-v21 #drillResultIcon{font-size:100px;}
 body.hud-v21 #drillResultText{font-size:54px; font-weight:900; text-shadow:0 0 26px rgba(76,163,255,.5);}
@@ -692,9 +692,9 @@ body.hud-v21.playing-ui .mode-row.hud-kick-row{
    ========================================================= */
 body.hud-v21.playing-ui #startBtn,
 body.hud-v21.playing-ui #startBtn2{
-  background:linear-gradient(180deg,#ff6b78,#D92B3A) !important;
+  background:linear-gradient(180deg,#ff6b78,#E3172E) !important;
   color:#fff !important;
-  box-shadow:0 0 22px rgba(217,43,58,.34) !important;
+  box-shadow:0 0 22px rgba(227,23,46,.34) !important;
 }
 
 /* =========================================================
@@ -730,9 +730,9 @@ body.hud-v21 .diff-btn{
 }
 body.hud-v21 .diff-btn.active{
   color:#061326 !important;
-  background:linear-gradient(180deg,#ffe36b,#E8A020) !important;
+  background:linear-gradient(180deg,#ffe36b,#FF6A1A) !important;
   border-color:rgba(255,244,190,.95) !important;
-  box-shadow:0 0 20px rgba(232,160,32,.38), inset 0 1px 0 rgba(255,255,255,.35) !important;
+  box-shadow:0 0 20px rgba(255,106,26,.38), inset 0 1px 0 rgba(255,255,255,.35) !important;
 }
 body.hud-v21.playing-ui .difficulty-panel{
   opacity:.35 !important;
@@ -797,9 +797,9 @@ body.hud-v21 .diff-btn{
 }
 body.hud-v21 .diff-btn.active{
   color:#061326 !important;
-  background:linear-gradient(180deg,#ffe36b,#E8A020) !important;
+  background:linear-gradient(180deg,#ffe36b,#FF6A1A) !important;
   border-color:rgba(255,244,190,.95) !important;
-  box-shadow:0 0 20px rgba(232,160,32,.38), inset 0 1px 0 rgba(255,255,255,.35) !important;
+  box-shadow:0 0 20px rgba(255,106,26,.38), inset 0 1px 0 rgba(255,255,255,.35) !important;
 }
 @media (orientation:landscape) and (max-width:1200px){
   body.hud-v21 .difficulty-panel{
@@ -1204,7 +1204,7 @@ body.hud-v21 .diff-btn.active{
   border:none !important;
   box-shadow:none !important;
   color:#ffd86b !important;
-  text-shadow:0 0 12px rgba(232,160,32,.75) !important;
+  text-shadow:0 0 12px rgba(255,106,26,.75) !important;
 }
 
 body.hud-v21 .diff-btn.active::after{
@@ -1216,7 +1216,7 @@ body.hud-v21 .diff-btn.active::after{
   height:3px !important;
   border-radius:999px !important;
   background:#ffd86b !important;
-  box-shadow:0 0 12px rgba(232,160,32,.8) !important;
+  box-shadow:0 0 12px rgba(255,106,26,.8) !important;
 }
 
 /* 설정 버튼: 아이콘/텍스트만 남김 */
@@ -1253,7 +1253,7 @@ body.hud-v21 .btns button:active{
 /* 새로하기 버튼만 색감 약간 유지 */
 body.hud-v21 .btn-new{
   color:#ff7b8a !important;
-  background:rgba(217,43,58,.10) !important;
+  background:rgba(227,23,46,.10) !important;
 }
 
 /* 점수판: 카드 테두리 제거, 숫자만 강조 */
@@ -1373,10 +1373,10 @@ body.hud-v21 .stat-num{
 
 /* 각 성격별 색상만 유지 */
 body.hud-v21 .score-box .stat-num{
-  color:#E8A020 !important;
+  color:#FF6A1A !important;
   text-shadow:
     0 3px 14px rgba(0,0,0,.82),
-    0 0 22px rgba(232,160,32,.45) !important;
+    0 0 22px rgba(255,106,26,.45) !important;
 }
 
 body.hud-v21 .avg-box .stat-num{
@@ -1679,9 +1679,9 @@ body.hud-v21 #startBtn2{
 }
 body.hud-v21.playing-ui #startBtn,
 body.hud-v21.playing-ui #startBtn2{
-  background:rgba(217,43,58,.14) !important;
+  background:rgba(227,23,46,.14) !important;
   color:#ff8b99 !important;
-  text-shadow:0 0 12px rgba(217,43,58,.55) !important;
+  text-shadow:0 0 12px rgba(227,23,46,.55) !important;
 }
 
 /* 결과 텍스트도 시작영역 안에서 튀지 않게 */
@@ -2958,9 +2958,9 @@ button{transition:transform .14s ease, filter .14s ease, background .14s ease}bu
     if(pct > 65){
       fill.style.setProperty('background','#2ecc71','important'); // 초록
     }else if(pct > 35){
-      fill.style.setProperty('background','#E8A020','important'); // 노랑/주황
+      fill.style.setProperty('background','#FF6A1A','important'); // 노랑/주황
     }else{
-      fill.style.setProperty('background','#D92B3A','important'); // 빨강
+      fill.style.setProperty('background','#E3172E','important'); // 빨강
     }
   }
 
@@ -3307,7 +3307,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     <hr class="settings-divider">
 
     <button class="settings-pw-btn" onclick="toggleHudSettings(); openPwChangeModal();">🔑 비밀번호 변경</button>
-    <button class="settings-pw-btn" onclick="logoutLicense()" style="margin-top:8px;background:rgba(217,43,58,0.15);color:#ff8795;border-color:rgba(217,43,58,0.3);">🚪 라이선스 로그아웃</button>
+    <button class="settings-pw-btn" onclick="logoutLicense()" style="margin-top:8px;background:rgba(227,23,46,0.15);color:#ff8795;border-color:rgba(227,23,46,0.3);">🚪 라이선스 로그아웃</button>
   </div>
 </div>
 
@@ -3517,7 +3517,7 @@ function confetti(big=false){
     document.body.appendChild(cv); }
   cv.width=innerWidth; cv.height=innerHeight;
   const cx=cv.getContext('2d');
-  const colors=['#D92B3A','#E8A020','#2ecc71','#fff','#4ca3ff'];
+  const colors=['#E3172E','#FF6A1A','#2ecc71','#fff','#4ca3ff'];
   const n=big?300:150;
   const P=[];
   for(let i=0;i<n;i++) P.push({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*0.4,
@@ -3801,7 +3801,7 @@ function drawReadableText(text,x,y,font,fill,align='center'){
 function updateModeBadge(){
   const [t,sub]=modeTitleText();
   modeBadge.innerHTML=t+'<small>'+sub+'</small>';
-  modeBadge.style.borderColor=(isDrillMode())?'rgba(76,163,255,.85)':'rgba(232,160,32,.65)';
+  modeBadge.style.borderColor=(isDrillMode())?'rgba(76,163,255,.85)':'rgba(255,106,26,.65)';
 }
 
 /* ─────────────────────────────────────────────
@@ -4136,7 +4136,7 @@ function finishDrill(){
     const txt=avg>=95?'완벽해요!!':avg>=90?'아주 잘했어요!':'훌륭해요!';
     drillResultIcon.textContent=icon;
     drillResultText.textContent=txt;
-    drillResultText.style.color=avg>=90?'#E8A020':'#2ecc71';
+    drillResultText.style.color=avg>=90?'#FF6A1A':'#2ecc71';
     drillResultSub.textContent=cfg.label+' '+drillDone+'회 · 평균 '+avg+'점';
     drillResult.classList.add('show');
     confetti(avg>=90);
@@ -4181,7 +4181,7 @@ function handleSparringPracticeKick(peak){
   const bonus=Math.max(0, Math.round((mission.targetPct-70)/8));
   score=Math.max(40, Math.min(100, score+bonus));
   lastScore=score;
-  lastColor=score>=90?'#4ca3ff':(score>=75?'#E8A020':'#D92B3A');
+  lastColor=score>=90?'#4ca3ff':(score>=75?'#FF6A1A':'#E3172E');
   lastGrade=score>=95?'PERFECT':score>=88?'GREAT':score>=75?'GOOD':'TRY';
   sparringPracticeDone++;
   sparringPracticeScores.push(score);
@@ -4331,7 +4331,7 @@ function finishSparring(){
   setStartBtn(false,'다시!');
   drillResultIcon.textContent=sparringHp<=0?'K.O.':'완료';
   drillResultText.textContent=sparringHp<=0?'K.O.!':'수련 완료!';
-  drillResultText.style.color=sparringHp<=0?'#E8A020':'#4ca3ff';
+  drillResultText.style.color=sparringHp<=0?'#FF6A1A':'#4ca3ff';
   drillResultSub.textContent='총 데미지 '+sparringDamage+' · 최고 '+sparringMaxCombo+'콤보';
   drillResult.classList.add('show');
   if(sparringHp<=0){ confetti(true); sndRecord(); }
@@ -4716,8 +4716,8 @@ function loop(){
 
     if(result.landmarks && result.landmarks.length>0){
       const lm=result.landmarks[0];
-      drawingUtils.drawConnectors(lm,PoseLandmarker.POSE_CONNECTIONS,{color:'rgba(232,160,32,0.6)',lineWidth:2});
-      drawingUtils.drawLandmarks(lm,{color:'#D92B3A',lineWidth:1,radius:3});
+      drawingUtils.drawConnectors(lm,PoseLandmarker.POSE_CONNECTIONS,{color:'rgba(255,106,26,0.6)',lineWidth:2});
+      drawingUtils.drawLandmarks(lm,{color:'#E3172E',lineWidth:1,radius:3});
 
       const ankleVis=Math.max(lm[27]?.visibility??0,lm[28]?.visibility??0);
       if(ankleVis>0.25){

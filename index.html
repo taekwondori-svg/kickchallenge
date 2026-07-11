@@ -142,38 +142,30 @@
     .sub{font-size:15.5px;line-height:1.85;color:var(--muted);word-break:keep-all;margin-top:8px}
 
     .values{
-      display:grid;grid-template-columns:1.2fr .8fr;gap:1px;background:var(--line);
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);
       border-top:1px solid var(--line);border-bottom:1px solid var(--line);
     }
-    .value{min-height:190px;padding:34px;background:rgba(255,255,255,.88)}
-    .value:nth-child(1){
-      grid-row:span 2;display:flex;flex-direction:column;justify-content:flex-end;
-      min-height:381px;
-      position:relative;overflow:hidden;
-      background:#071C49 url('assets/images/kick-gameplay.jpg') center center/cover no-repeat;
-      color:#fff;
+    .value{
+      position:relative;min-height:310px;padding:38px;background:rgba(255,255,255,.92);
+      display:flex;flex-direction:column;justify-content:center;overflow:hidden;
     }
-    .value:nth-child(1)::before{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(180deg,rgba(7,28,73,.04) 20%,rgba(7,28,73,.82) 100%);
-      pointer-events:none;
-    }
-    .value:nth-child(1) strong,
-    .value:nth-child(1) p{position:relative;z-index:1}
-    .value:nth-child(1) strong{color:#BFD7FF}
-    .value:nth-child(1) p{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.32)}
-    .value:nth-child(4){
-      position:relative;overflow:hidden;padding:0;
-      background:#DDE8F6 url('assets/images/kick-real-use.jpg') center 58%/cover no-repeat;
-    }
-    .value:nth-child(4) strong,
-    .value:nth-child(4) p{display:none}
     .value strong{
       display:block;font-family:var(--font-data);font-size:13px;letter-spacing:.12em;
-      text-transform:uppercase;color:var(--blue);margin-bottom:12px;
+      text-transform:uppercase;color:var(--blue);margin-bottom:14px;
     }
-    .value p{margin:0;color:var(--deep);font-size:clamp(18px,2.2vw,28px);font-weight:800;line-height:1.35;word-break:keep-all}
-    .value:not(:first-child) p{font-size:17px;font-weight:500;color:#617084;line-height:1.65}
+    .value p{margin:0;color:#617084;font-size:18px;font-weight:500;line-height:1.7;word-break:keep-all;max-width:500px}
+    .value.visual{padding:0;justify-content:flex-end;background:#0A1730}
+    .value.visual img{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;
+    }
+    .value.visual:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(5,17,43,.04) 28%,rgba(5,17,43,.82) 100%);
+      pointer-events:none;
+    }
+    .value.visual .value-copy{position:relative;z-index:1;padding:38px;color:#fff}
+    .value.visual strong{color:#CFE0FF;margin-bottom:13px}
+    .value.visual p{color:#fff;font-size:clamp(22px,2.4vw,32px);font-weight:800;line-height:1.35;max-width:520px}
 
     .products{display:grid;gap:0;border-top:1px solid var(--line)}
     .product{
@@ -259,11 +251,7 @@
       .hero{min-height:auto;padding:82px 0 70px}.hero:after{right:-28vw;top:16vh}
       h1{font-size:clamp(48px,13vw,84px)}.lead{font-size:16px}
       section{padding:76px 0}.section-head{grid-template-columns:1fr;gap:22px;margin-bottom:36px}
-      .values{display:block;background:transparent;border:0}
-      .value{min-height:auto;padding:28px 0;background:transparent;border-bottom:1px solid var(--line)}
-      .value:nth-child(1){grid-row:auto;min-height:310px;padding:28px;background-position:center center}
-      .value:nth-child(4){min-height:260px;background-position:center 60%}
-      .value p{font-size:22px}
+      .values{grid-template-columns:1fr;background:transparent;border:0}.value{min-height:260px;padding:30px;background:#fff;border-bottom:1px solid var(--line)}.value.visual{min-height:300px;padding:0}.value.visual .value-copy{padding:30px}.value p{font-size:17px}
       .product{grid-template-columns:1fr;gap:24px;padding:50px 0;min-height:auto}.product.jump{min-height:auto;padding:76px 0 50px}.coming-badge{left:0;right:auto;top:30px;font-size:16px}.coming-marquee{font-size:clamp(48px,16vw,104px)}
       .process{grid-template-columns:1fr 1fr}.cta{grid-template-columns:1fr;padding:50px 0}
     }
@@ -313,10 +301,16 @@
           <p class="sub">AI는 보여주기 위한 장식이 아니라 아이들이 더 오래 집중하고, 더 자주 도전하고, 성장 과정을 직접 확인하게 만드는 도구입니다.</p>
         </div>
         <div class="values">
-          <div class="value"><strong>Enjoyment</strong><p>다시 하고 싶어지는 훈련 경험.</p></div>
+          <div class="value visual">
+            <img src="assets/value-enjoyment.jpg" alt="AI KICK MASTER 겨루기 모드 실행 화면">
+            <div class="value-copy"><strong>Enjoyment</strong><p>다시 하고 싶어지는 훈련 경험.</p></div>
+          </div>
           <div class="value"><strong>Growth</strong><p>순간 점수보다 중요한 건 아이가 어제보다 나아졌다는 확실한 감각입니다.</p></div>
           <div class="value"><strong>Reliability</strong><p>도장에서 매일 켜고 사용할 수 있도록 단순하고 안정적인 흐름을 우선합니다.</p></div>
-          <div class="value" role="img" aria-label="태블릿과 프로젝터로 AI KICK MASTER를 사용하는 실제 도장 환경"><strong>Professional</strong><p>태권도 현장을 이해한 기준으로 화면, 기록, 사용 동선을 설계합니다.</p></div>
+          <div class="value visual">
+            <img src="assets/value-professional.jpg" alt="AI KICK MASTER 돌려차기 훈련 실행 화면">
+            <div class="value-copy"><strong>Professional</strong><p>태권도 현장을 이해한 기준으로 화면, 기록, 사용 동선을 설계합니다.</p></div>
+          </div>
         </div>
       </div>
     </section>

@@ -1547,9 +1547,9 @@ window.addEventListener('load', function(){
 
 window.logoutLicense=()=>{
   _jmpClearCache();
-  document.getElementById('loginScreen').classList.remove('hidden');
-  const input=document.getElementById('licenseKeyInput'); if(input) input.value='';
-  const err=document.getElementById('loginError'); if(err) err.textContent='';
+  // 설정창과 카메라 화면을 확실히 종료한 뒤
+  // 라이선스 입력 화면부터 다시 시작합니다.
+  window.location.reload();
 };
 </script>
 </body>

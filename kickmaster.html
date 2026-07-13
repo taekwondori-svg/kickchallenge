@@ -581,12 +581,44 @@ footer{
   .trademark-status{font-size:13px}
 }
 
+
+/* Product identity lockup */
+.brand{
+  align-items:center!important;
+  gap:12px!important;
+}
+.brand-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  line-height:1;
+}
+.brand-product{
+  color:var(--ui-deep);
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:.035em;
+  white-space:nowrap;
+}
+.brand-company{
+  margin-top:5px;
+  color:#98A2B3;
+  font-size:9px;
+  font-weight:750;
+  letter-spacing:.16em;
+  white-space:nowrap;
+}
+@media(max-width:520px){
+  .brand-product{font-size:13px}
+  .brand-company{font-size:8px;margin-top:4px}
+}
+
 </style>
 </head>
 <body>
 <header>
   <div class="wrap nav">
-    <a class="brand" href="index.html"><div class="brand-mark">N</div><span>NARUUN LABS</span></a>
+    <a class="brand" href="index.html"><div class="brand-mark">N</div><span class="brand-copy"><strong class="brand-product">AI KICK MASTER</strong><small class="brand-company">NARUUN LABS</small></span></a>
     <a class="back" href="index.html">← 전체 제품 보기</a>
   </div>
 </header>

@@ -203,6 +203,45 @@ button{font-family:inherit;cursor:pointer;}
 .mini-btn{background:var(--panel);border:1px solid rgba(255,255,255,.10);border-radius:10px;
   padding:8px 13px;font-size:11px;font-weight:700;color:var(--ink);backdrop-filter:blur(6px);white-space:nowrap;}
 
+/* 설정 모달 */
+#jumpSettingsModal{
+  display:none;position:fixed;inset:0;z-index:9999;
+  align-items:center;justify-content:center;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+}
+#jumpSettingsModal.show{display:flex;}
+.jump-settings-box{
+  width:340px;max-width:92vw;
+  padding:26px;
+  border-radius:20px;
+  background:#0d1c30;
+  border:1px solid rgba(94,234,212,.30);
+  box-shadow:0 24px 70px rgba(0,0,0,.58);
+}
+.jump-settings-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;
+  color:#fff;font-size:17px;font-weight:900;
+}
+.jump-settings-close{
+  border:0;border-radius:9px;padding:7px 11px;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.72);
+  font-size:12px;font-weight:900;
+}
+.jump-settings-divider{
+  border:0;border-top:1px solid rgba(94,234,212,.16);
+  margin:16px 0;
+}
+.jump-home-btn{
+  width:100%;padding:13px;border:0;border-radius:12px;
+  background:rgba(255,255,255,.08);color:#fff;
+  font-size:14px;font-weight:900;
+  transition:background .15s ease,transform .15s ease;
+}
+.jump-home-btn:hover{background:rgba(255,255,255,.14);}
+.jump-home-btn:active{transform:scale(.98);}
+
+
 /* 안내 / 카운트다운 / 결과 오버레이 (항상 최상단) */
 #readyOverlay{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;
   justify-content:center;background:rgba(5,12,22,.4);backdrop-filter:blur(2px);z-index:20;}
@@ -643,6 +682,85 @@ button{transition:transform .14s ease, filter .14s ease, background .14s ease}bu
 .login-error{color:#F09595;font-size:13px;font-weight:700;margin-top:14px;min-height:20px;}
 .login-footer{font-size:11px;color:#3a5a50;margin-top:24px;line-height:1.6;}
 
+
+/* ============================================================
+   KICK MASTER AUTH / SETTINGS UX SYNC · 2026-07-13
+   ============================================================ */
+.jump-title{
+  position:absolute;top:calc(env(safe-area-inset-top) + 12px);left:16px;z-index:40;
+  min-width:220px;padding:0;display:flex;align-items:flex-start;color:#fff;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,.78));
+}
+.jump-title-left{min-width:0;display:flex;flex-direction:column;align-items:flex-start;}
+.jump-title-dojang{
+  max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:16px;line-height:1.15;font-weight:900;letter-spacing:-.04em;color:#fff;
+}
+.jump-title-auth{margin-top:3px;font-size:10px;line-height:1.2;font-weight:900;color:var(--lime);}
+.jump-title-version{margin-top:2px;font-size:9.5px;line-height:1.2;font-weight:700;color:rgba(234,244,241,.48);}
+.jump-hud-meta{margin-top:2px;font-size:9.5px;line-height:1.2;font-weight:700;color:rgba(234,244,241,.48);}
+.jump-powered{white-space:nowrap;}
+.jump-hud-settings-btn{
+  margin-top:5px;padding:0;border:0;border-radius:0;background:transparent;
+  color:rgba(234,244,241,.52);font-size:11px;line-height:1.4;font-weight:800;
+  text-align:left;box-shadow:none;
+}
+.jump-hud-settings-btn:hover{color:#fff;}
+.jump-hud-settings-btn:active{transform:none;}
+.top-bar .brand-stack{display:none !important;}
+#jumpSettingsBtn{display:none !important;}
+
+#jumpSettingsModal{
+  display:none;position:fixed;inset:0;z-index:99990;
+  align-items:center;justify-content:center;background:rgba(0,0,0,.72);
+}
+#jumpSettingsModal.show{display:flex;}
+.jump-settings-box{
+  width:340px;max-width:92vw;padding:28px 26px;border-radius:20px;
+  background:#0d1c30;border:1.5px solid rgba(45,212,191,.35);
+  box-shadow:0 20px 60px rgba(0,0,0,.60);
+}
+.jump-settings-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;
+  color:#fff;font-size:16px;font-weight:900;
+}
+.jump-settings-head span{color:var(--lime);}
+.jump-settings-close{
+  padding:5px 10px;border:0;border-radius:8px;background:rgba(255,255,255,.08);
+  color:#aaa;font-size:14px;font-weight:900;
+}
+.jump-settings-close:hover{color:#fff;}
+.jump-settings-section{margin-bottom:16px;}
+.jump-settings-label{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;
+  color:#dcecff;font-size:13px;font-weight:800;
+}
+.jump-settings-divider{margin:16px 0;border:0;border-top:1px solid rgba(45,212,191,.15);}
+.jump-settings-action{
+  width:100%;padding:12px;border:0;border-radius:11px;
+  background:rgba(45,212,191,.12);color:var(--teal-bright);
+  font-size:14px;font-weight:900;
+}
+.jump-settings-action:hover{background:rgba(45,212,191,.22);}
+.jump-settings-action.logout{margin-top:8px;background:rgba(227,23,46,.15);color:#ff8795;}
+.jump-settings-action.logout:hover{background:rgba(227,23,46,.24);}
+.jump-settings-action.home{background:rgba(255,255,255,.07);color:#fff;}
+.jump-settings-action.home:hover{background:rgba(255,255,255,.13);}
+
+#jumpSettingsModal .sens-box{
+  display:flex !important;width:100%;padding:0;border:0;border-radius:0;
+  background:transparent;box-shadow:none;backdrop-filter:none;
+}
+#jumpSettingsModal .sens-box label{color:#dcecff;font-size:13px;font-weight:800;}
+#jumpSettingsModal .sens-box .sens-row{width:100%;}
+#jumpSettingsModal .auto-row{margin-top:8px;color:var(--lime-bright);font-size:11px;}
+.bottom-left > .sens-box{display:none !important;}
+
+@media (orientation:landscape) and (max-width:1200px){
+  .jump-title{left:14px;top:calc(env(safe-area-inset-top) + 10px);}
+  .jump-title-dojang{font-size:14px;max-width:220px;}
+}
+
 </style>
 </head>
 <body>
@@ -680,13 +798,18 @@ button{transition:transform .14s ease, filter .14s ease, background .14s ease}bu
 
   <div class="hud">
 
-    <!-- 좌상단 브랜드 + 우상단 타이머 -->
-    <div class="top-bar">
-      <div class="brand-stack">
-        <div class="bs-name" id="bsDojangName">점프마스터</div>
-        <div class="bs-tag"><span class="bs-dot"></span>정품 인증됨</div>
-        <div class="bs-meta">나른랩스 · v0.2 · Google MediaPipe · <a href="javascript:void(0)" onclick="logoutLicense()" style="color:inherit;text-decoration:underline;">로그아웃</a></div>
+    <!-- 좌상단 인증 정보 + 우상단 타이머 -->
+    <div class="jump-title">
+      <div class="jump-title-left">
+        <div class="jump-title-dojang" id="bsDojangName">AI JUMP MASTER</div>
+        <div class="jump-title-auth">● 정품 인증됨</div>
+        <div class="jump-title-version">v0.2.0</div>
+        <div class="jump-hud-meta"><span class="jump-powered">Powered by Google MediaPipe</span></div>
+        <button id="jumpHudSettingsBtn" class="jump-hud-settings-btn" type="button" onclick="toggleJumpSettings()">⚙ 설정</button>
       </div>
+    </div>
+
+    <div class="top-bar">
       <div id="timerBadge"><div id="timerNum">30</div><div id="timerLabel">남은 시간</div></div>
     </div>
 
@@ -742,14 +865,6 @@ button{transition:transform .14s ease, filter .14s ease, background .14s ease}bu
           <option value="120">120초</option>
         </select>
       </div>
-      <div class="sens-box">
-        <label>감도</label>
-        <div class="sens-row">
-          <input type="range" id="sensSlider" min="0" max="100" value="60">
-          <span class="sv" id="sensVal">60</span>
-        </div>
-        <label class="auto-row"><input type="checkbox" id="autoSensChk" checked> 자동 감도 (아이 점프에 맞춤)</label>
-      </div>
       <button class="start-cta" id="startCta" onclick="startGame()">▶ 시작!</button>
     </div>
 
@@ -762,6 +877,47 @@ button{transition:transform .14s ease, filter .14s ease, background .14s ease}bu
     </div>
   </div>
 </div>
+
+<!-- 설정 모달 -->
+<div id="jumpSettingsModal">
+  <div class="jump-settings-box">
+    <div class="jump-settings-head">
+      <div>⚙ <span>설정</span></div>
+      <button class="jump-settings-close" type="button" onclick="toggleJumpSettings()">닫기</button>
+    </div>
+
+    <div class="jump-settings-section">
+      <div class="jump-settings-label">점프 감도 설정</div>
+      <div class="sens-box">
+        <label>감도</label>
+        <div class="sens-row">
+          <input type="range" id="sensSlider" min="0" max="100" value="60">
+          <span class="sv" id="sensVal">60</span>
+        </div>
+        <label class="auto-row"><input type="checkbox" id="autoSensChk" checked> 자동 감도 (아이 점프에 맞춤)</label>
+      </div>
+    </div>
+
+    <hr class="jump-settings-divider">
+
+    <button class="jump-settings-action logout" type="button" onclick="logoutLicense()">🚪 라이선스 로그아웃</button>
+
+    <hr class="jump-settings-divider">
+
+    <button class="jump-settings-action home" type="button" onclick="location.href='jumpmaster.html'">🏠 홈페이지로 돌아가기</button>
+  </div>
+</div>
+
+<script>
+function toggleJumpSettings(){
+  const modal=document.getElementById('jumpSettingsModal');
+  if(modal) modal.classList.toggle('show');
+}
+document.addEventListener('click',function(e){
+  const modal=document.getElementById('jumpSettingsModal');
+  if(modal && e.target===modal) modal.classList.remove('show');
+});
+</script>
 
 <script type="module">
 import { PoseLandmarker, FilesetResolver, DrawingUtils }
@@ -1327,7 +1483,7 @@ function _jmpClearCache(){ try{ localStorage.removeItem(_JMP_LS_KEY); }catch(e){
 
 function _jmpShowAuthedUI(dojang_name){
   const nameEl=document.getElementById('bsDojangName');
-  if(nameEl) nameEl.textContent = dojang_name || '점프마스터';
+  if(nameEl) nameEl.textContent = dojang_name || 'AI JUMP MASTER';
   document.getElementById('loginScreen').classList.add('hidden');
   if(window.__startApp) window.__startApp();
 }

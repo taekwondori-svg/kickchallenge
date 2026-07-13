@@ -367,6 +367,22 @@ body.hud-v21 .bar-track{height:18px;}
   font-size:14px; font-weight:900; cursor:pointer;
 }
 .settings-pw-btn:hover{ background:rgba(76,163,255,0.22); }
+.settings-home-btn{
+  width:100%;
+  margin-top:8px;
+  padding:12px;
+  border:0;
+  border-radius:11px;
+  background:rgba(255,255,255,.07);
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  transition:background .15s ease,transform .15s ease;
+}
+.settings-home-btn:hover{background:rgba(255,255,255,.13);}
+.settings-home-btn:active{transform:scale(.98);}
+
 /* 모달 안 bar-track */
 #settingsModal .bar-track{ position:relative; height:18px; background:#0a1220; border-radius:9px; overflow:hidden; border:1px solid #1d3050; }
 #settingsModal .bar-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--gold),var(--red)); border-radius:9px; transition:width .06s linear; }
@@ -2916,6 +2932,42 @@ body.hud-v21.akm-ui .cam-wrap::after{
 /* NARUUN LABS IN-APP UI POLISH 2026-07-09 */
 button{transition:transform .14s ease, filter .14s ease, background .14s ease}button:hover{filter:brightness(1.06)}.mode-btn,.game-btn,.drill-btn,.start-btn,#startBtn,.btns button{border-radius:14px!important}.panel{box-shadow:inset 1px 0 0 rgba(255,255,255,.04)}#modeBadge,#timerBadge,#status,.stat-box{backdrop-filter:blur(12px)}
 
+
+/* =========================================================
+   2026-07-13 발차기 수동/자동모드 + 자동훈련 결과
+   ========================================================= */
+#drillModePanel{display:flex;}
+#difficultyPanel{display:none;}
+#sparringTypePanel{display:none;}
+#drillResult{pointer-events:auto !important; overflow:auto; padding:24px;}
+#drillResultSub.auto-result-summary{
+  width:min(520px,82vw); max-height:44vh; overflow:auto;
+  display:grid; grid-template-columns:1fr auto; gap:8px 26px;
+  padding:20px 24px; border-radius:18px;
+  background:rgba(6,16,31,.72); text-align:left;
+  border:1px solid rgba(120,170,255,.22);
+}
+#drillResultSub.auto-result-summary .result-label{color:#dbeaff;font-weight:800;}
+#drillResultSub.auto-result-summary .result-score{color:#ffe36b;font-weight:1000;text-align:right;}
+#drillResultSub.auto-result-summary .result-average{
+  grid-column:1 / -1; margin-top:8px; padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.16);
+  text-align:center; color:#54ffad; font-size:30px; font-weight:1000;
+}
+#drillRestartBtn{
+  display:none; min-width:190px; padding:13px 26px; border:0; border-radius:999px;
+  background:linear-gradient(180deg,#7ff0a5,#28bd68); color:#052217;
+  font-family:inherit; font-size:18px; font-weight:1000; cursor:pointer;
+  box-shadow:0 0 24px rgba(46,204,113,.30);
+}
+#drillResult.auto-summary #drillRestartBtn{display:block;}
+body.hud-v21.auto-drill-selected .mode-row.hud-kick-row .drill-btn{
+  opacity:.42 !important; pointer-events:none !important;
+}
+body.hud-v21.auto-drill-selected .mode-row.hud-kick-row .drill-btn.active{
+  opacity:1 !important;
+}
+
 </style>
 
 
@@ -3170,8 +3222,9 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     <!-- 발차기 연습 완료 오버레이 -->
     <div id="drillResult">
       <div id="drillResultIcon">🏆</div>
-      <div id="drillResultText">훌륭해요!</div>
+      <div id="drillResultText">훈련 완료</div>
       <div id="drillResultSub"></div>
+      <button id="drillRestartBtn" type="button" onclick="restartDrillFromResult()">다시 시작</button>
     </div>
 
     <div id="readyOverlay">
@@ -3196,7 +3249,12 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <div id="studentRosterBar" style="display:none;"></div>
 
-    <div id="difficultyPanel" class="difficulty-panel" aria-label="난이도 선택">
+    <div id="drillModePanel" class="difficulty-panel drill-mode-panel" aria-label="발차기 훈련 방식 선택">
+      <button type="button" class="diff-btn drill-mode-btn active" data-drill-run-mode="manual" onclick="setDrillRunMode('manual')">수동모드</button>
+      <button type="button" class="diff-btn drill-mode-btn" data-drill-run-mode="auto" onclick="setDrillRunMode('auto')">자동모드</button>
+    </div>
+
+    <div id="difficultyPanel" class="difficulty-panel" aria-label="격파 난이도 선택">
       <button type="button" class="diff-btn" data-diff="easy" onclick="setDifficulty('easy')">쉬움</button>
       <button type="button" class="diff-btn active" data-diff="normal" onclick="setDifficulty('normal')">보통</button>
       <button type="button" class="diff-btn" data-diff="hard" onclick="setDifficulty('hard')">어려움</button>
@@ -3308,6 +3366,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <button class="settings-pw-btn" onclick="toggleHudSettings(); openPwChangeModal();">🔑 비밀번호 변경</button>
     <button class="settings-pw-btn" onclick="logoutLicense()" style="margin-top:8px;background:rgba(227,23,46,0.15);color:#ff8795;border-color:rgba(227,23,46,0.3);">🚪 라이선스 로그아웃</button>
+    <hr class="settings-divider">
+    <button class="settings-home-btn" type="button" onclick="location.href='kickmaster.html'">🏠 홈페이지로 돌아가기</button>
   </div>
 </div>
 
@@ -3427,6 +3487,88 @@ function initDifficulty(){
   document.querySelectorAll('.diff-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.diff===saved));
 }
 
+window.setDrillRunMode=(mode)=>{
+  if(mode!=='manual' && mode!=='auto') return;
+  if(running) stopGame();
+  drillRunMode=mode;
+  try{ localStorage.setItem('akm_drill_run_mode',mode); }catch(e){}
+  document.querySelectorAll('.drill-mode-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.drillRunMode===mode);
+  });
+  document.body.classList.toggle('auto-drill-selected',mode==='auto');
+  if(mode==='auto'){
+    autoDrillIndex=0;
+    autoDrillResults={};
+    currentMode=AUTO_DRILL_SEQUENCE[0];
+    updateSelectedKickButtons();
+    statusEl.style.opacity='1';
+    statusEl.textContent='자동모드: 네 가지 발차기를 순서대로 연결합니다.';
+  }else{
+    statusEl.style.opacity='1';
+    statusEl.textContent='수동모드: 원하는 발차기를 선택해 연습하세요.';
+  }
+  updateModeBadge();
+  renderStats();
+};
+function initDrillRunMode(){
+  let saved='manual';
+  try{ saved=localStorage.getItem('akm_drill_run_mode') || 'manual'; }catch(e){}
+  if(saved!=='manual' && saved!=='auto') saved='manual';
+  drillRunMode=saved;
+  document.querySelectorAll('.drill-mode-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.drillRunMode===saved);
+  });
+  document.body.classList.toggle('auto-drill-selected',saved==='auto');
+}
+function updateSelectedKickButtons(){
+  ['apcha_r','apcha_l','dollo_r','dollo_l'].forEach(m=>{
+    const el=document.getElementById('m_'+m);
+    if(el) el.classList.toggle('active',m===currentMode);
+  });
+}
+function autoDrillStageLabel(){
+  return (autoDrillIndex+1)+' / '+AUTO_DRILL_SEQUENCE.length;
+}
+function beginAutoDrillStage(index, announce=true){
+  autoDrillIndex=index;
+  currentMode=AUTO_DRILL_SEQUENCE[autoDrillIndex];
+  drillDone=0;
+  drillScores=[];
+  lastScore=null; lastGrade=''; lastColor='var(--gold)';
+  kicking=false; aboveFrames=0; belowFrames=0; peakPct=0;
+  trajX=[]; trajY=[]; trajHipX=[]; trajActive=false; drillSide=0;
+  updateSelectedKickButtons();
+  updateModeBadge();
+  renderStats();
+  if(announce){
+    statusEl.style.opacity='1';
+    statusEl.textContent='다음 동작: '+MODE_CFG[currentMode].label+' · '+autoDrillStageLabel();
+    setTimeout(()=>{
+      if(running && drillRunMode==='auto'){
+        statusEl.textContent='';
+        statusEl.style.opacity='0';
+      }
+    },1400);
+  }
+}
+window.restartDrillFromResult=()=>{
+  drillResult.classList.remove('show','auto-summary');
+  drillResultSub.classList.remove('auto-result-summary');
+  autoDrillIndex=0; autoDrillResults={}; autoDrillTransitioning=false;
+  if(drillRunMode==='auto'){
+    currentMode=AUTO_DRILL_SEQUENCE[0];
+    updateSelectedKickButtons();
+  }
+  resetCounters();
+  updateModeBadge();
+  renderStats();
+  setStartBtn(false,'시작!');
+  statusEl.style.opacity='1';
+  statusEl.textContent=drillRunMode==='auto'
+    ?'시작 버튼을 눌러 자동 발차기 훈련을 시작하세요'
+    :'시작 버튼을 눌러 '+MODE_CFG[currentMode].label+' 연습을 시작하세요';
+};
+
 
 let lastScore=null, lastGrade='', lastColor='var(--gold)';
 let balloons=[], balloonCount=0;
@@ -3438,6 +3580,11 @@ let trajX=[], trajY=[], trajHipX=[], trajActive=false, drillSide=0; // drillSide
 
 // 연습 모드 상태
 let drillTarget=10, drillDone=0, drillScores=[], drillResultTimer=null;
+let drillRunMode='manual';
+const AUTO_DRILL_SEQUENCE=['apcha_r','apcha_l','dollo_r','dollo_l'];
+let autoDrillIndex=0;
+let autoDrillResults={};
+let autoDrillTransitioning=false;
 let sparringHp=250, sparringDamage=0, sparringCombo=0, sparringMaxCombo=0;
 let sparringLastHitT=0;
 let lastKickCompleteT=0;
@@ -3775,10 +3922,11 @@ function modeTitleText(){
     }
     return ['겨루기 실전모드','키에 맞춰 나오는 머리/몸통 타겟 공격'];
   }
-  if(currentMode==='apcha_r') return ['앞차기 오른발','오른발로 중앙선 위로 곧게 차기'];
-  if(currentMode==='apcha_l') return ['앞차기 왼발','왼발로 중앙선 위로 곧게 차기'];
-  if(currentMode==='dollo_r') return ['돌려차기 오른발','오른발 화살표를 따라 회전'];
-  if(currentMode==='dollo_l') return ['돌려차기 왼발','왼발 화살표를 따라 회전'];
+  const autoPrefix=(drillRunMode==='auto' ? '자동 '+autoDrillStageLabel()+' · ' : '');
+  if(currentMode==='apcha_r') return [autoPrefix+'앞차기 오른발','오른발로 중앙선 위로 곧게 차기'];
+  if(currentMode==='apcha_l') return [autoPrefix+'앞차기 왼발','왼발로 중앙선 위로 곧게 차기'];
+  if(currentMode==='dollo_r') return [autoPrefix+'돌려차기 오른발','오른발 화살표를 따라 회전'];
+  if(currentMode==='dollo_l') return [autoPrefix+'돌려차기 왼발','왼발 화살표를 따라 회전'];
   if(currentMode==='balloon') return ['격파 모드', diffCfg().label+' · '+(diffCfg().targetEmoji||'🎈')+' 타겟 격파'];
   return ['AI KICK MASTER','태권도 AI 발차기 훈련'];
 }
@@ -4122,7 +4270,72 @@ function onDrillKick(peak, traj){
   trajX=[]; trajY=[]; trajHipX=[]; trajActive=false; drillSide=0;
 
   // 목표 횟수 달성
-  if(drillDone>=drillTarget) setTimeout(finishDrill, 700);
+  if(drillDone>=drillTarget){
+    if(drillRunMode==='auto') setTimeout(finishAutoDrillStage,700);
+    else setTimeout(finishDrill,700);
+  }
+}
+
+function finishAutoDrillStage(){
+  if(!running || drillRunMode!=='auto' || autoDrillTransitioning) return;
+  autoDrillTransitioning=true;
+  const finishedMode=currentMode;
+  const scores=drillScores.slice();
+  autoDrillResults[finishedMode]={
+    label:MODE_CFG[finishedMode].label,
+    scores:scores,
+    avg:avgOf(scores)||0,
+    best:scores.length?Math.max(...scores):0
+  };
+  if(autoDrillIndex < AUTO_DRILL_SEQUENCE.length-1){
+    const nextIndex=autoDrillIndex+1;
+    const nextMode=AUTO_DRILL_SEQUENCE[nextIndex];
+    drillResultIcon.textContent='완료';
+    drillResultText.textContent=MODE_CFG[finishedMode].label+' 완료';
+    drillResultText.style.color='#54ffad';
+    drillResultSub.className='';
+    drillResultSub.textContent='다음 동작 · '+MODE_CFG[nextMode].label;
+    drillResult.classList.remove('auto-summary');
+    drillResult.classList.add('show');
+    setTimeout(()=>{
+      drillResult.classList.remove('show');
+      beginAutoDrillStage(nextIndex,true);
+      autoDrillTransitioning=false;
+    },1500);
+  }else{
+    autoDrillTransitioning=false;
+    finishAutoDrill();
+  }
+}
+
+function finishAutoDrill(){
+  running=false;
+  setPlayingUi(false);
+  const rows=AUTO_DRILL_SEQUENCE.map(mode=>{
+    const r=autoDrillResults[mode] || {label:MODE_CFG[mode].label,avg:0};
+    return {label:r.label,avg:r.avg};
+  });
+  const allScores=AUTO_DRILL_SEQUENCE.flatMap(mode=>(autoDrillResults[mode]?.scores||[]));
+  const totalAvg=avgOf(allScores)||0;
+  drillResultIcon.textContent='훈련 완료';
+  drillResultText.textContent='자동 발차기 훈련 완료';
+  drillResultText.style.color='#fff';
+  drillResultSub.className='auto-result-summary';
+  drillResultSub.innerHTML=rows.map(r=>
+    '<div class="result-label">'+r.label+'</div><div class="result-score">'+r.avg+'점</div>'
+  ).join('')+'<div class="result-average">평균 '+totalAvg+'점</div>';
+  drillResult.classList.add('auto-summary','show');
+  confetti(totalAvg>=90);
+  sndRecord();
+  setStartBtn(false,'다시 시작');
+  setGrResult('자동훈련 완료 · 평균 '+totalAvg+'점');
+  akmSaveRecord('drill_auto',{
+    count:allScores.length,
+    avg:totalAvg,
+    best:allScores.length?Math.max(...allScores):totalAvg,
+    scores:allScores.slice(),
+    parts:autoDrillResults
+  });
 }
 
 function finishDrill(){
@@ -4464,6 +4677,12 @@ window.startGame=()=>{
   }
   ensureAudio();
   resetCounters(); setGrResult('');
+  if(isDrillMode() && drillRunMode==='auto'){
+    autoDrillIndex=0;
+    currentMode=AUTO_DRILL_SEQUENCE[0];
+    updateSelectedKickButtons();
+    updateModeBadge();
+  }
   const startMode=currentMode;
   setReadyUi(true);
   setStartBtn(true,'⏳ 준비중...');
@@ -4481,6 +4700,12 @@ window.startGame=()=>{
     else if(isDrillMode()){
       drillTarget=parseInt(drillCountSel.value);
       drillDone=0; drillScores=[];
+      if(drillRunMode==='auto'){
+        autoDrillIndex=0;
+        autoDrillResults={};
+        autoDrillTransitioning=false;
+        beginAutoDrillStage(0,false);
+      }
     }
     setStartBtn(false,'■ 종료'); renderStats();
   });
@@ -4491,6 +4716,7 @@ function resetCounters(){
   lastScore=null; lastGrade=''; lastColor='var(--gold)';
   balloonCount=0;
   drillDone=0; drillScores=[];
+  autoDrillTransitioning=false;
   sparringHp=250; sparringDamage=0; sparringCombo=0; sparringMaxCombo=0; sparringLastHitT=0;
   updateSparringHud();
   kicking=false; aboveFrames=0; belowFrames=0; peakPct=0; lastRankTs=null;
@@ -4537,6 +4763,12 @@ function updateKickButtonVisibility(){
   });
 }
 window.setMode=(mode)=>{
+  // 자동모드에서 개별 발차기 버튼만 막는다. 격파/겨루기에서 발차기모드로 돌아오는 것은 허용한다.
+  if(drillRunMode==='auto' && isDrillMode() && MODE_CFG[mode]?.isDrill && mode!==currentMode){
+    statusEl.style.opacity='1';
+    statusEl.textContent='자동모드에서는 발차기가 순서대로 전환됩니다.';
+    return;
+  }
   try{
     document.body.classList.toggle('balloon-mode', mode==='balloon');
     document.body.classList.toggle('sparring-mode', mode==='sparring');
@@ -4544,10 +4776,14 @@ window.setMode=(mode)=>{
     document.body.classList.toggle('sparring-live', mode==='sparring' && sparringMode==='live');
   }catch(e){}
   ensureAudio(); stopGame(); currentMode=mode; updateModeBadge(); updateKickButtonVisibility();
+  const drillPanel=document.getElementById('drillModePanel');
   const diffPanel=document.getElementById('difficultyPanel');
   const sparPanel=document.getElementById('sparringTypePanel');
-  if(diffPanel) diffPanel.style.display=(mode==='sparring')?'none':'flex';
-  if(sparPanel) sparPanel.style.display=(mode==='sparring')?'flex':'none';
+  const drillSelected=MODE_CFG[mode]?.isDrill===true;
+  // .difficulty-panel CSS에 display:flex !important가 있으므로 important 우선순위로 정확히 교체한다.
+  if(drillPanel) drillPanel.style.setProperty('display',drillSelected?'flex':'none','important');
+  if(diffPanel) diffPanel.style.setProperty('display',(mode==='balloon')?'flex':'none','important');
+  if(sparPanel) sparPanel.style.setProperty('display',(mode==='sparring')?'flex':'none','important');
   const all=['apcha_r','apcha_l','dollo_r','dollo_l','balloon','sparring'];
   all.forEach(m=>{ const el=document.getElementById('m_'+m); if(el) el.classList.toggle('active',m===mode); });
   const isDrill=MODE_CFG[mode].isDrill;
@@ -4768,8 +5004,11 @@ function loop(){
 drillCountArea.style.display='flex';
 gameArea.style.display='none';
 initDifficulty();
+initDrillRunMode();
 initSparringMode();
 document.getElementById('sparringTypePanel')?.style.setProperty('display','none','important');
+document.getElementById('difficultyPanel')?.style.setProperty('display','none','important');
+document.getElementById('drillModePanel')?.style.setProperty('display','flex','important');
 updateModeBadge();
 updateKickButtonVisibility();
 renderStats(); renderCamRank(); updateModeBadge(); akmRenderStudentUI();

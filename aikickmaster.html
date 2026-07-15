@@ -2864,16 +2864,6 @@ body.hud-v21 .sparring-type-panel .diff-btn{min-width:78px !important;}
 /* =========================================================
    AKM record save confirmation + roster count
    ========================================================= */
-#akmSaveToast{
-  position:absolute; left:50%; bottom:92px; transform:translateX(-50%) translateY(18px);
-  z-index:9999; opacity:0; pointer-events:none;
-  padding:12px 22px; border-radius:999px;
-  background:rgba(5,14,29,.82); border:1px solid rgba(81,255,157,.45);
-  color:#fff; font-size:16px; font-weight:1000; letter-spacing:-.3px;
-  box-shadow:0 16px 44px rgba(0,0,0,.32), 0 0 26px rgba(81,255,157,.18);
-  transition:opacity .25s ease, transform .25s ease;
-}
-#akmSaveToast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 body.hud-v21 .roster-chip .rc-save-count{
   margin-left:auto; padding-right:8px; color:#51ff9d; font-size:11px; font-weight:1000;
   text-shadow:0 0 12px rgba(81,255,157,.55);
@@ -3327,7 +3317,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
         <div class="stat-label" id="lblA">횟수</div>
         <div class="stat-num" id="valA">0</div>
       </div>
-      <div class="stat-box avg-box">
+      <div class="stat-box avg-box" id="statCBox">
         <div class="stat-label" id="lblC">평균</div>
         <div class="stat-num" id="valC">—</div>
       </div>
@@ -3383,7 +3373,7 @@ const modeBadge=document.getElementById('modeBadge');
 const lblA=document.getElementById('lblA'), valA=document.getElementById('valA');
 const sparringTimeBox=document.getElementById('sparringTimeBox'), valTime=document.getElementById('valTime');
 const lblB=document.getElementById('lblB'), valB=document.getElementById('valB');
-const lblC=document.getElementById('lblC'), valC=document.getElementById('valC');
+const lblC=document.getElementById('lblC'), valC=document.getElementById('valC'), statCBox=document.getElementById('statCBox');
 const scoreGrade=document.getElementById('scoreGrade');
 const barFill=document.getElementById('barFill'), barThresh=document.getElementById('barThresh');
 const sensEl=document.getElementById('sens'), sensVal=document.getElementById('sensVal');
@@ -3699,7 +3689,6 @@ function akmWriteHomeState(st){
   try{ localStorage.setItem(AKM_HOME_STATE_KEY, JSON.stringify(st)); return true; }
   catch(e){
     console.warn('AKM record save failed', e);
-    akmShowSaveToast('기록 저장 실패 · 저장공간 확인');
     return false;
   }
 }
@@ -3708,18 +3697,6 @@ function akmNormalizeKeyPart(v){
 }
 function akmStudentKey(s){
   return [akmNormalizeKeyPart(s && s.name), akmNormalizeKeyPart(s && s.className), akmNormalizeKeyPart(s && s.belt)].join('|');
-}
-function akmShowSaveToast(msg){
-  let el=document.getElementById('akmSaveToast');
-  if(!el){
-    el=document.createElement('div');
-    el.id='akmSaveToast';
-    (document.getElementById('camWrap')||document.body).appendChild(el);
-  }
-  el.textContent=msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t=setTimeout(()=>el.classList.remove('show'),1500);
 }
 function akmActiveStudentIds(){
   try{
@@ -3798,7 +3775,6 @@ function akmRenderStudentUI(){
 function akmSaveRecord(kind, data){
   const cur = akmCurrentStudent();
   if(!cur){
-    akmShowSaveToast('수련생 선택 없음 · 기록 미저장');
     return;
   }
   const st=akmReadHomeState();
@@ -3828,7 +3804,6 @@ function akmSaveRecord(kind, data){
     akmRecordedStudents.add(cur.id);
     akmRecordedCounts.set(cur.id,(akmRecordedCounts.get(cur.id)||0)+1);
     akmRenderStudentUI();
-    akmShowSaveToast(cur.name+' 기록 저장됨');
     console.info('AKM record saved', record);
   }
 }
@@ -3862,10 +3837,11 @@ function avgOf(arr){ return arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.l
 function renderStats(){
   scoreGrade.style.display='none';
   if(sparringTimeBox) sparringTimeBox.style.display='none';
+  if(statCBox) statCBox.style.display='';
   if(currentMode==='balloon'){
     lblA.textContent='격파'; valA.textContent=balloonCount;
     lblB.textContent='남은 시간'; valB.textContent=(running?gameRemain+'초':'—'); valB.style.color='var(--gold)';
-    const best=loadRank('balloon')[0]; lblC.textContent='오늘 1등'; valC.textContent=(best?best.v+'장':'—');
+    if(statCBox) statCBox.style.display='none';
   } else if(currentMode==='sparring'){
     if(sparringMode==='practice'){
       lblA.textContent='성공 횟수'; valA.textContent=sparringPracticeDone;

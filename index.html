@@ -509,6 +509,13 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
 .legacy-product-logo{display:block;width:min(430px,92%);height:118px;object-fit:contain;object-position:left center;margin:4px 0 12px}
 @media(max-width:700px){.brand-logo-img{width:145px;height:36px}.legacy-product-logo{height:88px;width:min(330px,94%)}}
 
+
+/* CONTACT SYSTEM */
+.contact-inner{align-items:flex-end}
+.contact-notice{margin-top:14px!important;font-size:13px!important;color:rgba(255,255,255,.68)!important}
+.contact-phone{display:inline-flex;margin-top:12px;color:#fff;font-weight:800;font-size:15px;border-bottom:1px solid rgba(255,255,255,.42);padding-bottom:3px}
+.footer-contact{margin-top:7px;font-size:12px;color:#7C899B}.footer-contact a:hover{color:var(--brand)}
+@media(max-width:760px){.contact-inner{align-items:flex-start}.contact-notice{max-width:420px}}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#071C49">
@@ -521,7 +528,7 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
     </a>
     <nav class="nav-links" aria-label="주요 메뉴">
       <a href="#about">브랜드</a><a href="#products">제품</a><a href="#how">사용 방식</a>
-      <a class="nav-cta" href="mailto:naruunlabs@gmail.com">문의하기</a>
+      <a class="nav-cta js-kakao-link" href="#contact">카카오톡 1:1 상담</a>
     </nav>
   </div>
 </header>
@@ -641,9 +648,9 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
   </div>
 </section>
 
-<section class="final" id="contact"><div class="wrap final-inner"><div><h2>AI 스포츠 교육의 시작,<br>NARUUN LABS.</h2><p id="contactDesc">도장 현장에서 실제로 쓰이는 기술을 만듭니다. 제품 도입과 시범 운영에 대해 문의해 주세요.</p></div><a class="btn" href="mailto:naruunlabs@gmail.com">naruunlabs@gmail.com ↗</a></div></section>
+<section class="final" id="contact"><div class="wrap final-inner contact-inner"><div><h2>제품 도입과 사용이<br>궁금하신가요?</h2><p id="contactDesc">AI KICK MASTER와 AI JUMP MASTER의 구매, 설치, 사용 환경을 안내해드립니다.</p><p class="contact-notice" id="contactNotice">도장 수업 중에는 답변이 늦어질 수 있습니다. 확인하는 대로 순차적으로 답변드리겠습니다.</p><a class="contact-phone" id="contactPhone" href="tel:01076573579">전화 문의 010-7657-3579</a></div><a class="btn js-kakao-link" id="contactKakao" href="#contact">카카오톡 1:1 상담하기 ↗</a></div></section>
 </main>
-<footer><div class="wrap footer-inner"><div><span class="footer-brand">NARUUN LABS</span><span> · Learn with Joy. Grow with AI.</span></div><div id="copyrightText">© 2026 NARUUN LABS. All rights reserved.</div></div></footer>
+<footer><div class="wrap footer-inner"><div><span class="footer-brand">NARUUN LABS</span><span> · Learn with Joy. Grow with AI.</span><div class="footer-contact"><a class="js-kakao-link" href="#contact">카카오톡 1:1 상담</a><span> · </span><a id="footerPhone" href="tel:01076573579">010-7657-3579</a></div></div><div id="copyrightText">© 2026 NARUUN LABS. All rights reserved.</div></div></footer>
 
 <script>
 (function(){
@@ -652,7 +659,11 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
   const trigger=document.getElementById('adminTrigger'); let count=0,timer;
   trigger?.addEventListener('click',e=>{e.preventDefault();count++;clearTimeout(timer);timer=setTimeout(()=>count=0,1500);if(count>=5){count=0;const code=prompt('코드를 입력하세요');if(code===null)return;if(code===EASY_CODE)location.href=adminUrl||'admin.html';else alert('코드가 올바르지 않습니다.');}});
   fetch(ADMIN_EDGE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'GET_HOME_DATA',payload:{target:'index'}})})
-    .then(r=>r.json()).then(res=>{const d=res&&res.data;if(!d)return;if(d.admin_url)adminUrl=d.admin_url;const setText=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.textContent=v};const setHtml=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.innerHTML=v};setText('heroEyebrow',d.hero_eyebrow);setHtml('heroTitle',d.hero_title);setText('heroLead',d.hero_desc);setText('contactDesc',d.contact_desc);setText('copyrightText',d.copyright);}).catch(()=>{});
+    .then(r=>r.json()).then(res=>{const d=res&&res.data;if(!d)return;if(d.admin_url)adminUrl=d.admin_url;const setText=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.textContent=v};const setHtml=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.innerHTML=v};setText('heroEyebrow',d.hero_eyebrow);setHtml('heroTitle',d.hero_title);setText('heroLead',d.hero_desc);setText('contactDesc',d.contact_desc);setText('copyrightText',d.copyright);
+      const kakao=(d.kakao_url||'').trim(); const tel=(d.tel_url||'tel:01076573579').trim(); const phone=(d.phone||'010-7657-3579').trim();
+      document.querySelectorAll('.js-kakao-link').forEach(a=>{if(kakao&&kakao!=='#'){a.href=kakao;a.target='_blank';a.rel='noopener';}else{a.href='#contact';}});
+      const cp=document.getElementById('contactPhone'); if(cp){cp.href=tel;cp.textContent='전화 문의 '+phone;}
+      const fp=document.getElementById('footerPhone'); if(fp){fp.href=tel;fp.textContent=phone;}}).catch(()=>{});
   const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 })();

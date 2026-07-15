@@ -646,6 +646,13 @@ footer{
 .brand{min-width:248px}
 @media(max-width:620px){.product-header-logo{width:190px;height:44px}.brand{min-width:190px}}
 
+
+/* SHARED CONTACT UI */
+.contact-cta{align-items:flex-end!important}.cta-actions{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}
+.contact-notice{margin-top:14px!important;font-size:12.5px!important;color:#7A8798!important;max-width:620px}
+.contact-phone{display:inline-flex;margin-top:10px;color:var(--page-deep);font-size:14px;font-weight:850;border-bottom:1px solid currentColor;padding-bottom:3px}
+.product-footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.product-footer a:hover{color:var(--brand-blue)}
+@media(max-width:760px){.contact-cta{align-items:flex-start!important}.cta-actions{justify-content:flex-start}.product-footer{flex-direction:column;gap:6px}}
 </style>
 </head>
 <body>
@@ -664,7 +671,7 @@ footer{
       <p class="lead" id="kickLead">웹캠 하나로 발차기 동작을 실시간으로 인식합니다. 수련생은 화면의 즉각적인 반응과 점수를 보며 즐겁게 반복하고, 지도자는 기존 수업 흐름 안에서 간편하게 활용할 수 있습니다.</p>
       <div class="actions">
         <a class="btn primary" href="aikickmaster.html">AI KICK MASTER 시작하기</a>
-        <a class="btn ghost" href="index.html#contact">도입 문의</a>
+        <a class="btn ghost js-kakao-link" href="index.html#contact">카카오톡 1:1 상담</a>
       </div>
     </div>
   </section>
@@ -736,19 +743,24 @@ footer{
 
   <section>
     <div class="wrap">
-      <div class="cta">
+      <div class="cta contact-cta">
         <div>
-          <h2>지금 바로 도장에서 사용해보세요</h2>
-          <p id="kickCtaDesc">라이선스 키가 있다면 바로 시작할 수 있습니다.</p>
+          <h2>AI KICK MASTER를 도장에 도입해보세요</h2>
+          <p id="kickCtaDesc">구매, 설치 환경, 사용 방법을 안내해드립니다.</p>
+          <p class="contact-notice">도장 수업 중에는 답변이 늦어질 수 있습니다. 확인하는 대로 순차적으로 답변드리겠습니다.</p>
+          <a class="contact-phone" id="kickPhone" href="tel:01076573579">전화 문의 010-7657-3579</a>
         </div>
-        <a class="btn primary" href="aikickmaster.html">AI KICK MASTER 시작하기</a>
+        <div class="cta-actions">
+          <a class="btn primary" href="aikickmaster.html">AI KICK MASTER 시작하기</a>
+          <a class="btn ghost js-kakao-link" href="index.html#contact">카카오톡 1:1 상담하기</a>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">© 2026 NARUUN LABS · AI KICK MASTER · naruunlabs.kr</div>
+  <div class="wrap product-footer"><span>© 2026 NARUUN LABS · AI KICK MASTER · naruunlabs.kr</span><span><a class="js-kakao-link" href="index.html#contact">카카오톡 1:1 상담</a> · <a id="kickFooterPhone" href="tel:01076573579">010-7657-3579</a></span></div>
 </footer>
 
 <script>
@@ -766,6 +778,12 @@ footer{
     setHtml('kickTitle', d.title);
     setText('kickLead', d.lead);
     setText('kickCtaDesc', d.cta_desc);
+    return fetch('https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'GET_HOME_DATA',payload:{target:'index'}})});
+  }).then(r=>r&&r.json?r.json():null).then(res=>{
+    const c=res&&res.data;if(!c)return;const kakao=(c.kakao_url||'').trim();const tel=(c.tel_url||'tel:01076573579').trim();const phone=(c.phone||'010-7657-3579').trim();
+    document.querySelectorAll('.js-kakao-link').forEach(a=>{if(kakao&&kakao!=='#'){a.href=kakao;a.target='_blank';a.rel='noopener';}});
+    const p=document.getElementById('kickPhone');if(p){p.href=tel;p.textContent='전화 문의 '+phone;}const fp=document.getElementById('kickFooterPhone');if(fp){fp.href=tel;fp.textContent=phone;}
+  
   }).catch(()=>{ /* 실패 시 기본 정적 문구 그대로 사용 */ });
 })();
 </script>

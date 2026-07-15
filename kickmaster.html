@@ -613,6 +613,23 @@ footer{
   .brand-company{font-size:8px;margin-top:4px}
 }
 
+
+
+/* SYSTEM REQUIREMENTS — shared product card style */
+.requirements-section{background:var(--ui-soft)!important}
+.requirements-intro{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:end;margin-bottom:40px}
+.requirements-intro .eyebrow{margin-bottom:10px}
+.requirements-intro p{color:var(--ui-muted);font-size:15px;line-height:1.85;word-break:keep-all}
+.requirements-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.requirement-card{padding:28px 26px;border:1px solid var(--ui-line);background:#fff;min-height:270px}
+.requirement-card .label{display:inline-flex;align-items:center;min-height:25px;padding:0 9px;background:color-mix(in srgb,var(--product-primary) 9%,#fff);color:var(--product-primary);font-size:11px;font-weight:900;letter-spacing:.06em}
+.requirement-card h3{margin:20px 0 14px;color:var(--ui-deep);font-size:20px;letter-spacing:-.035em}
+.requirement-list{list-style:none;display:grid;gap:10px}
+.requirement-list li{position:relative;padding-left:15px;color:var(--ui-muted);font-size:14px;line-height:1.65;word-break:keep-all}
+.requirement-list li:before{content:"";position:absolute;left:0;top:.68em;width:5px;height:5px;background:var(--product-primary)}
+.requirements-note{margin-top:18px;color:#7C8CA2;font-size:12.5px;line-height:1.7}
+@media(max-width:900px){.requirements-intro{grid-template-columns:1fr;gap:14px}.requirements-grid{grid-template-columns:1fr}.requirement-card{min-height:auto}}
+
 </style>
 </head>
 <body>
@@ -674,6 +691,22 @@ footer{
     </div>
   </section>
 
+
+  <section class="requirements-section" id="requirements">
+    <div class="wrap">
+      <div class="requirements-intro">
+        <div><div class="eyebrow">System Requirements</div><h2>사용 환경 안내</h2></div>
+        <p>별도 센서 없이 카메라가 있는 태블릿 또는 PC에서 사용할 수 있습니다. 원활한 AI 동작 인식을 위해 최신 브라우저와 충분한 조명을 권장합니다.</p>
+      </div>
+      <div class="requirements-grid">
+        <article class="requirement-card"><span class="label">최소 환경</span><h3>기본 실행 기준</h3><ul class="requirement-list"><li>Windows 10 이상 또는 Android 10 이상</li><li>Intel Core i3급 / RAM 4GB 이상</li><li>전면 또는 USB 웹캠</li><li>Chrome 또는 Edge 최신 버전</li></ul></article>
+        <article class="requirement-card"><span class="label">권장 환경</span><h3>도장 수업 권장 기준</h3><ul class="requirement-list"><li>Windows 11 또는 Android 12 이상</li><li>Intel Core i5급 / RAM 8GB 이상</li><li>FHD 카메라와 밝은 촬영 공간</li><li>프로젝터 또는 대형 화면 연결</li></ul></article>
+        <article class="requirement-card"><span class="label">iPad 지원</span><h3>iPad에서도 사용 가능</h3><ul class="requirement-list"><li>iPadOS 16 이상 권장</li><li>Safari 최신 버전 사용</li><li>카메라 접근 권한 허용 필요</li><li>기종에 따라 성능 차이 가능</li></ul></article>
+      </div>
+      <p class="requirements-note">※ 실제 인식 성능은 기기 성능, 카메라 화질, 조명, 촬영 거리와 주변 환경에 따라 달라질 수 있습니다.</p>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <div class="cta">
@@ -689,67 +722,6 @@ footer{
 
 <footer>
   <div class="wrap">© 2026 NARUUN LABS · AI KICK MASTER · naruunlabs.kr</div>
-
-<section class="section" id="requirements">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="section-kicker">SYSTEM REQUIREMENTS</div>
-        <h2>시스템 요구사항</h2>
-      </div>
-      <p>최근 <strong>5~6년 이내에 구입한 Windows 노트북이나 Android 태블릿</strong>이라면 대부분 별도의 업그레이드 없이 사용할 수 있습니다.</p>
-    </div>
-
-    <div class="process">
-      <div class="process-card">
-        <span>WINDOWS</span>
-        <h3>권장 사양</h3>
-        <p>• Windows 11<br>
-        • Intel Core i5 10세대 이상 또는 AMD Ryzen 5 이상<br>
-        • RAM 16GB 이상<br>
-        • Google Chrome 최신 버전<br>
-        • Full HD(1080p) 웹캠 이상</p>
-      </div>
-
-      <div class="process-card">
-        <span>WINDOWS</span>
-        <h3>최소 사양</h3>
-        <p>• Windows 10 이상<br>
-        • Intel Core i3 8세대 이상 또는 AMD Ryzen 3 이상<br>
-        • RAM 8GB 이상<br>
-        • 웹캠(720p 이상)<br>
-        • Google Chrome 최신 버전</p>
-      </div>
-
-      <div class="process-card">
-        <span>ANDROID</span>
-        <h3>권장 사양</h3>
-        <p>• Android 12 이상<br>
-        • RAM 8GB 이상<br>
-        • Galaxy Tab S8 이상<br>
-        • Google Chrome 최신 버전</p>
-      </div>
-
-      <div class="process-card">
-        <span>ANDROID</span>
-        <h3>최소 사양</h3>
-        <p>• Android 12 이상<br>
-        • RAM 6GB 이상<br>
-        • 전면 카메라 지원<br>
-        • Google Chrome 최신 버전</p>
-      </div>
-    </div>
-
-    <div style="margin-top:40px">
-      <h3 style="margin-bottom:14px;color:#071C49">권장 촬영 환경</h3>
-      <p>• 카메라와 사용자 거리 : 2~4m<br>
-      • 몸 전체가 화면 안에 들어오도록 설치<br>
-      • 밝은 실내 환경 권장<br>
-      • 전면 카메라 사용 권장</p>
-    </div>
-  </div>
-</section>
-
 </footer>
 
 <script>

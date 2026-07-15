@@ -475,6 +475,24 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
   .trademark-status{font-size:13px}
 }
 
+
+
+/* SYSTEM REQUIREMENTS */
+.requirements-section{padding:108px 0;background:#F7FAFE;border-top:1px solid var(--line)}
+.requirements-head{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:end;margin-bottom:42px}
+.requirements-kicker{display:block;color:var(--brand);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
+.requirements-head h2{color:var(--deep);font-size:clamp(34px,4.4vw,58px);line-height:1.08;letter-spacing:-.05em;word-break:keep-all}
+.requirements-head p{color:var(--muted);font-size:15px;line-height:1.85;word-break:keep-all}
+.requirements-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.requirement-card{padding:30px 28px;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 16px 42px rgba(7,28,73,.055)}
+.requirement-card .label{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:#EAF4FF;color:var(--brand);font-size:11px;font-weight:900;letter-spacing:.06em}
+.requirement-card h3{margin:20px 0 14px;color:var(--deep);font-size:20px;letter-spacing:-.035em}
+.requirement-list{list-style:none;display:grid;gap:10px}
+.requirement-list li{position:relative;padding-left:15px;color:#58677A;font-size:14px;line-height:1.65;word-break:keep-all}
+.requirement-list li:before{content:"";position:absolute;left:0;top:.68em;width:5px;height:5px;border-radius:50%;background:var(--brand2)}
+.requirements-note{margin-top:18px;color:#7B8798;font-size:12.5px;line-height:1.7}
+@media(max-width:900px){.requirements-head{grid-template-columns:1fr;gap:16px}.requirements-grid{grid-template-columns:1fr}.requirements-section{padding:82px 0}}
+
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#071C49">
@@ -580,70 +598,25 @@ footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);background:var(
   <div class="wrap"><div class="section-head reveal"><div><span class="section-kicker">HOW IT WORKS</span><h2>복잡한 준비 없이,<br>바로 수련으로.</h2></div><p>도장에서 필요한 흐름은 단순합니다. 카메라를 연결하고 학생과 모드를 선택한 뒤 시작하면 됩니다. 프로그램이 움직임을 읽고 즉시 반응합니다.</p></div><div class="process reveal"><article class="process-card"><span>STEP 01</span><h3>카메라 연결</h3><p>태블릿이나 노트북의 카메라를 사용해 수련 공간을 비춥니다.</p></article><article class="process-card"><span>STEP 02</span><h3>모드 선택</h3><p>수련 목적에 맞는 동작과 게임 모드를 간단하게 선택합니다.</p></article><article class="process-card"><span>STEP 03</span><h3>훈련 시작</h3><p>목표 동작과 모드를 고르면 화면이 실시간으로 움직임에 반응합니다.</p></article><article class="process-card"><span>STEP 04</span><h3>바로 반복</h3><p>화면의 즉각적인 반응과 점수를 보며 자연스럽게 다음 도전을 이어갑니다.</p></article></div></div>
 </section>
 
-<section class="final" id="contact"><div class="wrap final-inner"><div><h2>AI 스포츠 교육의 시작,<br>NARUUN LABS.</h2><p id="contactDesc">도장 현장에서 실제로 쓰이는 기술을 만듭니다. 제품 도입과 시범 운영에 대해 문의해 주세요.</p></div><a class="btn" href="mailto:naruunlabs@gmail.com">naruunlabs@gmail.com ↗</a></div></section>
-</main>
-<footer><div class="wrap footer-inner"><div><span class="footer-brand">NARUUN LABS</span><span> · Learn with Joy. Grow with AI.</span></div><div id="copyrightText">© 2026 NARUUN LABS. All rights reserved.</div></div>
-<section class="section" id="requirements">
+
+<section class="requirements-section" id="requirements">
   <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="section-kicker">SYSTEM REQUIREMENTS</div>
-        <h2>시스템 요구사항</h2>
-      </div>
-      <p>최근 <strong>5~6년 이내에 구입한 Windows 노트북이나 Android 태블릿</strong>이라면 대부분 별도의 업그레이드 없이 사용할 수 있습니다.</p>
+    <div class="requirements-head reveal">
+      <div><span class="requirements-kicker">SYSTEM REQUIREMENTS</span><h2>복잡한 장비 없이,<br>익숙한 기기에서.</h2></div>
+      <p>AI KICK MASTER와 AI JUMP MASTER는 별도 센서 없이 카메라가 있는 태블릿 또는 PC에서 사용할 수 있습니다. 원활한 동작 인식을 위해 최신 브라우저와 충분한 조명을 권장합니다.</p>
     </div>
-
-    <div class="process">
-      <div class="process-card">
-        <span>WINDOWS</span>
-        <h3>권장 사양</h3>
-        <p>• Windows 11<br>
-        • Intel Core i5 10세대 이상 또는 AMD Ryzen 5 이상<br>
-        • RAM 16GB 이상<br>
-        • Google Chrome 최신 버전<br>
-        • Full HD(1080p) 웹캠 이상</p>
-      </div>
-
-      <div class="process-card">
-        <span>WINDOWS</span>
-        <h3>최소 사양</h3>
-        <p>• Windows 10 이상<br>
-        • Intel Core i3 8세대 이상 또는 AMD Ryzen 3 이상<br>
-        • RAM 8GB 이상<br>
-        • 웹캠(720p 이상)<br>
-        • Google Chrome 최신 버전</p>
-      </div>
-
-      <div class="process-card">
-        <span>ANDROID</span>
-        <h3>권장 사양</h3>
-        <p>• Android 12 이상<br>
-        • RAM 8GB 이상<br>
-        • Galaxy Tab S8 이상<br>
-        • Google Chrome 최신 버전</p>
-      </div>
-
-      <div class="process-card">
-        <span>ANDROID</span>
-        <h3>최소 사양</h3>
-        <p>• Android 12 이상<br>
-        • RAM 6GB 이상<br>
-        • 전면 카메라 지원<br>
-        • Google Chrome 최신 버전</p>
-      </div>
+    <div class="requirements-grid reveal">
+      <article class="requirement-card"><span class="label">최소 환경</span><h3>기본 실행 기준</h3><ul class="requirement-list"><li>Windows 10 이상 또는 Android 10 이상</li><li>Intel Core i3급 / RAM 4GB 이상</li><li>전면 또는 USB 웹캠, 안정적인 인터넷 연결</li><li>Chrome 또는 Edge 최신 버전</li></ul></article>
+      <article class="requirement-card"><span class="label">권장 환경</span><h3>도장 수업 권장 기준</h3><ul class="requirement-list"><li>Windows 11 또는 Android 12 이상</li><li>Intel Core i5급 / RAM 8GB 이상</li><li>FHD 카메라와 밝고 넓은 촬영 공간</li><li>프로젝터 또는 대형 화면 연결</li></ul></article>
+      <article class="requirement-card"><span class="label">iPad 지원</span><h3>iPad에서도 사용 가능</h3><ul class="requirement-list"><li>iPadOS 16 이상 권장</li><li>Safari 최신 버전 사용</li><li>카메라 접근 권한 허용 필요</li><li>기종과 브라우저 상태에 따라 성능 차이 가능</li></ul></article>
     </div>
-
-    <div style="margin-top:40px">
-      <h3 style="margin-bottom:14px;color:#071C49">권장 촬영 환경</h3>
-      <p>• 카메라와 사용자 거리 : 2~4m<br>
-      • 몸 전체가 화면 안에 들어오도록 설치<br>
-      • 밝은 실내 환경 권장<br>
-      • 전면 카메라 사용 권장</p>
-    </div>
+    <p class="requirements-note reveal">※ 실제 인식 성능은 기기 성능, 카메라 화질, 조명, 촬영 거리와 주변 환경에 따라 달라질 수 있습니다.</p>
   </div>
 </section>
 
-</footer>
+<section class="final" id="contact"><div class="wrap final-inner"><div><h2>AI 스포츠 교육의 시작,<br>NARUUN LABS.</h2><p id="contactDesc">도장 현장에서 실제로 쓰이는 기술을 만듭니다. 제품 도입과 시범 운영에 대해 문의해 주세요.</p></div><a class="btn" href="mailto:naruunlabs@gmail.com">naruunlabs@gmail.com ↗</a></div></section>
+</main>
+<footer><div class="wrap footer-inner"><div><span class="footer-brand">NARUUN LABS</span><span> · Learn with Joy. Grow with AI.</span></div><div id="copyrightText">© 2026 NARUUN LABS. All rights reserved.</div></div></footer>
 
 <script>
 (function(){

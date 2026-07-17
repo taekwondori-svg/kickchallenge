@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AI KICK MASTER | NARUUN LABS</title>
-<meta name="description" content="웹캠 기반 AI 자세 인식으로 발차기 훈련을 게임처럼 즐기는 태권도장 전용 훈련 프로그램, AI KICK MASTER." />
+<meta name="description" content="웹캠 기반 AI 자세 인식으로 발차기 훈련을 게임처럼 즐기는 체육관·도장용 훈련 프로그램, AI KICK MASTER." />
 <meta name="theme-color" content="#E3172E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
@@ -669,6 +669,631 @@ footer{
 .faq-answer{padding:0 46px 24px 0;color:var(--muted,var(--ui-muted,#667085));font-size:14.5px;line-height:1.8;word-break:keep-all}
 @media(max-width:900px){.faq-section{padding:82px 0}.faq-head{grid-template-columns:1fr;gap:14px}.faq-item summary{padding:21px 40px 21px 0;font-size:16px}.faq-answer{padding-right:20px}}
 
+
+/* =========================================================
+   HERO TABLET MOCKUP — uploaded kickmaster(42).html 기준
+   기존 디자인 유지 + 실제 화면 추가
+   ========================================================= */
+.hero{
+  min-height:calc(100vh - 74px)!important;
+  padding:82px 0 72px!important;
+  overflow:hidden!important;
+}
+.hero-inner{
+  width:min(1180px,calc(100% - 48px))!important;
+  max-width:none!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,.96fr) minmax(440px,1.04fr)!important;
+  gap:54px!important;
+  align-items:center!important;
+  margin:0 auto!important;
+}
+.hero-copy{
+  position:relative;
+  z-index:2;
+  min-width:0;
+}
+.hero-copy h1{
+  font-size:clamp(50px,6.3vw,86px)!important;
+  max-width:620px!important;
+}
+.hero-copy .lead{
+  max-width:620px!important;
+}
+.hero-visual{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:650px;
+  justify-self:end;
+  padding:20px 10px 26px;
+}
+.hero-visual::before{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:8%;
+  bottom:3px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(7,28,73,.16);
+  filter:blur(22px);
+}
+.tablet-mockup{
+  position:relative;
+  width:100%;
+  padding:9px;
+  border-radius:28px;
+  background:linear-gradient(145deg,#080B12,#252B36);
+  box-shadow:
+    0 28px 64px rgba(7,28,73,.22),
+    inset 0 0 0 1px rgba(255,255,255,.22);
+  transform:perspective(1200px) rotateY(-3deg) rotateX(.5deg);
+  transform-origin:center;
+}
+.tablet-mockup::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:3px;
+  width:44px;
+  height:4px;
+  transform:translateX(-50%);
+  border-radius:999px;
+  background:#111722;
+  z-index:2;
+}
+.tablet-screen{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  aspect-ratio:16/10;
+  background:#111;
+}
+.tablet-screen img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.tablet-screen::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.09),transparent 22%);
+}
+.hero-visual-note{
+  position:absolute;
+  left:24px;
+  bottom:0;
+  z-index:3;
+  padding:12px 14px;
+  border:1px solid var(--ui-line);
+  border-radius:12px;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 14px 34px rgba(7,28,73,.12);
+}
+.hero-visual-note b{
+  display:block;
+  color:var(--ui-deep);
+  font-size:12.5px;
+}
+.hero-visual-note span{
+  display:block;
+  margin-top:2px;
+  color:var(--ui-muted);
+  font-size:10.5px;
+}
+
+@media(max-width:1050px){
+  .hero{
+    min-height:auto!important;
+    padding:78px 0 68px!important;
+  }
+  .hero-inner{
+    grid-template-columns:1fr!important;
+    gap:38px!important;
+  }
+  .hero-copy{
+    max-width:760px;
+  }
+  .hero-visual{
+    width:min(760px,100%);
+    max-width:none;
+    justify-self:center;
+    padding-left:0;
+    padding-right:0;
+  }
+}
+@media(max-width:680px){
+  .hero-inner{
+    width:min(100% - 32px,1180px)!important;
+  }
+  .hero-copy h1{
+    font-size:clamp(46px,14vw,68px)!important;
+  }
+  .hero-visual{
+    padding:6px 0 24px;
+  }
+  .tablet-mockup{
+    padding:6px;
+    border-radius:18px;
+    transform:none;
+  }
+  .tablet-screen{
+    border-radius:12px;
+  }
+  .hero-visual-note{
+    left:8px;
+    padding:9px 11px;
+  }
+}
+
+
+/* =========================================================
+   TABLET PERSPECTIVE REFINEMENT
+   정면이 아닌 약한 사선 시점 + 화면 밖 이탈 방지
+   ========================================================= */
+.hero-inner{
+  grid-template-columns:minmax(0,1fr) minmax(400px,.92fr)!important;
+  gap:44px!important;
+}
+.hero-visual{
+  max-width:590px!important;
+  padding:26px 34px 34px 8px!important;
+  justify-self:end!important;
+}
+.tablet-mockup{
+  width:94%!important;
+  margin-left:auto!important;
+  padding:9px!important;
+  border-radius:26px!important;
+  transform:
+    perspective(1450px)
+    rotateY(-11deg)
+    rotateX(2deg)
+    rotateZ(-.5deg)!important;
+  transform-origin:center center!important;
+  box-shadow:
+    34px 34px 72px rgba(7,28,73,.20),
+    -5px 10px 26px rgba(7,28,73,.08),
+    inset 0 0 0 1px rgba(255,255,255,.24)!important;
+}
+.tablet-mockup::after{
+  content:"";
+  position:absolute;
+  top:18px;
+  right:-10px;
+  width:11px;
+  height:calc(100% - 36px);
+  border-radius:0 11px 11px 0;
+  background:linear-gradient(180deg,#333A46,#111620 52%,#2B313B);
+  box-shadow:4px 0 10px rgba(0,0,0,.16);
+}
+.tablet-screen{
+  border-radius:18px!important;
+}
+.hero-visual-note{
+  left:18px!important;
+  bottom:0!important;
+}
+@media(max-width:1200px){
+  .hero-inner{
+    grid-template-columns:minmax(0,1fr) minmax(380px,.9fr)!important;
+    gap:36px!important;
+  }
+  .hero-visual{
+    max-width:540px!important;
+  }
+}
+@media(max-width:1050px){
+  .hero-inner{
+    grid-template-columns:1fr!important;
+  }
+  .hero-visual{
+    width:min(720px,100%)!important;
+    max-width:none!important;
+    justify-self:center!important;
+    padding:20px 28px 32px 8px!important;
+  }
+  .tablet-mockup{
+    width:92%!important;
+    margin:0 auto!important;
+    transform:
+      perspective(1450px)
+      rotateY(-8deg)
+      rotateX(1.5deg)
+      rotateZ(-.35deg)!important;
+  }
+}
+@media(max-width:680px){
+  .hero-visual{
+    padding:8px 6px 26px!important;
+  }
+  .tablet-mockup{
+    width:96%!important;
+    transform:
+      perspective(1200px)
+      rotateY(-4deg)
+      rotateX(1deg)!important;
+  }
+  .tablet-mockup::after{
+    right:-6px;
+    width:7px;
+  }
+}
+
+
+/* =========================================================
+   REALISTIC LARGE TABLET — 25% 확대 + 실제 옆면/두께 표현
+   ========================================================= */
+.hero{
+  padding:72px 0 66px!important;
+}
+.hero-inner{
+  width:min(1320px,calc(100% - 56px))!important;
+  grid-template-columns:minmax(0,.84fr) minmax(560px,1.16fr)!important;
+  gap:34px!important;
+}
+.hero-copy{
+  z-index:5!important;
+}
+.hero-copy h1{
+  font-size:clamp(48px,5.7vw,80px)!important;
+  max-width:600px!important;
+}
+.hero-copy .lead{
+  max-width:590px!important;
+}
+.hero-visual{
+  width:100%!important;
+  max-width:750px!important;
+  padding:38px 64px 48px 4px!important;
+  justify-self:end!important;
+  perspective:1800px!important;
+  overflow:visible!important;
+}
+.hero-visual::before{
+  left:12%!important;
+  right:2%!important;
+  bottom:9px!important;
+  height:58px!important;
+  background:rgba(7,28,73,.20)!important;
+  filter:blur(28px)!important;
+  transform:skewX(-10deg)!important;
+}
+
+/* 기기 본체 */
+.tablet-mockup{
+  position:relative!important;
+  width:100%!important;
+  margin:0!important;
+  padding:13px 15px 15px 13px!important;
+  border-radius:34px 30px 31px 35px!important;
+  background:
+    linear-gradient(145deg,#5A616C 0%,#252B34 8%,#080B10 38%,#161B23 74%,#505761 100%)!important;
+  transform:
+    perspective(1800px)
+    rotateY(-15deg)
+    rotateX(3deg)
+    rotateZ(-.7deg)!important;
+  transform-style:preserve-3d!important;
+  transform-origin:48% 50%!important;
+  box-shadow:
+    50px 46px 84px rgba(7,28,73,.23),
+    10px 18px 32px rgba(0,0,0,.20),
+    inset 2px 2px 2px rgba(255,255,255,.35),
+    inset -3px -3px 5px rgba(0,0,0,.55)!important;
+}
+
+/* 오른쪽 금속 측면 */
+.tablet-mockup::after{
+  content:""!important;
+  position:absolute!important;
+  z-index:-1!important;
+  top:14px!important;
+  right:-23px!important;
+  width:27px!important;
+  height:calc(100% - 27px)!important;
+  border-radius:2px 18px 18px 2px!important;
+  background:
+    linear-gradient(90deg,#0B0E13 0%,#3A414B 34%,#777E87 52%,#2A3039 74%,#090C11 100%)!important;
+  box-shadow:
+    8px 1px 14px rgba(0,0,0,.30),
+    inset 1px 0 1px rgba(255,255,255,.34)!important;
+  transform:translateZ(-12px) skewY(-1deg)!important;
+}
+
+/* 위쪽 금속 두께 */
+.tablet-mockup::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:4!important;
+  left:30px!important;
+  right:20px!important;
+  top:-8px!important;
+  width:auto!important;
+  height:11px!important;
+  transform:none!important;
+  border-radius:15px 15px 2px 2px!important;
+  background:
+    linear-gradient(180deg,#828893 0%,#333943 44%,#11151B 100%)!important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.42),
+    0 -2px 7px rgba(0,0,0,.15)!important;
+}
+
+/* 화면 유리와 안쪽 베젤 */
+.tablet-screen{
+  position:relative!important;
+  z-index:3!important;
+  border-radius:23px 20px 21px 24px!important;
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.92),
+    inset 0 0 12px rgba(0,0,0,.68),
+    0 1px 1px rgba(255,255,255,.16)!important;
+  transform:translateZ(5px)!important;
+  background:#020305!important;
+}
+.tablet-screen img{
+  border-radius:20px 17px 18px 21px!important;
+}
+.tablet-screen::after{
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 17%,transparent 31%),
+    linear-gradient(180deg,rgba(255,255,255,.025),transparent 55%,rgba(0,0,0,.10))!important;
+}
+
+/* 카메라 */
+.tablet-screen::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:5!important;
+  top:7px!important;
+  left:50%!important;
+  width:7px!important;
+  height:7px!important;
+  margin-left:-3px!important;
+  border-radius:50%!important;
+  background:
+    radial-gradient(circle at 38% 35%,#3E668B 0 15%,#121922 24%,#020306 66%)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.09)!important;
+}
+
+/* 측면 버튼 */
+.hero-visual .tablet-side-buttons{
+  display:block!important;
+  position:absolute!important;
+  z-index:8!important;
+  right:39px!important;
+  top:32%!important;
+  width:5px!important;
+  height:72px!important;
+  border-radius:4px!important;
+  background:
+    linear-gradient(180deg,#727985 0 29%,transparent 29% 42%,#626A75 42% 100%)!important;
+  box-shadow:2px 0 3px rgba(0,0,0,.26)!important;
+  transform:rotate(-1deg)!important;
+}
+
+.hero-visual-note{
+  left:16px!important;
+  bottom:3px!important;
+  z-index:10!important;
+}
+
+/* 중간 화면 */
+@media(max-width:1250px){
+  .hero-inner{
+    width:min(1180px,calc(100% - 48px))!important;
+    grid-template-columns:minmax(0,.88fr) minmax(510px,1.12fr)!important;
+    gap:24px!important;
+  }
+  .hero-visual{
+    max-width:680px!important;
+    padding-right:54px!important;
+  }
+}
+
+/* 한 줄 배치가 어려우면 안전하게 아래 배치 */
+@media(max-width:1050px){
+  .hero-inner{
+    grid-template-columns:1fr!important;
+    gap:32px!important;
+  }
+  .hero-visual{
+    width:min(850px,100%)!important;
+    max-width:none!important;
+    justify-self:center!important;
+    padding:28px 58px 44px 10px!important;
+  }
+  .tablet-mockup{
+    transform:
+      perspective(1800px)
+      rotateY(-11deg)
+      rotateX(2.5deg)
+      rotateZ(-.5deg)!important;
+  }
+  .hero-visual .tablet-side-buttons{
+    right:34px!important;
+  }
+}
+
+@media(max-width:680px){
+  .hero-inner{
+    width:min(100% - 28px,1180px)!important;
+  }
+  .hero-visual{
+    padding:18px 28px 35px 3px!important;
+  }
+  .tablet-mockup{
+    padding:8px 9px 9px 8px!important;
+    border-radius:22px!important;
+    transform:
+      perspective(1400px)
+      rotateY(-7deg)
+      rotateX(1.5deg)!important;
+  }
+  .tablet-mockup::after{
+    right:-13px!important;
+    width:16px!important;
+    top:10px!important;
+    height:calc(100% - 19px)!important;
+  }
+  .tablet-mockup::before{
+    left:20px!important;
+    right:13px!important;
+    top:-5px!important;
+    height:7px!important;
+  }
+  .tablet-screen{
+    border-radius:15px!important;
+  }
+  .tablet-screen img{
+    border-radius:13px!important;
+  }
+  .hero-visual .tablet-side-buttons{
+    right:17px!important;
+    height:48px!important;
+  }
+}
+
+
+/* =========================================================
+   FRONT-ONLY TABLET FINAL
+   후면/옆면 장식 제거, 전면 목업만 깔끔하게 유지
+   ========================================================= */
+.hero-visual{
+  max-width:740px!important;
+  padding:28px 18px 42px 0!important;
+  overflow:visible!important;
+}
+.hero-visual::before{
+  left:12%!important;
+  right:4%!important;
+  bottom:8px!important;
+  height:52px!important;
+  background:rgba(7,28,73,.18)!important;
+  filter:blur(26px)!important;
+  transform:none!important;
+}
+.hero-visual::after{
+  display:none!important;
+}
+
+.tablet-mockup{
+  width:100%!important;
+  margin:0!important;
+  padding:11px!important;
+  border-radius:30px!important;
+  background:
+    linear-gradient(145deg,#353B45 0%,#11151B 18%,#05070B 64%,#2A3038 100%)!important;
+  transform:
+    perspective(1600px)
+    rotateY(-8deg)
+    rotateX(1.6deg)
+    rotateZ(-.25deg)!important;
+  transform-style:flat!important;
+  box-shadow:
+    30px 34px 64px rgba(7,28,73,.20),
+    8px 14px 22px rgba(0,0,0,.18),
+    inset 1px 1px 0 rgba(255,255,255,.24),
+    inset -2px -2px 3px rgba(0,0,0,.52)!important;
+}
+.tablet-mockup::before{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:4px!important;
+  width:42px!important;
+  height:4px!important;
+  transform:translateX(-50%)!important;
+  border-radius:999px!important;
+  background:#111722!important;
+  box-shadow:none!important;
+  z-index:4!important;
+}
+.tablet-mockup::after{
+  display:none!important;
+}
+
+.tablet-screen{
+  border-radius:21px!important;
+  transform:none!important;
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.90),
+    inset 0 0 12px rgba(0,0,0,.62),
+    0 1px 0 rgba(255,255,255,.12)!important;
+}
+.tablet-screen img{
+  border-radius:18px!important;
+  filter:saturate(.99) contrast(1.02)!important;
+}
+.tablet-screen::after{
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.04) 16%,transparent 30%),
+    linear-gradient(180deg,transparent 74%,rgba(0,0,0,.09))!important;
+}
+.tablet-screen::before{
+  top:6px!important;
+  width:6px!important;
+  height:6px!important;
+  background:
+    radial-gradient(circle at 38% 34%,#537C9E 0 12%,#17212B 22%,#030508 64%)!important;
+  opacity:.82!important;
+}
+
+/* 혹시 이전 상세 요소가 남아 있어도 모두 숨김 */
+.tablet-back-plate,
+.tablet-right-rail,
+.tablet-bottom-rail,
+.tablet-volume-key,
+.tablet-power-key,
+.tablet-speaker,
+.tablet-usb-port,
+.tablet-side-buttons{
+  display:none!important;
+}
+
+.hero-visual-note{
+  left:10px!important;
+  bottom:0!important;
+}
+
+@media(max-width:1050px){
+  .hero-visual{
+    width:min(820px,100%)!important;
+    max-width:none!important;
+    padding:20px 12px 38px 0!important;
+  }
+  .tablet-mockup{
+    transform:
+      perspective(1500px)
+      rotateY(-6deg)
+      rotateX(1.2deg)!important;
+  }
+}
+@media(max-width:680px){
+  .hero-visual{
+    padding:10px 4px 30px!important;
+  }
+  .tablet-mockup{
+    padding:7px!important;
+    border-radius:20px!important;
+    transform:
+      perspective(1200px)
+      rotateY(-3deg)
+      rotateX(.7deg)!important;
+  }
+  .tablet-screen{
+    border-radius:14px!important;
+  }
+  .tablet-screen img{
+    border-radius:12px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -681,13 +1306,28 @@ footer{
 
 <main>
   <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="badge" id="kickBadge">🥋 AI 자세 인식 · 태권도장 전용</div>
-      <h1 id="kickTitle">발차기가<br><span>게임이 되는 순간.</span></h1>
-      <p class="lead" id="kickLead">웹캠 하나로 발차기 동작을 실시간으로 인식합니다. 수련생은 화면의 즉각적인 반응과 점수를 보며 즐겁게 반복하고, 지도자는 기존 수업 흐름 안에서 간편하게 활용할 수 있습니다.</p>
-      <div class="actions">
-        <a class="btn primary" href="aikickmaster.html">AI KICK MASTER 시작하기</a>
-        <a class="btn ghost js-kakao-link" href="index.html#contact">카카오톡 1:1 상담</a>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="badge" id="kickBadge">🥋 AI 자세 인식 · 발차기 훈련 프로그램</div>
+        <h1 id="kickTitle">발차기가<br><span>게임이 되는 순간.</span></h1>
+        <p class="lead" id="kickLead">웹캠 하나로 발차기 동작을 실시간으로 인식합니다. 수련생은 화면의 즉각적인 반응과 점수를 보며 즐겁게 반복하고, 지도자는 기존 수업 흐름 안에서 간편하게 활용할 수 있습니다.</p>
+        <div class="actions">
+          <a class="btn primary" href="aikickmaster.html">AI KICK MASTER 시작하기</a>
+          <a class="btn ghost js-kakao-link" href="index.html#contact">카카오톡 1:1 상담</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="AI KICK MASTER 실제 도장 사용 화면">
+        
+        <div class="tablet-mockup">
+          <div class="tablet-screen">
+            <img src="hero-kickmaster.png" alt="AI KICK MASTER 겨루기 실전모드 실제 사용 화면">
+          </div>
+        </div>
+        <div class="hero-visual-note">
+          <b>실제 도장 사용 화면</b>
+          <span>웹캠 기반 AI 자세 인식 · 실시간 타격 판정</span>
+        </div>
       </div>
     </div>
   </section>
@@ -813,7 +1453,12 @@ footer{
     if(!d) return;
     const setText = (id, val) => { const el = document.getElementById(id); if(el && val) el.textContent = val; };
     const setHtml = (id, val) => { const el = document.getElementById(id); if(el && val) el.innerHTML = val; };
-    setText('kickBadge', d.badge);
+    if(d.badge){
+      const normalizedBadge = d.badge
+        .replace(/태권도장\s*전용/g, '발차기 훈련 프로그램')
+        .replace(/태권도\s*전용/g, '발차기 훈련 프로그램');
+      setText('kickBadge', normalizedBadge);
+    }
     setHtml('kickTitle', d.title);
     setText('kickLead', d.lead);
     setText('kickCtaDesc', d.cta_desc);

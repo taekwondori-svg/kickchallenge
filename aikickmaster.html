@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>AI KICK MASTER - Taekwondo Training System</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B0B0D">
+<link rel="icon" href="kick1.svg" type="image/svg+xml">
 <!--
   aikickmaster.html maintenance note
   - CSS cleanup pass: 2026-07-03.
@@ -3361,7 +3364,19 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <button class="settings-pw-btn" onclick="logoutLicense()" style="margin-top:8px;background:rgba(227,23,46,0.15);color:#ff8795;border-color:rgba(227,23,46,0.3);">🚪 라이선스 로그아웃</button>
     <hr class="settings-divider">
+    <button class="settings-home-btn" type="button" id="shortcutBtn">📲 바탕화면에 바로가기 추가</button>
+    <hr class="settings-divider">
     <button class="settings-home-btn" type="button" onclick="location.href='kickmaster.html'">🏠 홈페이지로 돌아가기</button>
+  </div>
+</div>
+
+<div class="shortcut-overlay" id="shortcutOverlay">
+  <div class="shortcut-modal">
+    <button type="button" class="shortcut-close" id="shortcutClose" aria-label="닫기">✕</button>
+    <h3 id="shortcutTitle">바탕화면에 바로가기 추가</h3>
+    <p class="shortcut-sub" id="shortcutSub">아래 순서대로 하면 이 프로그램으로 바로 오는 아이콘이 생겨요.</p>
+    <ol class="shortcut-steps" id="shortcutSteps"></ol>
+    <button type="button" class="shortcut-ok-btn" id="shortcutOk">확인했어요</button>
   </div>
 </div>
 
@@ -5136,9 +5151,20 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 /* 전면 카메라 고정: 카메라 전환 제거 후 전체화면 버튼 단독 정렬 */
 body.hud-v21 .btns.fullscreen-only{width:150px !important;}
 body.hud-v21 .btns.fullscreen-only #fsBtn{width:100% !important;flex:1 1 100% !important;}
-@media (orientation:landscape) and (max-width:1200px){
-  body.hud-v21 .btns.fullscreen-only{width:138px !important;}
-}
+
+/* 바탕화면 바로가기 안내 모달 */
+.shortcut-overlay{position:fixed;inset:0;background:rgba(5,7,11,.72);backdrop-filter:blur(6px);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px}
+.shortcut-overlay.is-open{display:flex}
+.shortcut-modal{width:min(440px,100%);background:#12172a;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:30px 26px 26px;box-shadow:0 30px 90px rgba(0,0,0,.5);position:relative}
+.shortcut-modal h3{font-size:19px;margin-bottom:6px;letter-spacing:-.02em;color:#fff}
+.shortcut-modal .shortcut-sub{color:#9aa7bd;font-size:13.5px;margin-bottom:20px;line-height:1.5}
+.shortcut-steps{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding:0}
+.shortcut-steps li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.55;color:#dfe4ee}
+.shortcut-steps li b.stepnum{flex:0 0 auto;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,#E3172E,#FF6A1A);display:grid;place-items:center;font-size:12px;color:#fff;font-weight:900}
+.shortcut-steps li strong{color:#fff;font-weight:800}
+.shortcut-modal .shortcut-ok-btn{width:100%;height:48px;border:0;border-radius:14px;background:linear-gradient(135deg,#E3172E,#FF6A1A);color:#fff;font-weight:900;font-size:14px;cursor:pointer;margin-top:4px}
+.shortcut-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;font-size:15px;cursor:pointer;display:grid;place-items:center}
+.shortcut-close:hover{background:rgba(255,255,255,.14)}
 </style>
 <script id="fix4-start-stop-text-helper">
 (function(){
@@ -5280,5 +5306,100 @@ window.logoutLicense=()=>{
 };
 </script>
 
+<script>
+(function(){
+  const btn = document.getElementById('shortcutBtn');
+  const overlay = document.getElementById('shortcutOverlay');
+  const closeBtn = document.getElementById('shortcutClose');
+  const okBtn = document.getElementById('shortcutOk');
+  const titleEl = document.getElementById('shortcutTitle');
+  const subEl = document.getElementById('shortcutSub');
+  const stepsEl = document.getElementById('shortcutSteps');
+  if(!btn || !overlay) return;
+
+  // 서비스워커 등록 (설치 가능 조건 충족용)
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){ /* 등록 실패 시 조용히 무시 */ });
+    });
+  }
+
+  // 브라우저가 "설치 가능" 상태가 되면 이벤트를 잡아둔다 (Chrome/Edge/안드로이드 등)
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  window.addEventListener('appinstalled', function(){
+    deferredPrompt = null;
+    btn.textContent = '✅ 바로가기 설치 완료';
+  });
+
+  function step(n, html){ return '<li><b class="stepnum">'+n+'</b><span>'+html+'</span></li>'; }
+
+  function getGuide(){
+    const ua = navigator.userAgent || '';
+    const isIPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
+    const isIOS = /iPhone|iPod/.test(ua) || isIPad;
+    const isAndroid = /Android/.test(ua);
+
+    if(isIOS){
+      return {
+        title: isIPad ? '아이패드에 바로가기 추가' : '아이폰에 바로가기 추가',
+        sub: 'Safari 브라우저로 열고 있어야 해요.',
+        steps: [
+          step(1, '화면 하단(또는 상단)의 <strong>공유 버튼</strong> <span style="opacity:.8">(사각형에서 위로 화살표 모양)</span>을 눌러주세요.'),
+          step(2, '메뉴를 아래로 내려서 <strong>"홈 화면에 추가"</strong>를 눌러주세요.'),
+          step(3, '이름을 확인하고 오른쪽 위 <strong>"추가"</strong>를 누르면 완료돼요.')
+        ]
+      };
+    }
+    if(isAndroid){
+      return {
+        title: '안드로이드 태블릿에 바로가기 추가',
+        sub: 'Chrome 브라우저로 열고 있어야 해요.',
+        steps: [
+          step(1, '화면 오른쪽 위 <strong>점 3개(⋮) 메뉴</strong>를 눌러주세요.'),
+          step(2, '메뉴에서 <strong>"홈 화면에 추가"</strong>를 눌러주세요.'),
+          step(3, '이름을 확인하고 <strong>"추가"</strong>를 누르면 홈 화면에 아이콘이 생겨요.')
+        ]
+      };
+    }
+    // Windows / Mac 데스크톱 (Chrome, Edge 등)
+    return {
+      title: 'PC 바탕화면에 바로가기 추가',
+      sub: 'Chrome 또는 Edge 브라우저 기준 안내예요.',
+      steps: [
+        step(1, '브라우저 오른쪽 위 <strong>점 3개(⋮) 메뉴</strong>를 눌러주세요.'),
+        step(2, '<strong>"도구 더보기"</strong> → <strong>"바로가기 만들기"</strong>(Edge는 "이 페이지를 바탕화면에 고정")를 눌러주세요.'),
+        step(3, '이름을 확인하고 <strong>"만들기"</strong>를 누르면 바탕화면에 아이콘이 생겨요.')
+      ]
+    };
+  }
+
+  function openModal(){
+    const g = getGuide();
+    titleEl.textContent = g.title;
+    subEl.textContent = g.sub;
+    stepsEl.innerHTML = g.steps.join('');
+    overlay.classList.add('is-open');
+  }
+  function closeModal(){ overlay.classList.remove('is-open'); }
+
+  btn.addEventListener('click', function(){
+    if(deferredPrompt){
+      // 브라우저 네이티브 "설치하시겠습니까?" 팝업을 바로 띄운다 (원터치 설치)
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
+    } else {
+      // 원터치 설치를 지원하지 않는 환경(iOS 등)에서는 수동 안내로 대체
+      openModal();
+    }
+  });
+  closeBtn.addEventListener('click', closeModal);
+  okBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+})();
+</script>
 </body>
 </html>

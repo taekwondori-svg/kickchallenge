@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>AI KICK MASTER - Taekwondo Training System</title>
+<meta name="theme-color" content="#0B0B0D">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="kick1.svg">
 <!--
   aikickmaster.html maintenance note
   - CSS cleanup pass: 2026-07-03.
@@ -382,6 +385,34 @@ body.hud-v21 .bar-track{height:18px;}
 }
 .settings-home-btn:hover{background:rgba(255,255,255,.13);}
 .settings-home-btn:active{transform:scale(.98);}
+
+.settings-install-btn{
+  display:none;
+  width:100%;
+  margin-top:8px;
+  padding:12px;
+  border:1px solid rgba(46,204,113,.34);
+  border-radius:11px;
+  background:rgba(46,204,113,.14);
+  color:#79f2aa;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  transition:background .15s ease,transform .15s ease,border-color .15s ease;
+}
+.settings-install-btn.show{display:block;}
+.settings-install-btn:hover{background:rgba(46,204,113,.22);border-color:rgba(46,204,113,.55);}
+.settings-install-btn:active{transform:scale(.98);}
+.settings-install-btn:disabled{opacity:.55;cursor:default;transform:none;}
+.settings-install-note{
+  display:none;
+  margin-top:7px;
+  color:#8fa4bd;
+  font-size:11px;
+  line-height:1.45;
+  text-align:center;
+}
+.settings-install-note.show{display:block;}
 
 /* 모달 안 bar-track */
 #settingsModal .bar-track{ position:relative; height:18px; background:#0a1220; border-radius:9px; overflow:hidden; border:1px solid #1d3050; }
@@ -3362,6 +3393,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <button class="settings-pw-btn" onclick="logoutLicense()" style="margin-top:8px;background:rgba(227,23,46,0.15);color:#ff8795;border-color:rgba(227,23,46,0.3);">🚪 라이선스 로그아웃</button>
     <hr class="settings-divider">
+    <button id="installAppBtn" class="settings-install-btn" type="button">⬇ AI KICK MASTER 설치하기</button>
+    <div id="installAppNote" class="settings-install-note"></div>
     <button class="settings-home-btn" type="button" onclick="location.href='kickmaster.html'">🏠 홈페이지로 돌아가기</button>
   </div>
 </div>
@@ -5171,6 +5204,81 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
   window.addEventListener('orientationchange', function(){ setTimeout(setAkmViewportHeight, 250); }, {passive:true});
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', setAkmViewportHeight, {passive:true});
+  }
+})();
+</script>
+
+<!-- ===== PWA 설치 및 바탕화면 실행 ===== -->
+<script>
+(function(){
+  let deferredInstallPrompt = null;
+  const installBtn = document.getElementById('installAppBtn');
+  const installNote = document.getElementById('installAppNote');
+
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function setInstallMessage(message){
+    if(!installNote) return;
+    installNote.textContent = message || '';
+    installNote.classList.toggle('show', Boolean(message));
+  }
+
+  function hideInstallButton(){
+    if(installBtn) installBtn.classList.remove('show');
+  }
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(error){
+        console.warn('서비스 워커 등록 실패:', error);
+      });
+    });
+  }
+
+  window.addEventListener('beforeinstallprompt', function(event){
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    if(!isStandalone() && installBtn) installBtn.classList.add('show');
+    setInstallMessage('설치하면 다음부터 바탕화면 아이콘으로 바로 실행할 수 있습니다.');
+  });
+
+  if(installBtn){
+    installBtn.addEventListener('click', async function(){
+      if(isStandalone()){
+        hideInstallButton();
+        setInstallMessage('이미 설치되어 있습니다.');
+        return;
+      }
+      if(!deferredInstallPrompt){
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        setInstallMessage(isIOS
+          ? 'Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택하세요.'
+          : '브라우저 주소창의 설치 아이콘을 이용하거나 Chrome·Edge에서 다시 열어주세요.');
+        return;
+      }
+      installBtn.disabled = true;
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installBtn.disabled = false;
+      if(choice.outcome === 'accepted'){
+        hideInstallButton();
+        setInstallMessage('설치가 완료되었습니다. 바탕화면 아이콘으로 실행하세요.');
+      }
+    });
+  }
+
+  window.addEventListener('appinstalled', function(){
+    deferredInstallPrompt = null;
+    hideInstallButton();
+    setInstallMessage('설치가 완료되었습니다. 바탕화면 아이콘으로 실행하세요.');
+  });
+
+  if(isStandalone()){
+    hideInstallButton();
+    setInstallMessage('바탕화면에서 실행 중입니다.');
   }
 })();
 </script>

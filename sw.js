@@ -1,60 +1,37 @@
-const CACHE_NAME = 'naruunlabs-v2-20260711-flow-simplify';
-const ASSETS = [
-  './',
-  'index.html',
-  'kickmaster.html',
-  'jumpmaster.html',
-  'aikickmaster.html',
-  'aijumpmaster.html',
-  'admin.html',
-  'manifest.json',
-  'logo.svg',
-  'logo-icon.svg',
-  'logo-white.svg'
-];
+const AKM_CACHE = 'akm-shell-v1';
+const AKM_SHELL = ['./', './aikickmaster.html', './manifest.json', './kick1.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS).catch(() => null))
+    caches.open(AKM_CACHE).then(cache => cache.addAll(AKM_SHELL)).catch(() => undefined)
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
-    )
+    caches.keys().then(keys => Promise.all(keys.filter(key => key !== AKM_CACHE).map(key => caches.delete(key))))
   );
   self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (request.method !== 'GET') return;
-
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-
-  const isPageOrCoreAsset =
-    request.mode === 'navigate' ||
-    /\.(html|js|css|svg|json)$/i.test(url.pathname) ||
-    url.pathname.endsWith('/');
-
-  if (isPageOrCoreAsset) {
+  if(event.request.method !== 'GET') return;
+  if(event.request.mode === 'navigate'){
     event.respondWith(
-      fetch(request)
-        .then(response => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
-          return response;
-        })
-        .catch(() => caches.match(request))
+      fetch(event.request).then(response => {
+        const copy = response.clone();
+        caches.open(AKM_CACHE).then(cache => cache.put(event.request, copy));
+        return response;
+      }).catch(() => caches.match(event.request).then(cached => cached || caches.match('./aikickmaster.html')))
     );
     return;
   }
-
   event.respondWith(
-    caches.match(request).then(cached => cached || fetch(request))
+    caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
+      const copy = response.clone();
+      caches.open(AKM_CACHE).then(cache => cache.put(event.request, copy));
+      return response;
+    }))
   );
 });

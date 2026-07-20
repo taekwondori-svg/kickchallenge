@@ -3954,98 +3954,81 @@ function updateModeBadge(){
 
 // 궤적에서 발차기 형태 분석
 function analyzeTraj(){
-  if(trajX.length<6) return {score:null,ok:false,msg:'동작을 다시 보여주세요',reason:'too_short'};
+  if(trajX.length<4) return {score:null,ok:false,msg:'동작을 다시 보여주세요',reason:'too_short'};
 
-  // 발을 다시 내리는 회수 동작은 제외하고, 가장 높이 올라간 지점까지만 분석
+  // 몸이 좌우로 움직인 영향은 빼고, 발이 골반 기준으로 어떻게 움직였는지 분석
+  const relX=trajX.map((x,i)=>x-(trajHipX[i] ?? smHipX ?? 0.5));
+
+  // 발을 내리는 회수 동작은 제외하고 최고점까지 사용하되,
+  // 최고점이 초반에 잡혔다는 이유만으로 발차기를 실패시키지 않는다.
   let peakIndex=0;
   for(let i=1;i<trajY.length;i++){
     if(trajY[i]<trajY[peakIndex]) peakIndex=i;
   }
-  if(peakIndex<4) return {score:null,ok:false,msg:'조금 더 크게 차주세요',reason:'too_short'};
+  peakIndex=Math.max(peakIndex,Math.min(trajY.length-1,3));
 
-  const xs=trajX.slice(0,peakIndex+1);
+  const xs=relX.slice(0,peakIndex+1);
   const ys=trajY.slice(0,peakIndex+1);
-  const hips=trajHipX.slice(0,peakIndex+1);
-
   const startX=xs[0], startY=ys[0];
   const peakX=xs[xs.length-1], peakY=ys[ys.length-1];
-  const riseY=startY-peakY;
-  const hip0=hips[0] ?? smHipX ?? 0.5;
-  const side=(startX<hip0)?-1:1;
+  const riseY=Math.max(0,startY-peakY);
 
-  let maxAbsDX=0;
-  xs.forEach(x=>{ maxAbsDX=Math.max(maxAbsDX,Math.abs(x-startX)); });
-  const netDX=Math.abs(peakX-startX);
+  let minX=xs[0], maxX=xs[0];
+  for(const x of xs){ minX=Math.min(minX,x); maxX=Math.max(maxX,x); }
+  const lateralRange=maxX-minX;
+  const netLateral=Math.abs(peakX-startX);
 
-  // 돌려차기의 '물음표형' 궤적:
-  // 초반에 몸 바깥쪽으로 나갔다가, 이후 안쪽으로 방향을 바꾸며 계속 상승
-  let outerIndex=0;
-  for(let i=1;i<xs.length;i++){
-    if(side*(xs[i]-xs[outerIndex])>0) outerIndex=i;
+  // 궤적 중간에 좌우 방향이 실제로 바뀌었는지 느슨하게 확인
+  let meaningfulTurn=false;
+  for(let i=2;i<xs.length-1;i++){
+    const first=xs[i]-startX;
+    const second=peakX-xs[i];
+    if(Math.abs(first)>0.018 && Math.abs(second)>0.012 && Math.sign(first)!==Math.sign(second)){
+      meaningfulTurn=true;
+      break;
+    }
   }
-  const outerX=xs[outerIndex];
-  const outward=Math.max(0,side*(outerX-startX));
-  const inward=Math.max(0,-side*(peakX-outerX));
 
-  // 방향 전환 전후에 실제 이동이 있었는지 확인
-  const hasOrderedTurn=
-    outerIndex>=1 &&
-    outerIndex<=xs.length-3 &&
-    outward>0.028 &&
-    inward>0.018;
-
-  // 최고점까지 전체적으로 계속 올라갔는지 확인
-  let upwardSteps=0, downwardSteps=0;
-  for(let i=1;i<ys.length;i++){
-    const dy=ys[i-1]-ys[i];
-    if(dy>0.002) upwardSteps++;
-    else if(dy<-0.002) downwardSteps++;
-  }
-  const mostlyRising=upwardSteps>=Math.max(3,downwardSteps*1.5);
-
-  const hookStrength=Math.min(1,(outward/0.085)*0.55+(inward/0.060)*0.45);
-  const verticalDominant=maxAbsDX<Math.max(0.035,riseY*0.42);
-  const hasRoundShape=
-    riseY>0.050 &&
-    hasOrderedTurn &&
-    mostlyRising &&
-    hookStrength>0.42 &&
-    !verticalDominant;
+  // 너무 엄격한 물음표 모양 강제 대신,
+  // 골반 기준으로 충분한 옆 이동이 있으면 돌려차기로 인정한다.
+  const roundMovement=
+    riseY>0.030 &&
+    lateralRange>0.050 &&
+    (netLateral>0.026 || meaningfulTurn);
 
   if(drillKickType()==='apcha'){
-    // 앞차기는 곧게 상승해야 하며, 물음표형 방향 전환이 나타나면 실패
-    const straightness=Math.max(0,Math.min(1,1-(maxAbsDX/Math.max(riseY*0.95,0.055))));
-    const enoughHeight=riseY>0.055;
-    const tooCurved=hasRoundShape || (outward>0.050 && inward>0.016);
-    const ok=enoughHeight && straightness>0.28 && !tooCurved;
-
-    if(!ok){
-      const msg=tooCurved?'앞으로 곧게 차세요!':'조금 더 높이!';
-      return {score:null,ok:false,msg,reason:tooCurved?'round_shape':'low'};
+    // 앞차기: 높이는 쉽게 인정하고, 옆 이동이 아주 큰 경우만 실패
+    const enoughHeight=riseY>0.030;
+    const tooSideways=lateralRange>0.095 || (lateralRange>0.075 && meaningfulTurn);
+    if(!enoughHeight){
+      return {score:null,ok:false,msg:'조금 더 높이!',reason:'low'};
+    }
+    if(tooSideways){
+      return {score:null,ok:false,msg:'앞으로 곧게 차세요!',reason:'round_shape'};
     }
 
-    const heightScore=Math.max(0,Math.min(1,(riseY-0.055)/0.155));
-    const techniqueScore=Math.max(0,Math.min(1,straightness));
-    let score=Math.round(60 + heightScore*22 + techniqueScore*16);
-    score=Math.max(60,Math.min(98,score));
-    if(heightScore>0.94 && techniqueScore>0.92) score=100;
+    const heightScore=Math.max(0,Math.min(1,(riseY-0.030)/0.150));
+    const straightScore=Math.max(0,Math.min(1,1-lateralRange/0.095));
+    let score=Math.round(62 + heightScore*22 + straightScore*14);
+    score=Math.max(62,Math.min(98,score));
+    if(heightScore>0.96 && straightScore>0.94) score=100;
 
-    let msg=score>=98?'완벽한 앞차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
+    const msg=score>=98?'완벽한 앞차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
     return {score,ok:true,msg,reason:'front'};
   }
 
-  // 돌려차기는 초반 바깥 이동 → 방향 전환 → 안쪽 위로 상승이 반드시 보여야 함
-  if(!hasRoundShape){
-    return {score:null,ok:false,msg:'조금 더 돌려차세요!',reason:'not_round'};
+  if(!roundMovement){
+    return {score:null,ok:false,msg:'발을 옆으로 돌려 차보세요!',reason:'not_round'};
   }
 
-  const heightScore=Math.max(0,Math.min(1,(riseY-0.050)/0.145));
-  const techniqueScore=Math.max(0,Math.min(1,hookStrength));
-  let score=Math.round(60 + heightScore*20 + techniqueScore*18);
-  score=Math.max(60,Math.min(98,score));
-  if(heightScore>0.94 && techniqueScore>0.92 && mostlyRising) score=100;
+  const heightScore=Math.max(0,Math.min(1,(riseY-0.030)/0.145));
+  const roundScore=Math.max(0,Math.min(1,(lateralRange-0.050)/0.100));
+  const turnBonus=meaningfulTurn?1:0.55;
+  let score=Math.round(62 + heightScore*20 + roundScore*12 + turnBonus*4);
+  score=Math.max(62,Math.min(98,score));
+  if(heightScore>0.96 && roundScore>0.92 && meaningfulTurn) score=100;
 
-  let msg=score>=98?'완벽한 돌려차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
+  const msg=score>=98?'완벽한 돌려차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
   return {score,ok:true,msg,reason:'round'};
 }
 

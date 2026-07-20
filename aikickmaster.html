@@ -3887,9 +3887,9 @@ function renderStats(){
 }
 
 /* ── 팝업 ── */
-function popup(text,color){
+function popup(text,color,showGrade=true){
   let grade='';
-  if(typeof lastScore==='number'){
+  if(showGrade && typeof lastScore==='number'){
     if(lastScore>=98) grade='PERFECT!';
     else if(lastScore>=90) grade='GREAT!';
     else if(lastScore>=80) grade='GOOD!';
@@ -3954,7 +3954,7 @@ function updateModeBadge(){
 
 // 궤적에서 발차기 형태 분석
 function analyzeTraj(){
-  if(trajX.length<4) return {score:0,ok:false,msg:'너무 짧아요'};
+  if(trajX.length<3) return {score:0,ok:false,msg:'너무 짧아요'};
   const startY=trajY[0], minY=Math.min(...trajY);
   const riseY=startY-minY;
   const startX=trajX[0];
@@ -3976,9 +3976,9 @@ function analyzeTraj(){
     score=Math.max(40,Math.min(100,score));
     // 앞차기: 충분히 올라오면서, 옆으로 과도하게 휘지 않은 궤적만 인정
     // 기존보다 구별력은 높이되 아이들의 자연스러운 흔들림은 허용한다.
-    const ok=riseY>0.045 && absDX<riseY*1.05 && absDX<0.120;
+    const ok=riseY>0.025 && absDX<riseY*1.60 && absDX<0.160;
     let msg;
-    if(!ok && riseY<=0.045) msg='🦵 조금 더 높이!';
+    if(!ok && riseY<=0.025) msg='🦵 조금 더 높이!';
     else if(!ok) msg='↕️ 앞쪽으로 곧게!';
     else if(score>=98) msg='완벽한 앞차기!';
     else if(score>=90) msg='아주 좋아요!';
@@ -3995,9 +3995,9 @@ function analyzeTraj(){
     // 돌려차기: 최소 높이와 바깥쪽 곡선이 함께 확인되어야 인정
     // 절대 이동량만 강요하지 않고 상승량 대비 곡선 비율도 함께 본다.
     const curveRatio=outward/Math.max(riseY,0.025);
-    const ok=riseY>0.040 && outward>0.028 && curveRatio>0.22;
+    const ok=riseY>0.025 && outward>0.012 && curveRatio>0.10;
     let msg;
-    if(!ok && riseY<=0.040) msg='🔄 조금 더 높이!';
+    if(!ok && riseY<=0.025) msg='🔄 조금 더 높이!';
     else if(!ok) msg=(side<0?'↖ 왼쪽으로 조금 더 휘어요!':'↗ 오른쪽으로 조금 더 휘어요!');
     else if(score>=98) msg='완벽한 돌려차기!';
     else if(score>=90) msg='아주 좋아요!';
@@ -4299,7 +4299,7 @@ function onDrillKick(peak, traj){
     lastGrade=result.msg;
     lastColor='#9fb0c8';
     sndFail();
-    popup('다시!', '#9fb0c8');
+    popup('다시!', '#9fb0c8', false);
     renderStats();
     trajX=[]; trajY=[]; trajHipX=[]; trajActive=false; drillSide=0;
     return;

@@ -429,6 +429,7 @@ body.hud-v21 #popOverlay{z-index:12;}
 body.hud-v21 #drillResult{z-index:13; background:rgba(2,8,18,.62); backdrop-filter:blur(4px);}
 body.hud-v21 #popScore{font-size:132px; font-weight:900; line-height:.88; text-align:center; color:#ffe36b; text-shadow:0 0 34px rgba(255,106,26,.70),0 5px 36px rgba(0,0,0,.78);}
 body.hud-v21 .popGrade{margin-top:18px; font-size:48px; color:#4ca3ff; letter-spacing:1px; text-shadow:0 0 28px rgba(76,163,255,.75),0 4px 24px rgba(0,0,0,.65);}
+body.hud-v21 .popHint{margin-top:18px; font-size:38px; line-height:1.2; color:#fff; font-weight:900; text-align:center; text-shadow:0 3px 22px rgba(0,0,0,.85);}
 body.hud-v21 #drillResultIcon{font-size:100px;}
 body.hud-v21 #drillResultText{font-size:54px; font-weight:900; text-shadow:0 0 26px rgba(76,163,255,.5);}
 body.hud-v21 #drillResultSub{font-size:20px; color:#cdd8e8; font-weight:700;}
@@ -3587,6 +3588,7 @@ let smHipY=null, smTorso=null, smHipX=null;
 
 // 발차기 궤적 추적 (연습 모드용)
 let trajX=[], trajY=[], trajHipX=[], trajActive=false, drillSide=0; // drillSide: -1 왼쪽 시작, 1 오른쪽 시작
+let preTrajX=[], preTrajY=[], preTrajHipX=[]; // 발차기 시작 직전의 짧은 궤적을 보관
 
 // 연습 모드 상태
 let drillTarget=10, drillDone=0, drillScores=[], drillResultTimer=null;
@@ -3887,7 +3889,7 @@ function renderStats(){
 }
 
 /* ── 팝업 ── */
-function popup(text,color,showGrade=true){
+function popup(text,color,showGrade=true,hint=''){
   let grade='';
   if(showGrade && typeof lastScore==='number'){
     if(lastScore>=98) grade='PERFECT!';
@@ -3895,11 +3897,13 @@ function popup(text,color,showGrade=true){
     else if(lastScore>=80) grade='GOOD!';
     else if(lastScore>=70) grade='성공!';
   }
-  popScore.innerHTML = text + (grade ? '<div class="popGrade">'+grade+'</div>' : '');
+  popScore.innerHTML = text
+    + (grade ? '<div class="popGrade">'+grade+'</div>' : '')
+    + (hint ? '<div class="popHint">'+hint+'</div>' : '');
   popScore.style.color=color;
   popOverlay.classList.add('show');
   if(popTimer) clearTimeout(popTimer);
-  popTimer=setTimeout(()=>popOverlay.classList.remove('show'),900);
+  popTimer=setTimeout(()=>popOverlay.classList.remove('show'),1050);
 }
 
 
@@ -3954,57 +3958,71 @@ function updateModeBadge(){
 
 // 궤적에서 발차기 형태 분석
 function analyzeTraj(){
-  if(trajX.length<3) return {score:0,ok:false,msg:'너무 짧아요'};
-  const startY=trajY[0], minY=Math.min(...trajY);
-  const riseY=startY-minY;
-  const startX=trajX[0];
-  const hip0=trajHipX[0] ?? smHipX ?? 0.5;
-  const side=(startX<hip0)?-1:1; // -1: 화면/몸 기준 왼쪽 시작, 1: 오른쪽 시작
-  const extremeX = side<0 ? Math.min(...trajX) : Math.max(...trajX);
-  const outward = Math.max(0, side*(extremeX-startX));
-  let maxDX=0;
-  trajX.forEach(x=>{ if(Math.abs(x-startX)>Math.abs(maxDX)) maxDX=x-startX; });
-  const absDX=Math.abs(maxDX);
+  if(trajX.length<4) return {score:0,ok:false,msg:'동작을 크게 해주세요!'};
+
+  const torso=Math.max(0.08, smTorso || 0.22);
+  const peakIdx=trajY.indexOf(Math.min(...trajY));
+  const endIdx=Math.max(1,peakIdx);
+  const xs=trajX.slice(0,endIdx+1);
+  const ys=trajY.slice(0,endIdx+1);
+  const startX=xs[0], startY=ys[0], minY=Math.min(...ys);
+  const riseNorm=(startY-minY)/torso;
+  const lateralRangeNorm=(Math.max(...xs)-Math.min(...xs))/torso;
+
+  // 시작점과 최고점 사이의 직선에서 얼마나 벗어났는지 측정한다.
+  // 화면 크기가 아니라 몸통 길이로 보정해 아이와 성인의 판정 감도를 맞춘다.
+  const peakX=xs[xs.length-1];
+  let curveNorm=0, xTravel=0, directionChanges=0, prevDir=0;
+  for(let i=1;i<xs.length;i++){
+    const dx=xs[i]-xs[i-1];
+    xTravel+=Math.abs(dx);
+    const dir=Math.abs(dx)>torso*0.012 ? Math.sign(dx) : 0;
+    if(dir && prevDir && dir!==prevDir) directionChanges++;
+    if(dir) prevDir=dir;
+
+    const u=i/(xs.length-1);
+    const lineX=startX+(peakX-startX)*u;
+    curveNorm=Math.max(curveNorm,Math.abs(xs[i]-lineX)/torso);
+  }
+  const xTravelNorm=xTravel/torso;
+  const hasRoundShape = lateralRangeNorm>0.16 || xTravelNorm>0.24 || curveNorm>0.075 || directionChanges>0;
+  const stronglyCurved = lateralRangeNorm>0.34 || xTravelNorm>0.48 || curveNorm>0.16;
 
   if(drillKickType()==='apcha'){
-    // v1.6: 아이들이 흥미를 잃지 않도록 성공 점수는 후하게, 100점은 완벽할 때만 가능.
-    const heightNorm=Math.max(0,Math.min(1,riseY/0.22));
-    const straightNorm=Math.max(0,Math.min(1,1-(absDX/Math.max(riseY*1.45,0.02))));
+    const heightNorm=Math.max(0,Math.min(1,riseNorm/0.85));
+    const straightNorm=Math.max(0,Math.min(1,1-(lateralRangeNorm/0.42)));
     let score=Math.round(60 + heightNorm*28 + straightNorm*12);
-    // 높이와 직선성이 모두 좋은 경우에만 98~100점 영역 허용
-    if(heightNorm>0.92 && straightNorm>0.88) score=Math.min(100, score + 2);
+    if(heightNorm>0.92 && straightNorm>0.88) score=Math.min(100,score+2);
     score=Math.max(40,Math.min(100,score));
-    // 앞차기: 충분히 올라오면서, 옆으로 과도하게 휘지 않은 궤적만 인정
-    // 기존보다 구별력은 높이되 아이들의 자연스러운 흔들림은 허용한다.
-    const ok=riseY>0.025 && absDX<riseY*1.60 && absDX<0.160;
+
+    const highEnough=riseNorm>0.12;
+    const ok=highEnough && !stronglyCurved;
     let msg;
-    if(!ok && riseY<=0.025) msg='🦵 조금 더 높이!';
-    else if(!ok) msg='↕️ 앞쪽으로 곧게!';
+    if(!highEnough) msg='조금 더 높이!';
+    else if(!ok) msg='앞으로 곧게 차세요!';
     else if(score>=98) msg='완벽한 앞차기!';
     else if(score>=90) msg='아주 좋아요!';
     else if(score>=80) msg='좋아요!';
     else msg='좋은 앞차기!';
     return {score,ok,msg};
-  } else {
-    // v1.6: 돌려차기도 80~90점대가 더 잘 나오게 조정. 100점은 높이+곡선이 모두 좋을 때만.
-    const heightNorm=Math.max(0,Math.min(1,riseY/0.19));
-    const curveNorm=Math.max(0,Math.min(1,outward/0.115));
-    let score=Math.round(60 + heightNorm*22 + curveNorm*18);
-    if(heightNorm>0.92 && curveNorm>0.88) score=Math.min(100, score + 3);
-    score=Math.max(40,Math.min(100,score));
-    // 돌려차기: 최소 높이와 바깥쪽 곡선이 함께 확인되어야 인정
-    // 절대 이동량만 강요하지 않고 상승량 대비 곡선 비율도 함께 본다.
-    const curveRatio=outward/Math.max(riseY,0.025);
-    const ok=riseY>0.025 && outward>0.012 && curveRatio>0.10;
-    let msg;
-    if(!ok && riseY<=0.025) msg='🔄 조금 더 높이!';
-    else if(!ok) msg=(side<0?'↖ 왼쪽으로 조금 더 휘어요!':'↗ 오른쪽으로 조금 더 휘어요!');
-    else if(score>=98) msg='완벽한 돌려차기!';
-    else if(score>=90) msg='아주 좋아요!';
-    else if(score>=80) msg='좋아요!';
-    else msg='좋은 돌려차기!';
-    return {score,ok,msg};
   }
+
+  const heightNorm=Math.max(0,Math.min(1,riseNorm/0.78));
+  const roundNorm=Math.max(0,Math.min(1,Math.max(lateralRangeNorm/0.34,xTravelNorm/0.50,curveNorm/0.16)));
+  let score=Math.round(60 + heightNorm*22 + roundNorm*18);
+  if(heightNorm>0.92 && roundNorm>0.88) score=Math.min(100,score+3);
+  score=Math.max(40,Math.min(100,score));
+
+  const highEnough=riseNorm>0.12;
+  const ok=highEnough && hasRoundShape;
+  let msg;
+  if(!highEnough) msg='조금 더 높이!';
+  else if(!ok) msg='조금 더 돌려차세요!';
+  else if(score>=98) msg='완벽한 돌려차기!';
+  else if(score>=90) msg='아주 좋아요!';
+  else if(score>=80) msg='좋아요!';
+  else msg='좋은 돌려차기!';
+  return {score,ok,msg};
 }
 
 // ── v2.6 발차기 성향 분석: 앞차기/돌려차기 자동 구별용 ──
@@ -4299,9 +4317,10 @@ function onDrillKick(peak, traj){
     lastGrade=result.msg;
     lastColor='#9fb0c8';
     sndFail();
-    popup('다시!', '#9fb0c8', false);
+    popup('다시!', '#9fb0c8', false, result.msg);
     renderStats();
     trajX=[]; trajY=[]; trajHipX=[]; trajActive=false; drillSide=0;
+    preTrajX=[]; preTrajY=[]; preTrajHipX=[];
     return;
   }
 
@@ -4314,6 +4333,7 @@ function onDrillKick(peak, traj){
 
   renderStats();
   trajX=[]; trajY=[]; trajHipX=[]; trajActive=false; drillSide=0;
+  preTrajX=[]; preTrajY=[]; preTrajHipX=[];
 
   // 목표 횟수 달성
   if(drillDone>=drillTarget){
@@ -4898,7 +4918,12 @@ function runKick(pct,m=null){
         kicking=true; peakPct=pct; belowFrames=0; trajActive=true;
         if(m){
           drillSide=(m.footX < m.hipX)?-1:1;
-          trajX=[]; trajY=[]; trajHipX=[];
+          // 돌려차기의 초반 무릎 들기와 회전이 잘리지 않도록 시작 직전 궤적을 포함한다.
+          if(isDrillMode()){
+            trajX=preTrajX.slice(); trajY=preTrajY.slice(); trajHipX=preTrajHipX.slice();
+          }else{
+            trajX=[]; trajY=[]; trajHipX=[];
+          }
         }
       }
     } else aboveFrames=0;
@@ -5015,8 +5040,18 @@ function loop(){
           const mirrored=camWrap.classList.contains('mirrored');
           const fx=(mirrored?1-m.ankleX:m.ankleX)*100, fy=m.ankleY*100;
 
+          // 연습모드는 발차기로 확정되기 전 최근 움직임도 짧게 보관한다.
+          if(isDrillMode() && running && !kicking){
+            const PRE_TRAJ_MAX=9;
+            preTrajX.push(m.footX); preTrajY.push(m.footY); preTrajHipX.push(m.hipX);
+            if(preTrajX.length>PRE_TRAJ_MAX){ preTrajX.shift(); preTrajY.shift(); preTrajHipX.shift(); }
+          }
+
           if(running) runKick(m.pct,m);
-          else { kicking=false; aboveFrames=0; belowFrames=0; peakPct=0; trajActive=false; }
+          else {
+            kicking=false; aboveFrames=0; belowFrames=0; peakPct=0; trajActive=false;
+            preTrajX=[]; preTrajY=[]; preTrajHipX=[];
+          }
 
           // 발차기 궤적 수집: 연습/겨루기 공통
           if((isDrillMode()||currentMode==='sparring')&&running&&trajActive){

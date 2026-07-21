@@ -3295,6 +3295,9 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     <div class="mode-row hud-sparring-row">
       <button class="game-btn" id="m_sparring" onclick="setMode('sparring')">겨루기 모드</button>
     </div>
+    <div class="mode-row hud-lab-row">
+      <button class="game-btn" id="m_kicklab" type="button" onclick="openKickLab()">발차기 연구실</button>
+    </div>
     <div class="game-area" id="gameArea">
       <div class="drill-count-row balloon-time-row">
         <label>제한 시간</label>
@@ -3368,6 +3371,35 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
     <button class="settings-home-btn" type="button" id="shortcutBtn">📲 바탕화면에 바로가기 추가</button>
     <hr class="settings-divider">
     <button class="settings-home-btn" type="button" onclick="location.href='kickmaster.html'">🏠 홈페이지로 돌아가기</button>
+  </div>
+</div>
+
+
+<!-- ===== 발차기 연구실 ===== -->
+<div id="kickLabModal" role="dialog" aria-modal="true" aria-labelledby="kickLabTitle">
+  <div class="kick-lab-box">
+    <div class="kick-lab-head">
+      <div class="kick-lab-title" id="kickLabTitle">발차기 연구실<small>AI 인식 정확도 개선 참여</small></div>
+      <button class="kick-lab-close" type="button" onclick="closeKickLab()">닫기</button>
+    </div>
+    <div id="kickLabIntro">
+      <div class="kick-lab-copy">이 모드에서는 발차기 인식 개선을 위해 관절 좌표 데이터가 나른랩스 서버로 전송됩니다.</div>
+      <div class="kick-lab-note">사진·영상·음성은 저장하거나 전송하지 않습니다. 동의하지 않으면 취소를 눌러 기존 기능을 그대로 이용할 수 있습니다.</div>
+      <div class="kick-lab-grid" id="kickLabKickGrid"></div>
+      <div class="kick-lab-foot">
+        <button type="button" data-lab-foot="right" class="active">오른발</button>
+        <button type="button" data-lab-foot="left">왼발</button>
+      </div>
+      <div class="kick-lab-actions">
+        <button type="button" class="kick-lab-cancel" onclick="closeKickLab()">취소</button>
+        <button type="button" class="kick-lab-start" id="kickLabStartBtn" onclick="startKickLabCapture()">동의하고 시작</button>
+      </div>
+    </div>
+    <div id="kickLabCapture" style="display:none">
+      <div id="kickLabCount"></div>
+      <div id="kickLabStatus">준비해주세요.</div>
+      <div class="kick-lab-actions" style="margin-top:14px"><button type="button" class="kick-lab-cancel" onclick="cancelKickLabCapture()">중단</button></div>
+    </div>
   </div>
 </div>
 
@@ -5151,6 +5183,56 @@ async function startCamera(){
   }catch(e){ statusEl.textContent='카메라 실패: '+e.message; }
 }
 
+
+/* ===== 발차기 연구실 ===== */
+const KICK_LAB_EDGE_URL='https://ebgoolsymyzkftvavpyj.supabase.co/functions/v1/clever-worker';
+let kickLabConfig={enabled:true,kicks:['front_kick','roundhouse_kick','side_kick','back_kick']};
+let kickLabKick='front_kick', kickLabFoot='right';
+let kickLabCollecting=false, kickLabFrames=[], kickLabStartedAt=0, kickLabLastFrameAt=0;
+const KICK_LAB_LABELS={front_kick:'앞차기',roundhouse_kick:'돌려차기',side_kick:'옆차기',back_kick:'뒤차기'};
+async function kickLabPublicCall(action,payload={}){
+  const res=await fetch(KICK_LAB_EDGE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,payload})});
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.error||'서버 요청 실패'); return data;
+}
+async function loadKickLabConfig(){
+  try{const d=await kickLabPublicCall('GET_KICK_LAB_CONFIG',{}); if(d&&d.enabled!==undefined) kickLabConfig=d;}catch(e){console.warn('연구실 설정 조회 실패',e)}
+  const row=document.querySelector('.hud-lab-row'); if(row) row.style.display=kickLabConfig.enabled===false?'none':'flex';
+}
+function renderKickLabChoices(){
+  const grid=document.getElementById('kickLabKickGrid'); if(!grid)return;
+  const enabled=(kickLabConfig.kicks||[]).filter(k=>KICK_LAB_LABELS[k]);
+  if(!enabled.includes(kickLabKick)) kickLabKick=enabled[0]||'';
+  grid.innerHTML=enabled.map(k=>`<button type="button" class="kick-lab-choice ${k===kickLabKick?'active':''}" data-lab-kick="${k}">${KICK_LAB_LABELS[k]}</button>`).join('');
+  grid.querySelectorAll('[data-lab-kick]').forEach(b=>b.onclick=()=>{kickLabKick=b.dataset.labKick;renderKickLabChoices();});
+  document.getElementById('kickLabStartBtn').disabled=!kickLabKick;
+}
+window.openKickLab=async()=>{await loadKickLabConfig();if(kickLabConfig.enabled===false){statusEl.textContent='현재 발차기 연구실은 운영 중이 아닙니다.';return;}renderKickLabChoices();document.getElementById('kickLabIntro').style.display='block';document.getElementById('kickLabCapture').style.display='none';document.getElementById('kickLabModal').classList.add('show');};
+window.closeKickLab=()=>{if(kickLabCollecting)return;document.getElementById('kickLabModal').classList.remove('show');};
+document.querySelectorAll('[data-lab-foot]').forEach(b=>b.addEventListener('click',()=>{kickLabFoot=b.dataset.labFoot;document.querySelectorAll('[data-lab-foot]').forEach(x=>x.classList.toggle('active',x===b));}));
+window.cancelKickLabCapture=()=>{kickLabCollecting=false;kickLabFrames=[];document.getElementById('kickLabModal').classList.remove('show');};
+function labDelay(ms){return new Promise(r=>setTimeout(r,ms));}
+window.startKickLabCapture=async()=>{
+  if(!kickLabKick||kickLabCollecting)return;
+  const intro=document.getElementById('kickLabIntro'), cap=document.getElementById('kickLabCapture'), count=document.getElementById('kickLabCount'), st=document.getElementById('kickLabStatus');
+  intro.style.display='none';cap.style.display='block';kickLabFrames=[];
+  for(const n of ['3','2','1']){count.textContent=n;st.textContent=`${KICK_LAB_LABELS[kickLabKick]} ${kickLabFoot==='right'?'오른발':'왼발'} 준비`;await labDelay(700);}
+  count.textContent='START';st.textContent='한 번 자연스럽게 발차기해주세요.';kickLabCollecting=true;kickLabStartedAt=performance.now();kickLabLastFrameAt=0;
+  await labDelay(4200);kickLabCollecting=false;count.textContent='';
+  if(kickLabFrames.length<8){st.textContent='전신이 충분히 인식되지 않았습니다. 다시 시도해주세요.';await labDelay(1400);intro.style.display='block';cap.style.display='none';return;}
+  st.textContent='좌표 데이터를 전송하는 중입니다…';
+  try{
+    let license=null;try{license=JSON.parse(localStorage.getItem('akm_license_v1')||'null')}catch(e){}
+    const deviceId=localStorage.getItem('akm_device_id')||'';
+    await kickLabPublicCall('SUBMIT_KICK_LAB_SAMPLE',{kick_type:kickLabKick,foot:kickLabFoot,frames:kickLabFrames,frame_count:kickLabFrames.length,duration_ms:Math.round(performance.now()-kickLabStartedAt),license_key:license?.license_key||null,dojang_name:license?.dojang_name||null,device_id:deviceId||null,user_agent:navigator.userAgent});
+    st.textContent='참여해주셔서 감사합니다. 데이터가 안전하게 전송되었습니다.';await labDelay(1600);document.getElementById('kickLabModal').classList.remove('show');
+  }catch(e){st.textContent='전송에 실패했습니다. 인터넷 연결 후 다시 시도해주세요.';await labDelay(1600);intro.style.display='block';cap.style.display='none';}
+};
+function collectKickLabFrame(lm){
+  if(!kickLabCollecting)return;const now=performance.now();if(now-kickLabLastFrameAt<90)return;kickLabLastFrameAt=now;
+  kickLabFrames.push({t:Math.round(now-kickLabStartedAt),landmarks:lm.map(p=>({x:+p.x.toFixed(5),y:+p.y.toFixed(5),z:+(p.z||0).toFixed(5),v:+(p.visibility??0).toFixed(4)}))});
+}
+loadKickLabConfig();
+
 function loop(){
   if(poseLandmarker && video.readyState>=2 && video.currentTime!==lastVideoTime){
     lastVideoTime=video.currentTime;
@@ -5160,6 +5242,7 @@ function loop(){
 
     if(result.landmarks && result.landmarks.length>0){
       const lm=result.landmarks[0];
+      collectKickLabFrame(lm);
       drawingUtils.drawConnectors(lm,PoseLandmarker.POSE_CONNECTIONS,{color:'rgba(255,106,26,0.6)',lineWidth:2});
       drawingUtils.drawLandmarks(lm,{color:'#E3172E',lineWidth:1,radius:3});
 

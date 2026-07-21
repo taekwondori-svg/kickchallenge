@@ -3965,35 +3965,37 @@ function updateModeBadge(){
    숫자를 낮추면 = 더 관대해짐(쉽게 인정), 높이면 = 더 엄격해짐.
    ───────────────────────────────────────────────────────────── */
 const JUDGE={
-  MIN_RISE_T:0.14,        // 공통: 발이 최소 몸통의 14%는 올라와야 발차기로 인정
-  ROUND:{                 // ── 돌려차기: 아래 ①②③ 중 하나만 만족하면 인정 ──
-    // ① 옆으로 도는 궤적 (기존 방식, 몸통 배수로 환산)
-    LAT_T:0.19,           //   좌우 이동폭 최소값
-    NET_T:0.10,           //   시작→최고점 순수 좌우 이동 최소값
-    // ② 골반 회전 (신규): 대각선으로 차도 골반이 돌면 돌려차기로 인정
-    HIP_TURN:0.74,        //   골반 폭이 평소(서 있을 때)의 74% 이하로 줄면 회전으로 판단
-    LAT_HIP_T:0.09,       //   골반 회전이 보일 때 필요한 최소 좌우 폭 (많이 완화)
-    // ③ 대각선 궤적 (신규): 45도 근처로 비스듬히 올라가는 아이들 발차기 인정
-    DIAG_RATIO:0.72,      //   좌우폭÷상승량: 대각선 성향 (단독 통과가 아니라 보조 신호)
-    LAT_DIAG_T:0.12,      //   대각선 인정 최소 좌우 폭
-    HIP_TURN_WEAK:0.87,   //   대각선과 함께 사용할 약한 골반 회전 기준
-    HIP_TURN_FRAMES:2,    //   한 프레임 오인식을 막기 위한 연속 회전 프레임
-    HIP_VIS_MIN:0.50,     //   골반 랜드마크 신뢰도 최소값
-    KNEE_OPEN_T:0.11,     //   무릎이 골반 기준 바깥으로 열린 최소 이동량
-    KNEE_NET_T:0.07,      //   무릎 시작→최고점 순이동 최소값
-    KNEE_EXT_DEG:28,      //   무릎이 열린 뒤 펴지는 최소 각도 변화(너무 엄격하지 않게)
-    // 방향 전환 감지(궤적이 중간에 꺾였는지)
-    TURN_A_T:0.085, TURN_B_T:0.055,
-    // 점수 계산 범위
-    SCORE_RISE_SPAN:0.69, SCORE_LAT_SPAN:0.45
+  MIN_RISE_T:0.14,
+  ROUND:{
+    // 돌려차기 최소 인정 신호
+    LAT_T:0.16,
+    NET_T:0.075,
+    LAT_SUPPORT_T:0.12,
+    HIP_TURN:0.74,
+    HIP_TURN_WEAK:0.87,
+    HIP_TURN_FRAMES:2,
+    HIP_VIS_MIN:0.50,
+    KNEE_OPEN_T:0.10,
+    KNEE_NET_T:0.06,
+    KNEE_EXT_DEG:25,
+    // 보이지 않는 곡선 통로 폭. 화면에는 절대 표시하지 않는다.
+    CORRIDOR_SOFT_T:0.13,
+    CORRIDOR_HARD_T:0.24,
+    CORRIDOR_MIN_FIT:0.38,
+    SCORE_RISE_SPAN:0.69,
+    SCORE_LAT_SPAN:0.42
   },
-  FRONT:{                 // ── 앞차기: 잘 되고 있으므로 기존 값을 몸통 배수로 환산만 함 ──
-    ROUND_LAT_T:0.24, ROUND_NET_T:0.12,   // 이 이상 돌면 "앞차기로 곧게 차주세요"
-    LAT_MAX_T:0.32, NET_MAX_T:0.24, LAT_TURN_MAX_T:0.26
+  FRONT:{
+    // 보이지 않는 세로 통로. 화면에는 절대 표시하지 않는다.
+    CORRIDOR_SOFT_T:0.16,
+    CORRIDOR_HARD_T:0.27,
+    OUTSIDE_RATIO_MAX:0.28,
+    OUTSIDE_CONSEC_FRAMES:3,
+    RETURN_MIN_T:0.21,
+    RETURN_RATIO:0.58
   }
 };
 
-// 궤적이 기록된 구간의 대표 몸통 길이(중앙값) — 판정 정규화 기준
 function trajTorsoRef(){
   const arr=trajTorso.filter(v=>typeof v==='number' && v>0.02);
   if(!arr.length) return (smTorso && smTorso>0.02)?smTorso:0.21;
@@ -4001,8 +4003,6 @@ function trajTorsoRef(){
   return s[Math.floor(s.length/2)];
 }
 
-// 골반 폭 감소가 연속 프레임에서 확인되는지 검사한다.
-// 순간적인 랜드마크 튐 하나로 돌려차기가 인정되는 것을 막는다.
 function stableHipTurn(limit, endIndex=trajHipW.length-1){
   let consecutive=0, best=0, minRatio=1;
   for(let i=0;i<=endIndex && i<trajHipW.length;i++){
@@ -4017,43 +4017,36 @@ function stableHipTurn(limit, endIndex=trajHipW.length-1){
   return {ok:best>=JUDGE.ROUND.HIP_TURN_FRAMES,minRatio,bestFrames:best};
 }
 
-// 궤적에서 발차기 형태 분석 (모든 거리값은 몸통 길이 T의 배수로 정규화)
+function clamp01(v){ return Math.max(0,Math.min(1,v)); }
+
+// 발차기 궤적 분석. 통로는 내부 계산에만 사용하며 화면에는 그리지 않는다.
 function analyzeTraj(peakPctValue=null){
   if(trajX.length<4) return {score:null,ok:false,msg:'동작을 다시 보여주세요',reason:'too_short'};
 
   const T=trajTorsoRef();
-
-  // 몸이 좌우로 움직인 영향은 빼고, 발이 골반 기준으로 어떻게 움직였는지 분석
   const relX=trajX.map((x,i)=>x-(trajHipX[i] ?? smHipX ?? 0.5));
 
-  // 발을 내리는 회수 동작은 제외하고 최고점까지 사용하되,
-  // 최고점이 초반에 잡혔다는 이유만으로 발차기를 실패시키지 않는다.
   let peakIndex=0;
-  for(let i=1;i<trajY.length;i++){
-    if(trajY[i]<trajY[peakIndex]) peakIndex=i;
-  }
+  for(let i=1;i<trajY.length;i++) if(trajY[i]<trajY[peakIndex]) peakIndex=i;
   peakIndex=Math.max(peakIndex,Math.min(trajY.length-1,3));
 
   const xs=relX.slice(0,peakIndex+1);
   const ys=trajY.slice(0,peakIndex+1);
   const startX=xs[0], startY=ys[0];
   const peakX=xs[xs.length-1], peakY=ys[ys.length-1];
+  const riseT=Math.max(0,startY-peakY)/T;
 
-  // ── 몸통 배수(T 단위)로 환산 ──
-  const riseT=Math.max(0,startY-peakY)/T;                 // 발 상승량
   let minX=xs[0], maxX=xs[0];
   for(const x of xs){ minX=Math.min(minX,x); maxX=Math.max(maxX,x); }
-  const latT=(maxX-minX)/T;                               // 좌우 이동폭
-  const netT=Math.abs(peakX-startX)/T;                    // 순수 좌우 이동
+  const latT=(maxX-minX)/T;
+  const signedNetT=(peakX-startX)/T;
+  const netT=Math.abs(signedNetT);
 
-  // 골반 회전: 신뢰도 있는 값이 최소 2프레임 연속 나타날 때만 인정
   const strongHip=stableHipTurn(JUDGE.ROUND.HIP_TURN,peakIndex);
   const weakHip=stableHipTurn(JUDGE.ROUND.HIP_TURN_WEAK,peakIndex);
-  const hipWMin=strongHip.minRatio;
   const hipTurn=strongHip.ok;
   const hipTurnWeak=weakHip.ok;
 
-  // 무릎 궤적: 앞차기는 정면 상승, 돌려차기는 무릎이 골반 바깥으로 열리는 특성을 활용
   const kneeRel=trajKneeX.slice(0,peakIndex+1).map((x,i)=>(typeof x==='number'?x:trajHipX[i])-(trajHipX[i] ?? smHipX ?? 0.5));
   let kneeLatT=0, kneeNetT=0, kneeExtDeg=0;
   if(kneeRel.length>=3){
@@ -4066,76 +4059,97 @@ function analyzeTraj(peakPctValue=null){
   const kneeOpen=kneeLatT>JUDGE.ROUND.KNEE_OPEN_T && kneeNetT>JUDGE.ROUND.KNEE_NET_T;
   const kneeSnap=kneeExtDeg>JUDGE.ROUND.KNEE_EXT_DEG;
 
-  // 궤적 중간에 좌우 방향이 실제로 바뀌었는지 느슨하게 확인
-  let meaningfulTurn=false;
-  for(let i=2;i<xs.length-1;i++){
-    const first=(xs[i]-startX)/T;
-    const second=(peakX-xs[i])/T;
-    if(Math.abs(first)>JUDGE.ROUND.TURN_A_T && Math.abs(second)>JUDGE.ROUND.TURN_B_T && Math.sign(first)!==Math.sign(second)){
-      meaningfulTurn=true;
-      break;
-    }
-  }
-
-  // 대각선 정도: 좌우폭 ÷ 상승량 (클수록 옆으로 기울어진 궤적)
-  const diagRatio=latT/Math.max(riseT,0.06);
-
-  // ── 돌려차기 인정 경로 ──
-  // 한 가지 신호만으로 무조건 인정하지 않고, 뚜렷한 옆 궤적 또는 두 가지 보조 신호를 조합한다.
-  const clearLateral=latT>JUDGE.ROUND.LAT_T && (netT>JUDGE.ROUND.NET_T || meaningfulTurn);
-  const hipPath=hipTurn && latT>JUDGE.ROUND.LAT_HIP_T;
-  const diagonalPath=diagRatio>JUDGE.ROUND.DIAG_RATIO && latT>JUDGE.ROUND.LAT_DIAG_T && (hipTurnWeak || kneeOpen);
-  const kneePath=kneeOpen && (kneeSnap || hipTurnWeak) && latT>JUDGE.ROUND.LAT_HIP_T;
-  const roundMovement=riseT>JUDGE.MIN_RISE_T && (clearLateral || hipPath || diagonalPath || kneePath);
-
   if(drillKickType()==='apcha'){
-    // 앞차기: 기존 동작 유지 (기준값만 몸통 배수로 환산).
-    // 골반 회전·대각선 완화 경로는 앞차기 판정에 쓰지 않는다 → 앞차기가 갑자기 실패하는 일 방지.
-    const roundMovementForFront=
-      riseT>JUDGE.MIN_RISE_T &&
-      latT>JUDGE.FRONT.ROUND_LAT_T &&
-      (netT>JUDGE.FRONT.ROUND_NET_T || meaningfulTurn);
-    const tooSideways=
-      roundMovementForFront ||
-      latT>JUDGE.FRONT.LAT_MAX_T ||
-      netT>JUDGE.FRONT.NET_MAX_T ||
-      (latT>JUDGE.FRONT.LAT_TURN_MAX_T && meaningfulTurn);
-    if(tooSideways){
-      return {score:null,ok:false,msg:'앞차기로 곧게 차주세요!',reason:'round_shape'};
+    // 앞차기: 시작점 기준 보이지 않는 세로 통로를 끝까지 벗어나지 않아야 한다.
+    const deviations=xs.map(x=>Math.abs(x-startX)/T);
+    const maxDev=Math.max(...deviations);
+    const outsideCount=deviations.filter(v=>v>JUDGE.FRONT.CORRIDOR_SOFT_T).length;
+    const outsideRatio=outsideCount/deviations.length;
+    let consecutive=0, maxConsecutive=0;
+    for(const d of deviations){
+      if(d>JUDGE.FRONT.CORRIDOR_SOFT_T){ consecutive++; maxConsecutive=Math.max(maxConsecutive,consecutive); }
+      else consecutive=0;
+    }
+    // 크게 옆으로 빠졌다가 마지막에 중앙으로 돌아온 동작도 앞차기로 인정하지 않는다.
+    const returnedAfterExcursion=maxDev>JUDGE.FRONT.RETURN_MIN_T && netT<maxDev*JUDGE.FRONT.RETURN_RATIO;
+    const outsideCorridor=
+      maxDev>JUDGE.FRONT.CORRIDOR_HARD_T ||
+      outsideRatio>JUDGE.FRONT.OUTSIDE_RATIO_MAX ||
+      maxConsecutive>=JUDGE.FRONT.OUTSIDE_CONSEC_FRAMES ||
+      returnedAfterExcursion;
+
+    if(riseT<=JUDGE.MIN_RISE_T || outsideCorridor){
+      return {score:null,ok:false,msg:'앞차기로 곧게 차주세요!',reason:'front_corridor_out'};
     }
 
     const measuredPeak=(typeof peakPctValue==='number' && Number.isFinite(peakPctValue))
-      ? peakPctValue
-      : Math.max(0,Math.min(100,50 + riseT*T*250));
-    const heightScore=Math.max(0,Math.min(1,(measuredPeak-50)/50));
-    const straightScore=Math.max(0,Math.min(1,1-latT/JUDGE.FRONT.LAT_MAX_T));
-    let score=Math.round(62 + heightScore*22 + straightScore*14);
-    score=Math.max(62,Math.min(98,score));
-    if(heightScore>0.96 && straightScore>0.94) score=100;
-
+      ? peakPctValue : Math.max(0,Math.min(100,50 + riseT*T*250));
+    const heightScore=clamp01((measuredPeak-50)/50);
+    const straightScore=clamp01(1-(maxDev/JUDGE.FRONT.CORRIDOR_HARD_T));
+    const stayScore=clamp01(1-outsideRatio/Math.max(JUDGE.FRONT.OUTSIDE_RATIO_MAX,0.01));
+    let score=Math.round(60 + heightScore*22 + straightScore*12 + stayScore*6);
+    score=Math.max(60,Math.min(98,score));
+    if(heightScore>0.97 && straightScore>0.95 && stayScore>0.96) score=100;
     const msg=score>=98?'완벽한 앞차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
-    return {score,ok:true,msg,reason:'front'};
+    return {score,ok:true,msg,reason:'front_corridor'};
   }
+
+  // 돌려차기: 최고점까지의 상승 진행률에 따라 옆으로 휘는 보이지 않는 곡선 통로를 만든다.
+  const sideSign=signedNetT===0 ? (drillSide||1) : Math.sign(signedNetT);
+  const targetLatT=Math.max(netT,Math.min(latT,0.34));
+  let fitCount=0, hardMissCount=0, errSum=0, progressCount=0;
+  let prevDirected=-Infinity, monotonicGood=0;
+  for(let i=0;i<xs.length;i++){
+    const verticalProgress=clamp01((startY-ys[i])/Math.max(startY-peakY,0.001));
+    // 초반에는 완만하고 후반에 옆 이동이 커지는 곡선
+    const expectedT=sideSign*targetLatT*Math.pow(verticalProgress,0.72);
+    const actualT=(xs[i]-startX)/T;
+    const err=Math.abs(actualT-expectedT);
+    errSum+=err;
+    if(err<=JUDGE.ROUND.CORRIDOR_SOFT_T) fitCount++;
+    if(err>JUDGE.ROUND.CORRIDOR_HARD_T) hardMissCount++;
+    const directed=sideSign*actualT;
+    if(directed>=prevDirected-0.035) monotonicGood++;
+    prevDirected=directed;
+    progressCount++;
+  }
+  const corridorFit=fitCount/Math.max(progressCount,1);
+  const meanErr=errSum/Math.max(progressCount,1);
+  const hardMissRatio=hardMissCount/Math.max(progressCount,1);
+  const monotonicFit=monotonicGood/Math.max(progressCount,1);
+
+  // 최소한의 옆 이동이 있어야 하며, 무릎/골반은 보조 신호로 사용한다.
+  const lateralCore=latT>JUDGE.ROUND.LAT_T && netT>JUDGE.ROUND.NET_T;
+  const supportedPath=latT>JUDGE.ROUND.LAT_SUPPORT_T && (kneeOpen || hipTurnWeak);
+  const corridorEvidence=corridorFit>=JUDGE.ROUND.CORRIDOR_MIN_FIT && netT>JUDGE.ROUND.NET_T;
+  const roundMovement=riseT>JUDGE.MIN_RISE_T && (lateralCore || supportedPath || corridorEvidence);
 
   if(!roundMovement){
     return {score:null,ok:false,msg:'발을 옆으로 돌려 차보세요!',reason:'not_round'};
   }
 
-  // ── 돌려차기 점수 ──
-  // 회전 정도는 궤적 폭 + 골반 회전 중 더 잘 나온 쪽을 인정 (대각선 킥도 점수 손해 없게)
-  const heightScore=Math.max(0,Math.min(1,(riseT-JUDGE.MIN_RISE_T)/JUDGE.ROUND.SCORE_RISE_SPAN));
-  const latScore=Math.max(0,Math.min(1,(latT-JUDGE.ROUND.LAT_HIP_T)/JUDGE.ROUND.SCORE_LAT_SPAN));
-  const hipScore=hipTurn?Math.max(0.45,Math.min(1,(JUDGE.ROUND.HIP_TURN-hipWMin)/0.24+0.45)):0;
-  const kneeScore=Math.max(0,Math.min(1,(kneeLatT-JUDGE.ROUND.KNEE_OPEN_T)/0.28));
-  const diagScore=diagonalPath?Math.max(0.45,Math.min(1,(diagRatio-JUDGE.ROUND.DIAG_RATIO)/1.0+0.45)):0;
-  const roundScore=Math.max(latScore,hipScore,kneeScore,diagScore);
-  const turnBonus=(meaningfulTurn||hipTurn||kneeOpen)?1:0.55;
-  let score=Math.round(62 + heightScore*20 + roundScore*12 + turnBonus*4);
-  score=Math.max(62,Math.min(98,score));
-  if(heightScore>0.96 && roundScore>0.92 && (meaningfulTurn||hipTurn)) score=100;
+  // 인식과 점수를 분리한다. 간신히 인정된 돌려차기도 낮은 점수를 받는다.
+  const heightScore=clamp01((riseT-JUDGE.MIN_RISE_T)/JUDGE.ROUND.SCORE_RISE_SPAN);
+  const lateralScore=clamp01((latT-JUDGE.ROUND.LAT_SUPPORT_T)/JUDGE.ROUND.SCORE_LAT_SPAN);
+  const netScore=clamp01((netT-JUDGE.ROUND.NET_T)/0.30);
+  const corridorScore=clamp01(corridorFit*0.72 + monotonicFit*0.28 - meanErr*0.9 - hardMissRatio*0.35);
+  const kneeScore=clamp01((kneeLatT-JUDGE.ROUND.KNEE_OPEN_T)/0.27 + (kneeSnap?0.18:0));
+  const hipScore=hipTurn?0.85:(hipTurnWeak?0.55:0.25);
 
-  const msg=score>=98?'완벽한 돌려차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':'성공!';
-  return {score,ok:true,msg,reason:'round'};
+  let score=Math.round(
+    55 +
+    heightScore*14 +
+    lateralScore*10 +
+    netScore*6 +
+    corridorScore*9 +
+    kneeScore*3 +
+    hipScore*3
+  );
+  score=Math.max(55,Math.min(98,score));
+  if(heightScore>0.96 && lateralScore>0.92 && corridorScore>0.91 && (kneeOpen||hipTurn)) score=100;
+
+  const msg=score>=98?'완벽한 돌려차기!':score>=88?'아주 좋아요!':score>=75?'좋아요!':score>=65?'조금 더 크게 돌려보세요!':'돌려차기 동작을 더 살려보세요!';
+  return {score,ok:true,msg,reason:'round_corridor'};
 }
 
 // ── v2.6 발차기 성향 분석: 앞차기/돌려차기 자동 구별용 ──

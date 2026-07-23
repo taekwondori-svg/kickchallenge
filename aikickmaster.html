@@ -51,6 +51,18 @@
   #timerBadgeNum{font-size:100px;font-weight:900;color:var(--green);line-height:1;}
   #timerBadgeLabel{font-size:15px;color:#9fb0c8;font-weight:600;margin-top:2px;}
 
+  /* 카메라 왼쪽 랭킹 오버레이 */
+  #camRank{display:none;position:absolute;top:16px;left:16px;
+    background:rgba(9,22,40,.82);border:2px solid rgba(255,106,26,.6);
+    border-radius:14px;padding:10px 14px;z-index:8;min-width:130px;}
+  #camRank.show{display:none !important;}
+  #camRankTitle{font-size:11px;color:var(--gold);font-weight:800;margin-bottom:6px;}
+  #camRankList{list-style:none;display:flex;flex-direction:column;gap:3px;}
+  .cr-item{display:flex;align-items:center;gap:6px;font-weight:800;}
+  .cr-item .crk{font-size:14px;width:20px;text-align:center;}
+  .cr-item .crv{font-size:14px;color:#fff;}
+  .cr-item.me .crv{color:var(--gold);}
+
   /* ── 발차기 연습 결과 오버레이 (화면 중앙) ── */
   #drillResult{display:none;position:absolute;inset:0;
     align-items:center;justify-content:center;flex-direction:column;
@@ -227,6 +239,26 @@ body.hud-v21 .title-left{flex:1; min-width:0;}
 body.hud-v21 .title-dojang{font-size:13px; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 body.hud-v21 .title-auth{font-size:10px; color:#2ecc71; font-weight:800; margin-top:1px;}
 body.hud-v21 .title-version{font-size:10px; color:#5a7a9a; margin-top:1px;}
+body.hud-v21 #studentRosterBar{
+  position:absolute; bottom:150px; left:22px; width:220px; max-height:150px; overflow-y:auto;
+  display:flex; flex-direction:column; gap:2px; z-index:41; padding:0;
+}
+body.hud-v21 .roster-chip{
+  display:flex; align-items:center; gap:8px; width:100%; min-height:26px; padding:2px 0 2px 10px;
+  border:0; border-left:3px solid transparent; border-radius:0;
+  background:transparent; box-shadow:none;
+  font-size:13px; font-weight:800; text-align:left;
+  color:rgba(255,255,255,.32); text-shadow:0 2px 8px rgba(0,0,0,.85);
+}
+body.hud-v21 .roster-chip span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+body.hud-v21 .roster-chip .rc-num{
+  flex-shrink:0; font-size:11px; font-weight:700; color:rgba(255,255,255,.28);
+}
+body.hud-v21 .roster-chip.current{
+  border-left-color:var(--arcade-blue); color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.9), 0 0 12px rgba(49,183,255,.55);
+}
+body.hud-v21 .roster-chip.current .rc-num{color:#fff;}
 body.hud-v21 #modeBadge{top:14px; left:50%; transform:translateX(-50%); min-width:320px; padding:10px 22px; border-radius:16px; font-size:22px; font-weight:900; color:#fff; text-align:center; z-index:8;}
 body.hud-v21 #modeBadge small{display:block; margin-top:2px; font-size:11px; color:#dbeaff;}
 body.hud-v21 .hud-settings-btn{position:relative; top:auto; right:auto; min-width:44px; min-height:34px; padding:5px 10px; border-radius:10px; color:#9fb0c8; font-size:13px; font-weight:900; flex-shrink:0;}
@@ -289,6 +321,16 @@ body.hud-v21 #scoreGrade{font-size:11px; line-height:1.2; min-height:14px; font-
 body.hud-v21.balloon-mode .stats-row{top:220px;}
 body.hud-v21.sparring-mode .stats-row{top:238px;}
 
+/* 랭킹/타이머 */
+body.hud-v21 #camRank{display:none; position:absolute; top:318px !important; left:14px !important; min-width:145px; padding:9px 12px; border-radius:14px; z-index:8; background:rgba(7,18,34,.76); border:1px solid rgba(255,106,26,.52); box-shadow:0 0 20px rgba(255,106,26,.12); backdrop-filter:blur(8px);}
+body.hud-v21 #camRank.show{display:none !important;}
+body.hud-v21.sparring-mode #camRank{display:none !important;}
+body.hud-v21 #camRankTitle{font-size:12px; color:#ffd76b; font-weight:900; margin-bottom:6px;}
+body.hud-v21 #camRankList{list-style:none; display:flex; flex-direction:column; gap:4px;}
+body.hud-v21 .cr-item{display:flex; align-items:center; gap:8px; font-weight:900;}
+body.hud-v21 .cr-item .crk{width:28px; font-size:14px; text-align:center; color:#fff;}
+body.hud-v21 .cr-item .crv{font-size:15px; color:#fff;}
+body.hud-v21 .cr-item.me .crv{color:var(--gold);}
 body.hud-v21 #timerBadge, body.hud-v21 #timerBadge.show{display:none !important;}
 
 /* 설정 패널 - 모달 방식 */
@@ -1097,6 +1139,7 @@ body.hud-v21 .stat-box,
 body.hud-v21 #drillCountArea,
 body.hud-v21 #gameArea,
 body.hud-v21 .btns button,
+body.hud-v21 #camRank,
 body.hud-v21 #comboBadge,
 body.hud-v21 .height-box,
 body.hud-v21 .ctrl{
@@ -2823,6 +2866,16 @@ body.hud-v21 .sparring-type-panel .diff-btn{min-width:78px !important;}
 
 
 /* =========================================================
+   AKM record save confirmation + roster count
+   ========================================================= */
+body.hud-v21 .roster-chip .rc-save-count{
+  margin-left:auto; padding-right:8px; color:#51ff9d; font-size:11px; font-weight:1000;
+  text-shadow:0 0 12px rgba(81,255,157,.55);
+}
+
+
+
+/* =========================================================
    CSS CLEANUP NOTE 2026-07-03
    정리 완료:
    1) HP 게이지 색상 중복 규칙 1개 제거.
@@ -3162,6 +3215,11 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
       <div id="timerBadgeLabel">남은 시간</div>
     </div>
 
+    <div id="camRank" aria-hidden="true">
+      <div id="camRankTitle">오늘의 랭킹</div>
+      <ol id="camRankList"></ol>
+    </div>
+
     <!-- 발차기 연습 완료 오버레이 -->
     <div id="drillResult">
       <div id="drillResultIcon">🏆</div>
@@ -3189,6 +3247,8 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
         <button id="hudSettingsBtn" class="hud-settings-btn" type="button" onclick="toggleHudSettings()">⚙ 설정</button>
       </div>
     </div>
+
+    <div id="studentRosterBar" style="display:none;"></div>
 
     <div id="drillModePanel" class="difficulty-panel drill-mode-panel" aria-label="발차기 훈련 방식 선택">
       <button type="button" class="diff-btn drill-mode-btn active" data-drill-run-mode="manual" onclick="setDrillRunMode('manual')">수동모드</button>
@@ -3242,7 +3302,6 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <!-- ===== 발차기 연구실: 연구실 모드 패널 (2단계) ===== -->
     <div id="kickLabPanel" class="kicklab-panel">
-      <div class="kicklab-panel-title">발차기 연구실<small>AI 인식 정확도 개선 참여</small></div>
       <div class="section-label">— 발차기 선택</div>
       <div class="mode-row hud-lab-kick-col" id="kickLabKickGrid"></div>
       <div class="section-label">— 발 선택</div>
@@ -3382,6 +3441,7 @@ const barFill=document.getElementById('barFill'), barThresh=document.getElementB
 const sensEl=document.getElementById('sens'), sensVal=document.getElementById('sensVal');
 const camWrap=document.getElementById('camWrap');
 const timerBadge=document.getElementById('timerBadge'), timerBadgeNum=document.getElementById('timerBadgeNum');
+const camRank=document.getElementById('camRank'), camRankList=document.getElementById('camRankList'), camRankTitle=document.getElementById('camRankTitle');
 const readyOverlay=document.getElementById('readyOverlay'), readyNum=document.getElementById('readyNum'), readySub=document.getElementById('readySub');
 const popOverlay=document.getElementById('popOverlay'), popScore=document.getElementById('popScore');
 const drillResult=document.getElementById('drillResult');
@@ -3673,6 +3733,164 @@ function confetti(big=false){
       cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); cx.restore(); });
     if(t<dur) requestAnimationFrame(frame); else cx.clearRect(0,0,cv.width,cv.height);
   })(start);
+}
+
+/* ── 랭킹 ── */
+function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function loadRank(mode){
+  try{ const raw=localStorage.getItem('kickRank_'+mode); if(!raw) return [];
+    const obj=JSON.parse(raw); if(obj.date!==todayKey()) return []; return obj.scores||[];
+  }catch(e){ return []; }
+}
+function saveRank(mode,scores){ try{ localStorage.setItem('kickRank_'+mode,JSON.stringify({date:todayKey(),scores})); }catch(e){} }
+
+/* ── AKM 학생별 성장 기록 저장 ── */
+const AKM_HOME_STATE_KEY='akm_home_state_v1';
+const AKM_ACTIVE_ROSTER_KEY='akm_active_roster_v1';
+function akmReadHomeState(){
+  try{ return JSON.parse(localStorage.getItem(AKM_HOME_STATE_KEY)||'{}') || {}; }catch(e){ return {}; }
+}
+function akmWriteHomeState(st){
+  try{ localStorage.setItem(AKM_HOME_STATE_KEY, JSON.stringify(st)); return true; }
+  catch(e){
+    console.warn('AKM record save failed', e);
+    return false;
+  }
+}
+function akmNormalizeKeyPart(v){
+  return String(v||'').trim().replace(/\s+/g,'').toLowerCase();
+}
+function akmStudentKey(s){
+  return [akmNormalizeKeyPart(s && s.name), akmNormalizeKeyPart(s && s.className), akmNormalizeKeyPart(s && s.belt)].join('|');
+}
+function akmActiveStudentIds(){
+  try{
+    const q=new URLSearchParams(location.search).get('roster');
+    if(q) return q.split(',').map(x=>x.trim()).filter(Boolean);
+  }catch(e){}
+  try{
+    const raw=JSON.parse(localStorage.getItem(AKM_ACTIVE_ROSTER_KEY)||'[]');
+    return Array.isArray(raw)?raw.filter(Boolean):[];
+  }catch(e){ return []; }
+}
+function akmModeLabel(mode){
+  if(mode==='apcha_r') return '앞차기 오른발';
+  if(mode==='apcha_l') return '앞차기 왼발';
+  if(mode==='dollo_r') return '돌려차기 오른발';
+  if(mode==='dollo_l') return '돌려차기 왼발';
+  if(mode==='balloon') return '격파 모드';
+  if(mode==='sparring') return '겨루기 모드';
+  return mode || '측정';
+}
+
+/* ── 수련생 순서(현재 차례) 관리 ── */
+let akmCurrentStudentIdx = 0;
+const akmRecordedStudents = new Set();
+const akmRecordedCounts = new Map();
+function akmEscapeHtml(str){ return String(str||'').replace(/[&<>'"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+function akmRosterList(){
+  const ids = akmActiveStudentIds();
+  const st = akmReadHomeState();
+  const students = Array.isArray(st.students) ? st.students : [];
+  return ids.map(function(id){
+    const s = students.find(function(x){ return x && x.id===id; }) || {};
+    return { id:id, name:s.name || '이름 없음', className:s.className || '', belt:s.belt || '' };
+  });
+}
+function akmCurrentStudent(){
+  const roster = akmRosterList();
+  if(!roster.length) return null;
+  if(akmCurrentStudentIdx >= roster.length) akmCurrentStudentIdx = roster.length - 1;
+  if(akmCurrentStudentIdx < 0) akmCurrentStudentIdx = 0;
+  return roster[akmCurrentStudentIdx];
+}
+function akmSetCurrentStudent(idx){
+  const roster = akmRosterList();
+  if(!roster.length) return;
+  akmCurrentStudentIdx = Math.max(0, Math.min(idx, roster.length-1));
+  akmRenderStudentUI();
+}
+window.akmSetCurrentStudent = akmSetCurrentStudent;
+function akmNextStudent(){
+  const roster = akmRosterList();
+  if(roster.length <= 1) return;
+  akmCurrentStudentIdx = (akmCurrentStudentIdx >= roster.length - 1) ? 0 : (akmCurrentStudentIdx + 1);
+  akmRenderStudentUI();
+}
+function akmRenderStudentUI(){
+  const roster = akmRosterList();
+  const barEl = document.getElementById('studentRosterBar');
+  if(!roster.length){
+    if(barEl) barEl.style.display='none';
+    return;
+  }
+  if(barEl){
+    barEl.style.display='flex';
+    barEl.innerHTML = roster.map(function(r,i){
+      const cls=['roster-chip'];
+      if(i===akmCurrentStudentIdx) cls.push('current');
+      if(akmRecordedStudents.has(r.id)) cls.push('done');
+      const savedCount = akmRecordedCounts.get(r.id) || 0;
+      const mark = savedCount ? '<span class="rc-save-count">'+savedCount+'회</span>' : '';
+      return '<button type="button" class="'+cls.join(' ')+'" onclick="akmSetCurrentStudent('+i+')"><span class="rc-num">'+(i+1)+'.</span><span>'+akmEscapeHtml(r.name)+'</span>'+mark+'</button>';
+    }).join('');
+  }
+}
+
+function akmSaveRecord(kind, data){
+  const cur = akmCurrentStudent();
+  if(!cur){
+    return;
+  }
+  const st=akmReadHomeState();
+  st.records=Array.isArray(st.records)?st.records:[];
+  const now=new Date();
+  const record={
+    id:'r'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+    studentId:cur.id,
+    studentName:cur.name,
+    className:cur.className,
+    belt:cur.belt,
+    studentKey:akmStudentKey(cur),
+    kind:kind,
+    mode:currentMode,
+    modeLabel:akmModeLabel(currentMode),
+    difficulty:difficulty,
+    createdAt:now.toISOString(),
+    dateKey:now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'),
+    savedAtMs:Date.now(),
+    ...data
+  };
+  st.records.push(record);
+  // 태블릿 localStorage 용량 방지: 최신 1500개만 유지
+  st.records=st.records.slice(-1500);
+  const ok=akmWriteHomeState(st);
+  if(ok){
+    akmRecordedStudents.add(cur.id);
+    akmRecordedCounts.set(cur.id,(akmRecordedCounts.get(cur.id)||0)+1);
+    akmRenderStudentUI();
+    console.info('AKM record saved', record);
+  }
+}
+
+
+function addRank(mode,value){
+  let s=loadRank(mode); const entry={v:value,ts:Date.now()};
+  s.push(entry); s.sort((a,b)=>b.v-a.v); s=s.slice(0,10); saveRank(mode,s);
+  return {newTs:entry.ts, rank:s.findIndex(e=>e.ts===entry.ts)};
+}
+function renderCamRank(){
+  const cfg=MODE_CFG[currentMode];
+  if(!cfg.rank){ camRank.classList.remove('show'); return; }
+  const list=loadRank(currentMode).slice(0,5);
+  if(list.length===0){ camRank.classList.remove('show'); return; }
+  camRank.classList.add('show');
+  camRankTitle.textContent=cfg.title;
+  const medals=['1위','2위','3위','4위','5위'];
+  camRankList.innerHTML=list.map((e,i)=>{
+    const me=(e.ts===lastRankTs)?' me':'';
+    return '<li class="cr-item'+me+'"><span class="crk">'+medals[i]+'</span><span class="crv">'+e.v+cfg.unit+'</span></li>';
+  }).join('');
 }
 
 /* ── 민감도 ── */
@@ -4354,6 +4572,13 @@ function finishAutoDrill(){
   sndRecord();
   setStartBtn(false,'다시 시작');
   setGrResult('자동훈련 완료 · 평균 '+totalAvg+'점');
+  akmSaveRecord('drill_auto',{
+    count:allScores.length,
+    avg:totalAvg,
+    best:allScores.length?Math.max(...allScores):totalAvg,
+    scores:allScores.slice(),
+    parts:autoDrillResults
+  });
 }
 
 function finishDrill(){
@@ -4384,6 +4609,7 @@ function finishDrill(){
 
   setStartBtn(false,'다시!');
   setGrResult('결과: '+cfg.label+' '+drillDone+'회 · 평균 '+avg+'점');
+  akmSaveRecord('drill',{count:drillDone,avg:avg,best:drillScores.length?Math.max(...drillScores):avg,scores:drillScores.slice()});
 }
 
 /* ── 겨루기 모드 ── */
@@ -4548,6 +4774,7 @@ function finishSparring(){
     drillResultText.style.color='#4ca3ff';
     drillResultSub.textContent=sparringPracticeDone+'회 · 평균 '+avg+'점 · 최고 '+best+'점';
     drillResult.classList.add('final-result','show');
+    akmSaveRecord('sparring_practice',{score:best,average:avg,count:sparringPracticeDone,modeType:'practice',modeLabel:'겨루기 연습모드'});
     sparringMission=null;
     updateModeBadge();
     return;
@@ -4561,6 +4788,7 @@ function finishSparring(){
   drillResultSub.textContent='총 데미지 '+sparringDamage+' · 최고 '+sparringMaxCombo+'콤보';
   drillResult.classList.add('final-result','show');
   if(sparringHp<=0){ confetti(true); sndRecord(); }
+  akmSaveRecord('sparring',{score:sparringDamage,damage:sparringDamage,maxCombo:sparringMaxCombo,ko:sparringHp<=0,remainHp:Math.max(0,Math.round(sparringHp)),modeType:'live',modeLabel:'겨루기 실전모드'});
 }
 
 /* ── 격파 모드: 기존 풍선 로직 유지, 난이도별 이모지 타겟 표시 ── */
@@ -4619,6 +4847,7 @@ function clearBalloons(){ balloons.forEach(b=>{ if(b._lifeTimer) clearTimeout(b.
 function startBalloon(){ balloonCount=0; clearBalloons(); spawnBalloon(); spawnBalloon(); }
 function finishBalloon(){
   running=false; setPlayingUi(false); timerBadge.classList.remove('show'); clearBalloons();
+  camRank?.classList.remove('show');
   setGrResult('결과: 격파 '+balloonCount+'개');
   setStartBtn(false,'다시!');
   statusEl.style.opacity='1';
@@ -4635,6 +4864,7 @@ function finishBalloon(){
   sndRecord();
   if(balloonCount>=10) confetti(balloonCount>=20);
 
+  akmSaveRecord('balloon',{count:balloonCount});
 }
 
 /* ── 공통 ── */
@@ -4693,7 +4923,7 @@ window.startGame=()=>{
     setStartBtn(false,'시작!');
     setGrResult('중단됨');
     statusEl.style.opacity='1'; statusEl.textContent='중단했습니다. 다시 시작하려면 시작 버튼을 누르세요.';
-    renderStats();
+    renderStats(); renderCamRank();
     return;
   }
   ensureAudio();
@@ -4815,13 +5045,23 @@ window.setMode=(mode)=>{
   drillCountArea.style.display=isDrill?'flex':'none';
   gameArea.style.display=(!isDrill)?'flex':'none';
   setStartBtn(false,'시작!'); setGrResult('');
-  resetCounters(); renderStats();
+  resetCounters(); renderStats(); renderCamRank();
   statusEl.style.opacity='1';
   if(isDrill) statusEl.textContent='시작 버튼을 눌러 '+MODE_CFG[mode].label+' 연습을 시작하세요';
   else if(mode==='sparring') statusEl.textContent=sparringMode==='practice'?'연습모드: 랜덤 화살표 미션을 시작하세요':'실전모드: 키에 맞춘 타겟을 공격하세요';
   else statusEl.textContent='시작 버튼을 누르세요';
 };
 
+const newBtnEl=document.getElementById('newBtn');
+if(newBtnEl) newBtnEl.onclick=()=>{
+  stopGame(); resetCounters();
+  setStartBtn(false,'시작!'); setGrResult('');
+  renderStats(); renderCamRank();
+  akmNextStudent();
+  const isDrill=MODE_CFG[currentMode].isDrill;
+  if(isDrill) statusEl.textContent='시작 버튼을 눌러 '+MODE_CFG[currentMode].label+' 연습을 시작하세요';
+  else statusEl.textContent='시작 버튼을 누르세요';
+};
 window.toggleFullscreen=()=>{
   const el=document.documentElement;
   if(!document.fullscreenElement&&!document.webkitFullscreenElement){
@@ -5018,6 +5258,13 @@ window.enterKickLab=()=>{
   document.querySelectorAll('.hud-lab-foot-row [data-lab-foot]').forEach(x=>x.classList.toggle('active',x.dataset.labFoot==='right'));
   renderKickLabChoices();
   document.body.classList.add('kicklab-mode');
+  // setMode()가 남겨둔 인라인 !important 스타일은 외부 CSS로 덮어쓸 수 없으므로 직접 숨긴다.
+  ['drillModePanel','difficultyPanel','sparringTypePanel'].forEach(id=>{
+    document.getElementById(id)?.style.setProperty('display','none','important');
+  });
+  document.querySelectorAll('.mode-row.hud-kick-row, .mode-row.hud-kick-row1, .mode-row.hud-kick-row2, .mode-row.hud-kick-tabs').forEach(row=>{
+    row.style.setProperty('display','none','important');
+  });
   document.getElementById('m_kicklab')?.classList.add('active');
   modeBadge.innerHTML='발차기 연구실<small>AI 인식 정확도 개선 참여</small>';
   modeBadge.style.borderColor='rgba(255,106,26,.65)';
@@ -5264,7 +5511,7 @@ document.getElementById('difficultyPanel')?.style.setProperty('display','none','
 document.getElementById('drillModePanel')?.style.setProperty('display','flex','important');
 updateModeBadge();
 updateKickButtonVisibility();
-renderStats(); updateModeBadge();
+renderStats(); renderCamRank(); updateModeBadge(); akmRenderStudentUI();
 // 로그인 후 카메라 시작
 window.__startApp = async function() {
   await initModel(); await startCamera(); loop();
@@ -5524,54 +5771,41 @@ body.kicklab-mode #kickLabExitBtn{display:block;}
 /* 연구실 모드에서는 다른 모드 선택/난이도/시작 패널을 모두 숨기고 연구실 패널만 보여준다 */
 body.kicklab-mode .panel > *:not(#kickLabPanel):not(.title){display:none !important;}
 body.kicklab-mode #timerBadge,
+body.kicklab-mode #camRank,
 body.kicklab-mode #sparringHud,
 body.kicklab-mode #drillResult,
 body.kicklab-mode #popOverlay{display:none !important;}
 
 #kickLabPanel{display:none;}
-body.kicklab-mode #kickLabPanel{display:block !important;}
-.kicklab-panel-title{font-size:18px;font-weight:1000;color:#fff;margin:2px 0 16px;}
-.kicklab-panel-title small{display:block;margin-top:4px;color:#91a5c0;font-size:12px;font-weight:800;}
-.hud-lab-kick-col{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.hud-lab-kick-col .game-btn{
-  position:relative;
-  width:100%;
-  text-align:left;
-  min-height:40px;
-  padding:10px 12px 10px 16px;
-  border:1px solid rgba(130,178,255,.22);
-  border-radius:10px;
-  background:rgba(5,15,29,.6);
-  color:#b9c9dc;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
+body.kicklab-mode #kickLabPanel{
+  display:flex !important;
+  flex-direction:column;
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  width:235px;
+  max-height:78vh;
+  overflow-y:auto;
+  z-index:20;
+  padding:10px;
+  border-radius:14px;
+  background:rgba(6,12,22,.55);
+  border:1px solid rgba(130,178,255,.18);
 }
+.hud-lab-kick-col{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.hud-lab-kick-col .game-btn{position:relative;width:100%;text-align:left;padding-left:16px !important;}
 .hud-lab-kick-col .game-btn::before{
   content:"";
   position:absolute;
-  left:0; top:0; bottom:0;
-  width:3px;
-  border-radius:3px 0 0 3px;
+  left:5px; top:50%;
+  transform:translateY(-50%);
+  width:3px; height:60%;
+  border-radius:3px;
   background:rgba(255,255,255,.18);
 }
-.hud-lab-kick-col .game-btn.active{color:#fff;background:rgba(255,106,26,.16);border-color:rgba(255,126,60,.75);}
-.hud-lab-kick-col .game-btn.active::before{background:var(--arcade-red,#ff304f);box-shadow:0 0 10px rgba(255,48,79,.7);}
-.hud-lab-foot-row{display:flex;gap:8px;margin-bottom:20px;}
-.hud-lab-foot-row .game-btn{
-  flex:1;
-  text-align:center;
-  min-height:40px;
-  padding:10px 6px;
-  border:1px solid rgba(130,178,255,.22);
-  border-radius:10px;
-  background:rgba(5,15,29,.6);
-  color:#b9c9dc;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-}
-.hud-lab-foot-row .game-btn.active{color:#fff;background:rgba(255,106,26,.18);border-color:rgba(255,126,60,.9);}
+.hud-lab-kick-col .game-btn.active::before{background:var(--arcade-red,#ff304f);box-shadow:0 0 8px rgba(255,48,79,.7);}
+.hud-lab-foot-row{display:flex;gap:6px;margin-bottom:14px;}
+.hud-lab-foot-row .game-btn{flex:1;text-align:center;}
 #kickLabCaptureArea{text-align:center;}
 #kickLabCaptureBtn:disabled{opacity:.4;cursor:default;}
 .kick-lab-cancel{

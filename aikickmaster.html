@@ -3242,7 +3242,10 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
 
     <!-- ===== 발차기 연구실: 연구실 모드 패널 (2단계) ===== -->
     <div id="kickLabPanel" class="kicklab-panel">
-      <div class="kicklab-panel-title">측정 설정<small>발차기와 발을 선택한 뒤 측정을 시작하세요</small></div>
+      <div class="kicklab-panel-head">
+        <div class="kicklab-panel-title">발차기 연구실<small>발차기와 발을 선택한 뒤 측정을 시작하세요</small></div>
+        <button type="button" class="kicklab-inline-exit" onclick="exitKickLab()">연구실 나가기</button>
+      </div>
       <div class="section-label">— 발차기 선택</div>
       <div class="mode-row hud-lab-kick-col" id="kickLabKickGrid"></div>
       <div class="section-label">— 발 선택</div>
@@ -3251,7 +3254,7 @@ body.hud-v21.akm-ui.sparring-mode .stats-row{
         <button type="button" class="game-btn" data-lab-foot="left">왼발</button>
       </div>
       <div class="game-area" id="kickLabCaptureArea">
-        <button id="kickLabCaptureBtn" class="primary-start" type="button" disabled onclick="startKickLabCapture()">측정 시작</button>
+        <button id="kickLabCaptureBtn" class="primary-start" type="button" onclick="startKickLabCapture()">측정 시작</button>
         <button id="kickLabCancelBtn" class="kick-lab-cancel" type="button" style="display:none;margin-top:8px;width:100%" onclick="cancelKickLabCapture()">중단</button>
         <div id="kickLabResultActions" style="display:none">
           <button type="button" class="game-btn" onclick="retryKickLabCapture()">한 번 더</button>
@@ -5045,8 +5048,8 @@ function labSetCaptureUi(mode){
   const cancel=document.getElementById('kickLabCancelBtn');
   const result=document.getElementById('kickLabResultActions');
   if(!btn||!cancel||!result) return;
-  if(mode==='idle'){ btn.style.display='block'; btn.disabled=true; cancel.style.display='none'; result.style.display='none'; }
-  else if(mode==='ready'){ btn.style.display='block'; btn.disabled=false; cancel.style.display='none'; result.style.display='none'; }
+  if(mode==='idle'){ btn.style.display='block'; btn.disabled=false; btn.dataset.waitingBody='true'; cancel.style.display='none'; result.style.display='none'; }
+  else if(mode==='ready'){ btn.style.display='block'; btn.disabled=false; btn.dataset.waitingBody='false'; cancel.style.display='none'; result.style.display='none'; }
   else if(mode==='busy'){ btn.style.display='none'; cancel.style.display='block'; result.style.display='none'; }
   else if(mode==='result'){ btn.style.display='none'; cancel.style.display='none'; result.style.display='flex'; }
 }
@@ -5054,7 +5057,15 @@ function labSetCaptureUi(mode){
 /* ── 3단계: 실제 발차기 감지 (3-2-1 → 대기 → 상승/최고점/하강 → 종료) ── */
 function labDelay(ms){return new Promise(r=>setTimeout(r,ms));}
 window.startKickLabCapture=async()=>{
-  if(labPhase!=='ready' || !labKick) return;
+  if(!labKick){
+    labSetStatus('먼저 측정할 발차기를 선택해주세요.');
+    return;
+  }
+  if(labPhase==='waiting_body'){
+    labSetStatus('전신이 화면에 보이도록 뒤로 이동한 뒤 다시 눌러주세요.');
+    return;
+  }
+  if(labPhase!=='ready') return;
   labPhase='countdown';
   labSetCaptureUi('busy');
   const token=++labCountdownToken;
@@ -5746,6 +5757,171 @@ body.kicklab-mode #kickLabExitBtn{
     top:132px !important;
     width:260px !important;
     padding:16px !important;
+  }
+}
+
+
+/* ===== 발차기 연구실 UI v3 — 연구실 모드에만 적용 ===== */
+body.kicklab-mode #kickLabExitBtn{
+  display:none !important;
+}
+
+body.kicklab-mode #kickLabPanel{
+  left:18px !important;
+  top:118px !important;
+  width:330px !important;
+  max-height:calc(100vh - 136px) !important;
+  padding:18px !important;
+  border:1px solid rgba(112,150,205,.24) !important;
+  border-radius:18px !important;
+  background:
+    linear-gradient(180deg,rgba(8,18,34,.94),rgba(5,12,24,.91)) !important;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.48),
+    inset 0 1px 0 rgba(255,255,255,.07) !important;
+  backdrop-filter:blur(14px) saturate(1.08) !important;
+  -webkit-backdrop-filter:blur(14px) saturate(1.08) !important;
+}
+
+body.kicklab-mode .kicklab-panel-head{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:18px !important;
+  padding-bottom:15px !important;
+  border-bottom:1px solid rgba(120,170,255,.16) !important;
+}
+
+body.kicklab-mode .kicklab-panel-title{
+  flex:1 !important;
+  min-width:0 !important;
+  margin:0 !important;
+  font-size:21px !important;
+  line-height:1.2 !important;
+  letter-spacing:-.6px !important;
+}
+
+body.kicklab-mode .kicklab-panel-title small{
+  margin-top:5px !important;
+  color:#8fa5c1 !important;
+  font-size:11px !important;
+  line-height:1.4 !important;
+}
+
+body.kicklab-mode .kicklab-inline-exit{
+  flex:0 0 auto !important;
+  min-height:34px !important;
+  padding:0 11px !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+  border-radius:9px !important;
+  background:rgba(255,255,255,.06) !important;
+  color:#cbd7e6 !important;
+  font-family:inherit !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+}
+
+body.kicklab-mode .kicklab-inline-exit:hover{
+  background:rgba(255,255,255,.11) !important;
+  color:#fff !important;
+}
+
+body.kicklab-mode #kickLabPanel .section-label{
+  margin:0 0 9px !important;
+  color:#8da2bd !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+}
+
+body.kicklab-mode .hud-lab-kick-col,
+body.kicklab-mode .hud-lab-foot-row{
+  gap:9px !important;
+  margin-bottom:17px !important;
+}
+
+body.kicklab-mode .hud-lab-kick-col .game-btn,
+body.kicklab-mode .hud-lab-foot-row .game-btn{
+  min-height:44px !important;
+  border:1px solid rgba(118,157,211,.20) !important;
+  border-radius:11px !important;
+  background:linear-gradient(180deg,rgba(22,38,61,.82),rgba(12,26,45,.78)) !important;
+  color:#aebfd4 !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease !important;
+}
+
+body.kicklab-mode .hud-lab-kick-col .game-btn:hover,
+body.kicklab-mode .hud-lab-foot-row .game-btn:hover{
+  color:#fff !important;
+  border-color:rgba(255,255,255,.28) !important;
+}
+
+body.kicklab-mode .hud-lab-kick-col .game-btn.active,
+body.kicklab-mode .hud-lab-foot-row .game-btn.active{
+  border-color:rgba(255,119,47,.92) !important;
+  background:linear-gradient(180deg,rgba(255,106,26,.32),rgba(166,60,12,.27)) !important;
+  color:#fff !important;
+  box-shadow:
+    0 0 18px rgba(255,106,26,.18),
+    inset 0 1px 0 rgba(255,255,255,.10) !important;
+}
+
+body.kicklab-mode #kickLabCaptureBtn{
+  min-height:56px !important;
+  height:56px !important;
+  border-radius:12px !important;
+  background:linear-gradient(180deg,#ff8b42,#f05a13) !important;
+  color:#fff !important;
+  font-size:18px !important;
+  line-height:56px !important;
+  box-shadow:
+    0 10px 24px rgba(240,90,19,.27),
+    inset 0 1px 0 rgba(255,255,255,.20) !important;
+}
+
+body.kicklab-mode #kickLabCaptureBtn:hover{
+  background:linear-gradient(180deg,#ff9b5b,#fa681d) !important;
+}
+
+body.kicklab-mode #kickLabCaptureBtn:active{
+  transform:translateY(1px) !important;
+}
+
+body.kicklab-mode #kickLabCaptureBtn:disabled{
+  opacity:.55 !important;
+}
+
+body.kicklab-mode #kickLabCancelBtn,
+body.kicklab-mode #kickLabResultActions .game-btn,
+body.kicklab-mode #kickLabResultActions .kick-lab-cancel{
+  min-height:43px !important;
+  border:1px solid rgba(118,157,211,.20) !important;
+  border-radius:10px !important;
+  background:rgba(18,33,54,.82) !important;
+  color:#dce6f2 !important;
+}
+
+@media (orientation:landscape) and (max-width:1200px){
+  body.kicklab-mode #kickLabPanel{
+    top:104px !important;
+    width:304px !important;
+    max-height:calc(100vh - 120px) !important;
+    padding:15px !important;
+  }
+  body.kicklab-mode .hud-lab-kick-col .game-btn,
+  body.kicklab-mode .hud-lab-foot-row .game-btn{
+    min-height:40px !important;
+    font-size:13px !important;
+  }
+  body.kicklab-mode #kickLabCaptureBtn{
+    min-height:50px !important;
+    height:50px !important;
+    line-height:50px !important;
+    font-size:16px !important;
   }
 }
 
